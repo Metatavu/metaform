@@ -1,0 +1,131 @@
+p Kiitos hakemuksestasi, alla on hakemuksen sisältämät tiedot.
+br
+br
+- var getLanguageSkill = function(code){  
+-   if(code === 'bad'){
+-      return 'auttava';
+-    }else if(code == 'ok'){
+-      return 'kohtalainen';
+-    }else if(code == 'good'){
+-      return 'hyvä';
+-    }
+- }
+h3 Kesätyöhakemus
+p Lähetetty: 
+  span#application-added(data-added=application.added)
+  p
+    b Hakija:
+  address
+    strong #{application.firstName} #{application.lastName}
+    br
+    | #{application.address}
+    br
+    | #{application.zipcode} #{application.city}
+    br
+    abbr(title='Puhelin') Puh:
+    | #{application.phone}
+    br
+    a(href='mailto:'+application.email) #{application.email}
+    br
+    br
+  p
+    b Synt.aika: 
+    span#applicant-birthday #{application.birthday}
+  p
+    b Sukupuoli:
+    if(application.sex == 'male')
+      span#applicant-sex Mies
+    else
+      span#applicant-sex Nainen
+  p
+    b Synt.paikka: 
+    | #{application.placeOfBirth}
+  p
+    b Kotipaikka: 
+    | #{application.home}
+  p
+    b Ajokortti: 
+    each licence in application.driversLicence
+        | #{licence}, 
+  p
+    b Ajokortin hankintavuosi: 
+    | #{application.driversLicenceYear}
+  p
+    b Koulutus:
+    br
+    | #{application.education}
+  p
+    b Kokemus:
+    br
+    | #{application.previousExpericence}
+  p
+    b ATK-taidot:
+    br
+    | #{application.itSkills}
+  if application.previouslyEmployed
+    p Työskennellyt aikaisemmin Mikkelin kaupungille: #{application.whenEmployed}
+  else
+    p Ei työskennellyt aikaisemmin Mikkelin kaupungille
+  p
+    b Allergiat:
+    ul
+      each allergy in application.allergies
+        li #{allergy}
+  p
+    b Kielitaito:
+    ul
+      li Englanti: 
+        if(application.languages.english)
+          | #{getLanguageSkill(application.languages.english)}
+        else
+          | Ei
+      li Ruotsi: 
+        if(application.languages.swedish)
+          | #{getLanguageSkill(application.languages.swedish)}
+        else
+          | Ei
+      li Saksa: 
+        if(application.languages.german)
+          | #{getLanguageSkill(application.languages.german)}
+        else
+          | Ei
+  p
+    b Sopiva työskentelyjakso
+    ul
+      each period in application.suitableWorkingPeriod
+        li #{period}
+  p
+    b Käytettävissä olevat kulkuneuvot
+    ul
+      each transport in application.transportation
+        li #{transport}
+  p
+    b Harrastukset yms:
+    br
+    | #{application.additionalInfo}
+  p
+    b Ensisijainen hakutoive:
+    br
+    each position in positions
+      each job in position.jobs
+        if job.code == application.primaryRequest
+          | #{position.department} / #{job.name}
+  p
+    b Toissijainen hakutoive:
+    br
+    each position in positions
+      each job in position.jobs
+        if job.code == application.secondaryRequest
+          | #{position.department} / #{job.name}
+  if application.othersOk
+    p On valmis vastaanottamaan myös muuta työtä.
+  else
+    p Ei ole valmis vastaanottamaan muuta työtä.
+  p
+    b Perusohjaajakurssit:
+    br
+    | #{application.basicDirectorCourses}
+  p
+    b Lajiohjaajakurssit:
+    br
+    | #{application.fieldDirectorCourses}

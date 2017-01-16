@@ -1,0 +1,36 @@
+extends layout
+
+block content
+  br
+  span
+    button(id='add-user-button', class='btn btn-success') Uusi käyttäjä
+    button(id='delete-user-button', class='btn btn-danger') Poista käyttäjä
+  table(class='table table-hover')
+    caption Käyttäjät:
+    thead
+      tr
+        th Email
+        th Rooli
+    tbody(id='all-users-table')
+  div(id='add-new-user-modal', class='modal fade')
+    div(class='modal-dialog')
+      div(class='modal-content')
+        form(role='form', method='post', action=root+'/signup')
+          div(class='modal-header')
+            button(type='button', class='close', data-dismiss='modal', aria-label='Close')
+              span(aria-hidden='true') &times;
+            h4(class='modal-title') Uusi Käyttäjä
+          div(class='modal-body')
+            div(class='form-group')
+              label(for='add-new-user-email-input') Email:
+              input(name='email', type='email', class='form-control', id='add-new-user-email-input')
+            div(class='form-group')
+              label(for='add-new-user-role-input') Rooli:
+              select(name='role', class='form-control', id='add-new-user-role-input')
+                option(value='manager') Manageri
+                option(value='admin') Admin
+          div(class='modal-footer')
+            a(class='btn btn-danger', data-dismiss='modal') Peruuta
+            input(type='submit', class='btn btn-success', value='Lisää käyttäjä')
+block custom_script
+  script(src=root+'/js/usermanagement.js')

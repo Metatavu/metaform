@@ -1,0 +1,33 @@
+  input:required:invalid, input:focus:invalid {
+    background-image: url(../img/cross.png);
+    background-position: right center;
+    background-repeat: no-repeat;
+  }
+  input:required:valid {
+    background-image: url(../img/tick.png);
+    background-position: right center;
+    background-repeat: no-repeat;
+  }
+  textarea:required:invalid, input:focus:invalid {
+    background-image: url(../img/cross.png);
+    background-position: right center;
+    background-repeat: no-repeat;
+  }
+  textarea:required:valid {
+    background-image: url(../img/tick.png);
+    background-position: right center;
+    background-repeat: no-repeat;
+  }
+  select:required:invalid, input:focus:invalid {
+    background-image: url(../img/cross.png);
+    background-position: right center;
+    background-repeat: no-repeat;
+  }
+  select:required:valid {
+    background-image: url(../img/tick.png);
+    background-position: right center;
+    background-repeat: no-repeat;
+  }
+  .error-container {
+    color:red;
+  }
