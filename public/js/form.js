@@ -60,7 +60,6 @@
         });
       
       $.each(data.result, $.proxy(function (index, file) {
-        console.log(file);
         $('<p/>')
           .append('<input type="hidden" value="' + file._id + '" name="files" />')
           .append('<a href="/upload/' + file.fileData + '" target="blank">' + file.originalname + '</a>')

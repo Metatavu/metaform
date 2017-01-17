@@ -2,11 +2,9 @@ extends layout
 
 block content
   .container-fluid
-    .row
+    button#menu-toggle.btn.btn-default(href='#menu-toggle') Piilota/näytä valikko
+    .row.table-container
       .col-lg-12
-        a#menu-toggle.btn.btn-default(href='#menu-toggle') Piilota/näytä valikko
-        button#excelImport.btn.btn-default.pull-right Vie Exceliin
-        h1 #{state}
         table#applicationTable
           thead
             tr
@@ -19,20 +17,3 @@ block content
               th Aloituspvm
               th Lopetuspvm
           tbody
-            each application in applications
-              tr(data-application-id=application._id)
-                td #{application.firstName}
-                td #{application.lastName}
-                td.applicant-birthday #{application.birthday}
-                td 
-                  | #{application.address} #{application.zipcode} #{application.city}
-                td #{application.phone}
-                td #{application.email}
-                if application.startDate
-                  td.applicant-birthday #{application.startDate}
-                else
-                  td -
-                if application.endDate
-                  td.applicant-birthday #{application.endDate}
-                else
-                  td -
