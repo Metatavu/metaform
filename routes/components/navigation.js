@@ -1,20 +1,26 @@
-var config = require(__dirname + '/../../config');
+/*jshint esversion: 6 */
+(function () {
+  'use strict';
 
-exports.renderIndex = (req, res) => {
-  res.render('form', { positions: config.positions, root: config.server_root });
-}
-
-exports.renderLogin = (req, res) => {
-  res.render('login', {
-    message: req.flash('loginMessage'),
-    root: config.server_root
-  });
-}
-
-exports.renderForgotPass = (req, res) => {
-  res.render('forgotpassword', { root: config.server_root });
-}
-
-exports.renderChangePass = (req, res) => {
-  res.render('setpassword', { root: config.server_root });
-}
+  const config = require(__dirname + '/../../config');
+  const Form = require(__dirname + '/../../form');
+  
+  exports.renderIndex = (req, res) => {
+    res.render('form', { viewModel: Form.viewModel(), root: config.server_root });
+  }
+  
+  exports.renderLogin = (req, res) => {
+    res.render('login', {
+      message: req.flash('loginMessage'),
+      root: config.server_root
+    });
+  }
+  
+  exports.renderForgotPass = (req, res) => {
+    res.render('forgotpassword', { root: config.server_root });
+  }
+  
+  exports.renderChangePass = (req, res) => {
+    res.render('setpassword', { root: config.server_root });
+  }
+}).call(this);

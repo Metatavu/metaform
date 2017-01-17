@@ -1,5 +1,5 @@
-var FileMeta = require(__dirname + '/../../model/fileMeta');
-var FileData = require(__dirname + '/../../model/fileData');
+const FileMeta = require(__dirname + '/../../model/filemeta');
+const FileData = require(__dirname + '/../../model/filedata');
 
 exports.getFileData = (req, res) => {
   var id = req.params.id;

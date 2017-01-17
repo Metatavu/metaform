@@ -3,7 +3,7 @@
   'use strict';
 
   const util = require('util');
-  const form = require(__dirname + './components/form');
+  const form = require(__dirname + '/components/form');
   const admin = require(__dirname + '/components/admin');
   const user = require(__dirname + '/components/user');
   const navigation = require(__dirname + '/components/navigation');
@@ -47,7 +47,7 @@
 
     app.post(config.server_root + '/upload', fileParser.array('appendix'), upload.uploadFile);
     app.get(config.server_root + '/upload/:id', upload.getFileData);
-    app.delete(config.server_root + '/upload/:id', upload.deleteFile);
+    app.delete(config.server_root + '/upload/:id', upload.removeFile);
 
 
     /*

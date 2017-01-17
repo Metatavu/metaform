@@ -1,0 +1,90 @@
+mixin text-field(field)
+  .form-group
+    .col-12
+      label(for='field-' + field.name)
+        =field.title
+    .col-12
+      input.form-control(aria-labelledby=id='field-' + field.name,id='field-' + field.name,type="text",name=field.name,title=field.title,required=field.required)
+      if field.help
+        small.form-text.text-muted
+          =field.help
+          
+mixin email-field(field)
+  .form-group
+    .col-12
+      label(for='field-' + field.name)
+        =field.title
+    .col-12
+      input.form-control(aria-labelledby=id='field-' + field.name,id='field-' + field.name,type="email",name=field.name,title=field.title,required=field.required)
+      if field.help
+        small.form-text.text-muted
+          =field.help
+          
+mixin number-field(field)
+  .form-group
+    .col-12
+      label(for='field-' + field.name)
+        =field.title
+    .col-12
+      input.form-control(aria-labelledby=id='field-' + field.name,id='field-' + field.name,type="number",name=field.name,title=field.title,required=field.required,min=field.min,max=field.max,step=field.step)
+      if field.help
+        small.form-text.text-muted
+          =field.help
+          
+mixin boolean-field(field)
+  .form-group
+    .col-12
+      .form-check
+        label.form-check-label
+          input.form-check-input(type="checkbox",name=field.name,title=field.title)
+          |&nbsp;
+          =field.title
+      if field.help
+        small.form-text.text-muted
+          =field.help
+          
+mixin memo-field(field)
+  .form-group
+    .col-12
+      label(for='field-' + field.name)
+        =field.title
+    .col-12
+      textarea.form-control(aria-labelledby=id='field-' + field.name,id='field-' + field.name,name=field.name,title=field.title,required=field.required)
+      if field.help
+        small.form-text.text-muted
+          =field.help          
+          
+mixin files-field(field)
+  .form-group
+    .col-12
+      label(for='field-' + field.name)
+        =field.title
+    .col-12
+      input.form-control-file(aria-labelledby=id='field-' + field.name,id='field-' + field.name,type="file",multiple="multiple",name=field.name,title=field.title,required=field.required)
+      if field.help
+        small.form-text.text-muted
+          =field.help
+
+mixin unknown-field(field)
+  .col-12.error
+    =field.type
+    |&nbsp;is unknown
+
+mixin field(field)
+  case field.type 
+    when 'text'
+      +text-field(field)
+    when 'email'
+      +email-field(field)
+    when 'number'
+      +number-field(field)
+    when 'memo'
+      +memo-field(field)
+    when 'boolean'
+      +boolean-field(field)
+    when 'files'
+      +files-field(field)
+    default
+      +unknown-field(field)
+      
+  

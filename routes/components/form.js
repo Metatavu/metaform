@@ -4,7 +4,7 @@
   
   var Form = require(__dirname + '/../../form');
   var FormModel = Form.model();
-  var Appendix = require('../../model/appendix');
+  var FileMeta = require('../../model/filemeta');
   var pug = require('pug');
   var mailer = require('../../services/mailer');
   var config = require('../../config');

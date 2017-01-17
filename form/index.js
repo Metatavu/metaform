@@ -13,6 +13,14 @@
       return require(util.format(__dirname + '/../forms/%s.json', config.form));
     }
     
+    static viewModel() {
+      var formConfig = Form.config();
+      return {
+        "title": formConfig.title,
+        "sections": formConfig.sections
+      };
+    }
+    
     static fields() {
       var fields = [];
       var config = Form.config();

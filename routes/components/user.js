@@ -1,9 +1,9 @@
-var passport = require('passport');
-var generatePassword = require('password-generator');
-var mailer = require('../../services/mailer');
-var User = require('../../model/user');
-var config = require('../../config');
-var ResetToken = require('../../model/resetToken');
+const passport = require('passport');
+const generatePassword = require('password-generator');
+const mailer = require('../../services/mailer');
+const User = require('../../model/user');
+const config = require('../../config');
+const ResetToken = require('../../model/resettoken');
 
 exports.login = passport.authenticate('local-login', {
   successRedirect : config.server_root+'/admin',

@@ -1,3 +1,4 @@
+include mixins/fields
 doctype html
 html(lang='en')
   head
@@ -6,9 +7,24 @@ html(lang='en')
     meta(name='viewport', content='width=device-width, initial-scale=1')
     meta(name='description', content='')
     meta(name='author', content='')
-    title #{form.title}
-    link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css', integrity='sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7', crossorigin='anonymous')
-    link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.1/css/bootstrap-datepicker3.min.css')
-    link(rel='stylesheet', href='/css/animate.css')
+    title #{viewModel.title}
+    link(rel='stylesheet', href='//cdn.metatavu.io/libs/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css')
   body
+    .container-fluid.no-gutters
+      .row
+        .col-12
+          h1
+            =viewModel.title
+      form
+        each section in viewModel.sections 
+          .row
+            section.col-12
+              h2
+                =section.title
+              fieldset
+                each field in section.fields
+                  +field(field)
+            
+        
+    
     
