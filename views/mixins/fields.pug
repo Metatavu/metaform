@@ -36,9 +36,25 @@ mixin boolean-field(field)
     .col-12
       .form-check
         label.form-check-label
-          input.form-check-input(type="checkbox",name=field.name,title=field.title)
+          input.form-check-input(type="checkbox",name=field.name,title=field.title,checked=field.checked)
           |&nbsp;
           =field.title
+      if field.help
+        small.form-text.text-muted
+          =field.help
+
+mixin radio-field(field)
+  .form-group
+    .col-12
+      label(for='field-' + field.name)
+        =field.title
+    .col-12
+      each option in field.options
+        .form-check
+          label.form-check-label
+            input.form-check-input(type="radio",name=field.name, value=option.name,checked=option.checked)
+            |&nbsp;
+          =option.text
       if field.help
         small.form-text.text-muted
           =field.help
@@ -60,7 +76,13 @@ mixin files-field(field)
       label(for='field-' + field.name)
         =field.title
     .col-12
-      input.form-control-file(aria-labelledby=id='field-' + field.name,id='field-' + field.name,type="file",multiple="multiple",name=field.name,title=field.title,required=field.required)
+      .file-component
+        button.add-file-button.btn.btn-success
+          |+ Lisää tiedosto
+        input.form-control-file(aria-labelledby=id='field-' + field.name,id='field-' + field.name,type="file",multiple="multiple",name='file',title=field.title,required=field.required)
+        .progress
+          .progress-bar(role='progressbar',aria-valuemin='0',aria-valuemax='100',aria-valuenow='0')
+        .files
       if field.help
         small.form-text.text-muted
           =field.help
@@ -82,6 +104,8 @@ mixin field(field)
       +memo-field(field)
     when 'boolean'
       +boolean-field(field)
+    when 'radio'
+      +radio-field(field)
     when 'files'
       +files-field(field)
     default

@@ -11,7 +11,6 @@
   const multer = require('multer');
   const fileParser = multer({ storage: multer.memoryStorage() });
   const config = require(__dirname + '/../config');
-  const async = require('async');
   const path = require('path');
   const fs = require('fs');
 
@@ -45,7 +44,7 @@
      * File uploads
      */
 
-    app.post(config.server_root + '/upload', fileParser.array('appendix'), upload.uploadFile);
+    app.post(config.server_root + '/upload', fileParser.array('file'), upload.uploadFile);
     app.get(config.server_root + '/upload/:id', upload.getFileData);
     app.delete(config.server_root + '/upload/:id', upload.removeFile);
 

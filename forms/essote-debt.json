@@ -37,7 +37,8 @@
       "title": "Perhesuhteet",
       "options":  [{
         "name": "married",
-        "text": "Avioliitto"
+        "text": "Avioliitto",
+        "checked": true
       }, {
         "name": "cohabiting",
         "text": "Avoliitto"

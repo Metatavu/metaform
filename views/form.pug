@@ -9,8 +9,13 @@ html(lang='en')
     meta(name='author', content='')
     title #{viewModel.title}
     link(rel='stylesheet', href='//cdn.metatavu.io/libs/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css')
+    script(defer="defer",src="//cdn.metatavu.io/libs/jquery/3.1.1/jquery.min.js",type="text/javascript")
+    script(defer="defer",src="//cdn.metatavu.io/libs/jquery-ui/1.12.1/jquery-ui.min.js",type="text/javascript")
+    script(defer='defer',src='//cdn.metatavu.io/libs/jquery.fileupload/9.14.2/js/jquery.iframe-transport.js',type="text/javascript")
+    script(defer='defer',src='//cdn.metatavu.io/libs/jquery.fileupload/9.14.2/js/jquery.fileupload.js',type="text/javascript")
+    script(defer='defer',src='/js/form.js')
   body
-    .container-fluid.no-gutters
+    .container
       .row
         .col-12
           h1
@@ -24,6 +29,9 @@ html(lang='en')
               fieldset
                 each field in section.fields
                   +field(field)
+        .row
+          .col-12
+            input.btn.btn-primary(type="submit",value="Lähetä")
             
         
     
