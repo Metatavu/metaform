@@ -4,39 +4,6 @@ var config = require('../../config');
 var xlsx = require('node-xlsx');
 var moment = require('moment');
 
-exports.convertPhoneNumbers = function(req, res){
-    Application.find({})
-    .batchSize(2000)
-    .exec(function(err, applications) {
-      if (err) {
-        res.status(404).send();
-      } else {
-        res.send('ok');
-        for(var i = 0; i < applications.length;i++){
-          var application = applications[i];
-          /*var fixedPhone = application.phone;
-          fixedPhone = fixedPhone.toString();
-          if(!fixedPhone.startsWith('358') && !fixedPhone.startsWith('0')){
-            fixedPhone = '0'+fixedPhone;
-          }*/
-          var phoneNumber = '';
-          for(var key in application.phone){
-            phoneNumber += key;
-            phoneNumber += application.phone[key];
-          }
-          application.phone = phoneNumber;
-          application.save(function(err, application){
-            if(err){
-              console.log(err);
-            }else{
-              console.log('Fixed phone number for application');
-            }
-          });
-        }
-      }
-    });
-};
-
 exports.renderAdminView = function(req, res) {
   var query = {};
   if (typeof (req.query.state) !== 'undefined' && req.query.state !== '') {
