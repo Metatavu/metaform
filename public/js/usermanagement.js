@@ -8,7 +8,10 @@
     for(var i = 0, j = users.length;i < j;i++){
       var user = users[i];
       userData[user._id] = user;
-      $('#all-users-table').append('<tr data-id="'+user._id+'"><td>'+user.email+'</td><td>'+user.role+'</td></tr>');
+      var newRow = $('tr').attr('data-id', user._id);
+      newRow.append($('td').text(user.email));
+      newRow.append($('td').text(user.role));
+      $('#all-users-table').append(newRow);
     }
   });
   
