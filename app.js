@@ -1,3 +1,4 @@
+/*jshint esversion: 6 */
 (function() {
   'use strict';
   
@@ -21,7 +22,7 @@
   var app = express();
   
   app.set('views', path.join(__dirname, 'views'));
-  app.set('view engine', 'pub');
+  app.set('view engine', 'pug');
   
   app.use(cookieParser());
   app.use(expressSession({secret:config.session_secret}));
