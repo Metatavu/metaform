@@ -20,18 +20,23 @@ html(lang='en')
         .col-12
           h1
             =viewModel.title
-      form
-        each section in viewModel.sections 
-          .row
-            section.col-12
-              h2
-                =section.title
-              fieldset
-                each field in section.fields
-                  +field(field)
-        .row
-          .col-12
-            input.btn.btn-primary(type="submit",value="Lähetä")
+      .row
+        .col-12
+          form
+            each section in viewModel.sections 
+              .row
+                section.col-12
+                  .row
+                    .col-12
+                      h2
+                        =section.title
+                  .row
+                    fieldset.col-12
+                      each field in section.fields
+                        +field(field)
+            .row
+              .col-12
+                input.btn.btn-primary(type="submit",value="Lähetä")
             
         
     

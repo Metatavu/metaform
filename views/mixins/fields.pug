@@ -1,5 +1,5 @@
 mixin text-field(field)
-  .form-group
+  .form-group.row
     .col-12
       label(for='field-' + field.name)
         =field.title
@@ -10,7 +10,7 @@ mixin text-field(field)
           =field.help
           
 mixin email-field(field)
-  .form-group
+  .form-group.row
     .col-12
       label(for='field-' + field.name)
         =field.title
@@ -21,7 +21,7 @@ mixin email-field(field)
           =field.help
           
 mixin number-field(field)
-  .form-group
+  .form-group.row
     .col-12
       label(for='field-' + field.name)
         =field.title
@@ -32,7 +32,7 @@ mixin number-field(field)
           =field.help
           
 mixin boolean-field(field)
-  .form-group
+  .form-group.row
     .col-12
       .form-check
         label.form-check-label
@@ -44,7 +44,7 @@ mixin boolean-field(field)
           =field.help
 
 mixin radio-field(field)
-  .form-group
+  .form-group.row
     .col-12
       label(for='field-' + field.name)
         =field.title
@@ -60,7 +60,7 @@ mixin radio-field(field)
           =field.help
           
 mixin memo-field(field)
-  .form-group
+  .form-group.row
     .col-12
       label(for='field-' + field.name)
         =field.title
@@ -71,7 +71,7 @@ mixin memo-field(field)
           =field.help          
           
 mixin files-field(field)
-  .form-group
+  .form-group.row
     .col-12
       label(for='field-' + field.name)
         =field.title
@@ -88,7 +88,7 @@ mixin files-field(field)
           =field.help
 
 mixin unknown-field(field)
-  .col-12.error
+  .col-12.error.row
     =field.type
     |&nbsp;is unknown
 
