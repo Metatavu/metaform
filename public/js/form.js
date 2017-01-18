@@ -5,6 +5,7 @@
     
     _create : function() {
       this.element.find('.add-file-button').on("click", $.proxy(this._onAddFileButtonClick, this));
+      this.element.on('click', '.remove-file-button', $.proxy(this._onRemoveFileButtonClick, this));
       
       this.element.find('input[type="file"]')
         .css({
@@ -42,6 +43,10 @@
       data.submit();
     },
     
+    _onRemoveFileButtonClick: function (event) {
+      event.preventDefault();
+    },
+    
     _onUploadFail: function (event, data) {
       
     },
@@ -60,11 +65,36 @@
         });
       
       $.each(data.result, $.proxy(function (index, file) {
-        $('<p/>')
-          .append('<input type="hidden" value="' + file._id + '" name="files" />')
-          .append('<a href="/upload/' + file.fileData + '" target="blank">' + file.originalname + '</a>')
-          .append($('<button>').addClass('remove-file-button btn btn-danger btn-sm').attr('data-id', file._id).text('Poista'))
+        var row = $('<div>')
+          .addClass('file row')
           .appendTo(this.element.find('.files'));
+        
+        var cell = $('<div>')
+          .addClass('col-12')
+          .appendTo(row);
+        
+        $('<input>')
+          .attr({
+            'type': 'hidden',
+            'name': 'files',
+            'value': file._id
+          })
+          .appendTo(cell);
+        
+        $('<a>')
+          .attr({
+            'href': '/upload/' + file.fileData,
+            'target': 'blank'
+          })
+          .text(file.originalname)
+          .appendTo(cell);
+       
+        $('<button>')
+          .addClass('remove-file-button btn btn-danger btn-sm float-right')
+          .attr('data-id', file._id)
+          .text('Poista')
+          .appendTo(cell);
+          
       }, this));
     },
     
