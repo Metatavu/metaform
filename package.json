@@ -7,6 +7,11 @@
     "name": "Metatavu",
     "email": "devs@metatavu.fi"
   },
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-contrib-sass": "^1.0.0",
+    "load-grunt-tasks": "^3.5.2"
+  },
   "dependencies": {
     "async": "2.1.4",
     "bcrypt-nodejs": "0.0.3",
