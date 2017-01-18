@@ -43,10 +43,6 @@
       data.submit();
     },
     
-    _onRemoveFileButtonClick: function (event) {
-      event.preventDefault();
-    },
-    
     _onUploadFail: function (event, data) {
       
     },
@@ -104,6 +100,21 @@
         .css({
           'width': progress + '%'  
         });
+    },
+    
+    _onRemoveFileButtonClick: function (event) {
+      event.preventDefault();
+      var button = $(event.target).closest('.remove-file-button');
+      var fileId = button.attr('data-id');
+      
+      $.ajax({
+        url: '/upload/' + fileId,
+        method: 'DELETE',
+        success: $.proxy(function(res) {
+          $(button).closest('.file').remove();
+        }, this)
+      });
+      
     }
   
   });
