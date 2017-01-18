@@ -17,6 +17,7 @@
       var formConfig = Form.config();
       return {
         "title": formConfig.title,
+        "sendButton": formConfig.sendButton,
         "sections": formConfig.sections
       };
     }

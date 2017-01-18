@@ -1,5 +1,6 @@
 {
   "title": "Talous- ja velkaneuvonnan palvelupyyntö",
+  "sendButton": "Lähetä",
   "sections": [{
     "title": "Perustiedot",
     "description": "Palvelupyynnönjättäjän perustiedot",
