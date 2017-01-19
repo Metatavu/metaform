@@ -3,6 +3,8 @@ mixin text-field(field)
     .col-12
       label(for='field-' + field.name)
         =field.title
+        if field.required
+          |&nbsp;*
     .col-12
       input.form-control(aria-labelledby=id='field-' + field.name,id='field-' + field.name,type="text",name=field.name,title=field.title,required=field.required)
       if field.help
@@ -14,6 +16,8 @@ mixin email-field(field)
     .col-12
       label(for='field-' + field.name)
         =field.title
+        if field.required
+          |&nbsp;*
     .col-12
       input.form-control(aria-labelledby=id='field-' + field.name,id='field-' + field.name,type="email",name=field.name,title=field.title,required=field.required)
       if field.help
@@ -25,8 +29,10 @@ mixin number-field(field)
     .col-12
       label(for='field-' + field.name)
         =field.title
+        if field.required
+          |&nbsp;*
     .col-12
-      input.form-control(aria-labelledby=id='field-' + field.name,id='field-' + field.name,type="number",name=field.name,title=field.title,required=field.required,min=field.min,max=field.max,step=field.step)
+      input.form-control(aria-labelledby=id='field-' + field.name,id='field-' + field.name,type="number",name=field.name,title=field.title,required=field.required,min=field.min,max=field.max,step=field.step,value=field.default)
       if field.help
         small.form-text.text-muted
           =field.help
@@ -39,6 +45,8 @@ mixin boolean-field(field)
           input.form-check-input(type="checkbox",name=field.name,title=field.title,checked=field.checked)
           |&nbsp;
           =field.title
+          if field.required
+            |&nbsp;*
       if field.help
         small.form-text.text-muted
           =field.help
@@ -48,6 +56,8 @@ mixin radio-field(field)
     .col-12
       label(for='field-' + field.name)
         =field.title
+        if field.required
+          |&nbsp;*
     .col-12
       each option in field.options
         .form-check
@@ -64,6 +74,8 @@ mixin memo-field(field)
     .col-12
       label(for='field-' + field.name)
         =field.title
+        if field.required
+          |&nbsp;*
     .col-12
       textarea.form-control(aria-labelledby=id='field-' + field.name,id='field-' + field.name,name=field.name,title=field.title,required=field.required)
       if field.help
@@ -75,6 +87,8 @@ mixin files-field(field)
     .col-12
       label(for='field-' + field.name)
         =field.title
+        if field.required
+          |&nbsp;*
     .col-12
       .file-component
         button.add-file-button.btn.btn-success
@@ -86,6 +100,22 @@ mixin files-field(field)
       if field.help
         small.form-text.text-muted
           =field.help
+          
+mixin logo-field(field)
+  .form-group.row
+    .col-12.logo-container
+      img.logo(src=field.src)
+
+mixin small-text-field(field)
+  .form-group.row
+    .col-12.small-text-container
+      small
+        =field.text
+
+mixin submit-field(field)
+  .form-group.row
+    .col-12
+      input.btn.btn-lg.btn-primary(type="submit",value=field.text)
 
 mixin unknown-field(field)
   .col-12.error.row
@@ -108,6 +138,12 @@ mixin field(field)
       +radio-field(field)
     when 'files'
       +files-field(field)
+    when 'logo'
+      +logo-field(field)
+    when 'small-text'
+      +small-text-field(field)
+    when 'submit'
+      +submit-field(field)
     default
       +unknown-field(field)
       

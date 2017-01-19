@@ -6,18 +6,19 @@
   const mongoose = require('mongoose');
   const _ = require('underscore');
   const config = require(__dirname + '/../config.js');
+  const NOT_SAVED_FIELDS = ['logo', 'submit', 'small-text'];
   
   class Form {
     
     static config() {
-      return require(util.format(__dirname + '/../forms/%s.json', config.form));
+      return require(util.format(__dirname + '/../%s.json', config.form));
     }
     
     static viewModel() {
       var formConfig = Form.config();
       return {
         "title": formConfig.title,
-        "sendButton": formConfig.sendButton,
+        "theme": formConfig.theme,
         "sections": formConfig.sections
       };
     }
@@ -46,22 +47,24 @@
           req.checkBody(field.name, util.format("Syötä %s", field.title)).notEmpty();
         }
         
-        switch (field.type) {
-          case 'number':
-            req.checkBody(field.name, util.format("%s ei ole numero", field.title)).isInt()
-          break;
-          case 'email':
-            req.checkBody(field.name, util.format("%s ei ole sähköpostiosoite", field.title)).isEmail()
-          break;
-          case 'boolean':
-            req.checkBody(field.name, util.format("%s on väärin muotoiltu", field.title)).isBoolean();
-          break;
-          case 'radio':
-            var options = Form.resolveFieldOptions(field);
-            req.checkBody(field.name, util.format("%s ei ole joukossa %s", field.title, options.join(','))).isIn(options);
-          break;
-          default:
-          break;
+        if (req.body[field.name]) {
+          switch (field.type) {
+            case 'number':
+              req.checkBody(field.name, util.format("%s ei ole numero", field.title)).isInt()
+            break;
+            case 'email':
+              req.checkBody(field.name, util.format("%s ei ole sähköpostiosoite", field.title)).isEmail()
+            break;
+            case 'boolean':
+              req.checkBody(field.name, util.format("%s on väärin muotoiltu", field.title)).isBoolean();
+            break;
+            case 'radio':
+              var options = Form.resolveFieldOptions(field);
+              req.checkBody(field.name, util.format("%s ei ole joukossa %s", field.title, options.join(','))).isIn(options);
+            break;
+            default:
+            break;
+          }
         }
       }
     }
@@ -76,9 +79,6 @@
         switch (field.type) {
           case 'number':
             data[field.name] = req.sanitizeBody(field.name).toInt();
-          break;
-          case 'email':
-            data[field.name] = req.sanitizeBody(field.name).toEmail();
           break;
           case 'boolean':
             data[field.name] = req.sanitizeBody(field.name).toBoolean();
@@ -99,20 +99,24 @@
       for (var i = 0; i < fields.length; i++) {
         var field = fields[i];
         var fieldType = field.type;
-        var schemaType = Form.resolveSchemaType(fieldType);
-        var schemaField = {
-          type: schemaType
-        };
+        var skip = NOT_SAVED_FIELDS.indexOf(fieldType) > -1;
         
-        if (field.required) {
-          schemaField.required = true;
-        }
+        if (!skip) {
+          var schemaType = Form.resolveSchemaType(fieldType);
+          var schemaField = {
+            type: schemaType
+          };
+          
+          if (field.required) {
+            schemaField.required = true;
+          }
+    
+          if (field.type === 'radio') {
+            schemaField.enum = Form.resolveFieldOptions(field);
+          }          
   
-        if (field.type === 'radio') {
-          schemaField.enum = Form.resolveFieldOptions(field);
+          schema[field.name] = schemaField;
         }
-  
-        schema[field.name] = schemaField;
       }
       
       return new mongoose.Schema(schema);

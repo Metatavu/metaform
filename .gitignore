@@ -5,3 +5,4 @@ config.js
 /.tern-project
 /.externalToolBuilders/
 /.sass-cache/
+/essote-debt.json
