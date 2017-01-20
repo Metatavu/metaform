@@ -55,7 +55,6 @@
 
     app.post(util.format('%s/formReply', config.server_root), form.postReply);
     // app.post(util.format('%s/update', config.server_root), authenticate(['manager', 'admin']), form.updateForm);
-    app.get(util.format('%s/form/:id', config.server_root), authenticate(['manager', 'admin']), form.getForm);
     
     app.post(util.format('%s/reply', config.server_root), form.postReply);
 
@@ -63,9 +62,10 @@
      *  Admin
      */
 
-    app.get(config.server_root + '/admin', authenticate(['manager', 'admin']), admin.renderAdminView);
-    app.get(config.server_root + '/export', authenticate(['manager', 'admin']), admin.createXlsx);
-    app.get(config.server_root + '/admin/users', authenticate(['admin']), admin.renderUserManagementView);
+    app.get('/admin', authenticate(['manager', 'admin']), admin.renderAdminView);
+    app.get('/export', authenticate(['manager', 'admin']), admin.createXlsx);
+    app.get('/admin/users', authenticate(['admin']), admin.renderUserManagementView);
+    app.get('/admin/replies/:id', authenticate(['manager', 'admin']), admin.getFormReply);
     
     /*
      * User

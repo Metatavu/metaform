@@ -4,11 +4,11 @@
 
   const Form = require(__dirname + '/../../form');
   const FormReplyModel = Form.replyModel();
+  const async = require('async');
   const _ = require('underscore');
   const config = require('../../config');
   const xlsx = require('node-xlsx');
   const moment = require('moment');
-
 
   exports.renderAdminView = function (req, res) {
     FormReplyModel.find()
@@ -21,7 +21,7 @@
           res.render('admin', { 
             user: req.user,
             viewModel: Form.viewModel(),
-            listFields: Form.reportListFields(),
+            fields: Form.contextFields('MANAGEMENT_LIST'),
             replies: replies
           });
         }
@@ -71,6 +71,24 @@
     //        }
     //      });
     req.status(501).send('not implemented yet');
+  };
+  
+  exports.getFormReply = (req, res) => {
+    var id = req.params.id;
+    
+    Form.loadReply(id, (err, formReply) => {
+      if (err) {
+        res.status(500).send(err);
+      } else {
+        console.log(formReply);
+        
+        res.render('form-reply', {
+          user: req.user,
+          viewModel: Form.viewModel(),
+          formReply: formReply
+        });
+      }
+    });
   };
 
 

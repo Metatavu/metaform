@@ -106,7 +106,7 @@
         $('<input>')
           .attr({
             'type': 'hidden',
-            'name': 'files',
+            'name': this.element.attr('data-field-name'),
             'value': file._id
           })
           .appendTo(cell);

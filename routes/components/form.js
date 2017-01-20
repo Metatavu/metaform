@@ -11,34 +11,6 @@
   var async = require('async');
   var _ = require('underscore');
   
-  exports.getForm = (req, res) => {
-    var id = req.params.id;
-    
-    FormReplyModel.findById(id, (err, form) => {
-      if (err) {
-        res.status(404).send();
-      } else {
-        var appendices = [];
-        async.each(form.appendices||[], (appendixId, callback) => {
-          Appendix.findById(appendixId, (err, appendix) => {
-            if (err) {
-              callback(err);
-            } else {
-              appendices.push(appendix);
-              callback();
-            }
-          })
-        }, (err) => {
-          if (err) {
-            res.status(500).send();
-          }
-          
-          res.render('form', {form: form, appendices: appendices, positions: config.positions, root: config.server_root});
-        }); 
-      }
-    });
-  };
-  
   exports.postReply = (req, res) => {
     var id = req.body.id;
     var data = req.body.data;

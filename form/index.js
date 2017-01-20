@@ -4,7 +4,9 @@
     
   const util = require('util');
   const mongoose = require('mongoose');
+  const async = require('async');
   const _ = require('underscore');
+  const FileMeta = require(__dirname + '/../model/filemeta');
   const config = require(__dirname + '/../config.js');
   const NOT_SAVED_FIELDS = ['logo', 'submit', 'small-text'];
   
@@ -23,13 +25,13 @@
       };
     }
     
-    static reportListFields() {
+    static contextFields(context) {
       var fields = Form.fields();
       var result = [];
       
       for (var i = 0; i < fields.length; i++) {
         var field = fields[i];
-        if (field.listInReport) {
+        if ((field.contexts||[]).indexOf(context) > -1) {
           result.push(field);
         }
       }
@@ -97,6 +99,9 @@
             case 'boolean':
               data[field.name] = req.sanitizeBody(field.name).toBoolean();
             break;
+            case 'files':
+              data[field.name] = req.body[field.name];
+            break;
             default:
               data[field.name] = req.sanitizeBody(field.name);
             break;
@@ -137,6 +142,7 @@
     
           if (field.type === 'radio') {
             schemaField.enum = Form.resolveFieldOptions(field);
+            schemaField.default = Form.resolveFieldDefaultOption(field);
           }          
   
           schemaOptions[field.name] = schemaField;
@@ -149,8 +155,68 @@
       return Form._replyModel;
     }
     
+    static createFileMetaLoad (fieldName, id) {
+      return (callback) => {
+        FileMeta.findById(id, (err, meta) => {
+          if (err) {
+            callback(err);
+          } else {
+            callback(null, {
+              fieldName: fieldName,
+              fileMeta: meta
+            });
+          }
+        });
+      }
+    }
+    
+    static loadReply(id, callback) {
+      Form.replyModel().findById(id).lean().exec((err, formReply) => {
+        if (err) {
+          callback(err);
+        } else {
+          var fields = Form.fields();
+          var fileLoads = [];
+          
+          for (var i = 0; i < fields.length; i++) {
+            var field = fields[i];
+            if (field.type == 'files') {
+              var fileIds = (formReply[field.name] || []);
+              fileLoads = fileLoads.concat(fileIds.map((fileId) => {
+                return this.createFileMetaLoad(field.name, fileId);
+              }));
+            }
+          }
+          
+          async.parallel(fileLoads, (fileErr, fileMetaResponses) => {
+            if (fileErr) {
+              callback(fileErr);
+            } else {
+              var result = formReply;
+              var fieldMetas = {};
+              
+              for (var i = 0; i < fileMetaResponses.length; i++) {
+                var fileMetaResponse = fileMetaResponses[i];
+                var fileMeta = fileMetaResponse.fileMeta;
+                var fileMetas = fieldMetas[fileMetaResponse.fieldName] || [];
+                console.log("Meat files", fileMetas);
+                fieldMetas[fileMetaResponse.fieldName] = fileMetas.concat([fileMeta]);
+              }
+              
+              for (var j = 0; j < fields.length; j++) {
+                if (fields[j].type == 'files') {
+                  result[fields[j].name] = fieldMetas[fields[j].name];
+                }
+              }
+              
+              callback(null, result);
+            }
+          });
+        }
+      });
+    }
+        
     static resolveSchemaType (fieldType) {
-      
       switch (fieldType) {
         case 'text':
         case 'email':
@@ -174,6 +240,16 @@
       return _.map(field.options, (option) => {
         return option.name;
       });
+    }
+    
+    static resolveFieldDefaultOption(field) {
+      for (var i = 0; i < field.options.length; i++) {
+        if (field.options[i].checked) {
+          return field.options[i].name;
+        }
+      }
+      
+      return null;
     }
     
   }

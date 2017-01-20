@@ -1,37 +1,33 @@
-doctype html
-html
-  head
-    meta(charset='utf-8')
-    meta(http-equiv='X-UA-Compatible', content='IE=edge')
-    meta(name='viewport', content='width=device-width, initial-scale=1')
-    title Kirjaudu sisään
-    link(rel='stylesheet', href='//cdn.metatavu.io/libs/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css')
-    link(rel='stylesheet', href='/css/login.min.css')
-    script(defer='defer', src='//cdn.metatavu.io/libs/jquery/3.1.1/jquery.min.js',type='text/javascript')
-  body
-    .container
-      block content
-        form(role='form', action='/login', method='post')
-          .row.mt-4
-            .col-12
-              h2
-                |Kirjautuminen
-          .form-group.row
-            .col-12
-              label(for='email')
-                |Sähköpostiosoite
-            .col-12
-              input.form-control(id='email',name='email',type='email',required=true)
-          .form-group.row
-            .col-12
-              label(for='password')
-                |Sähköpostiosoite
-            .col-12
-              input.form-control(id='password',name='password',type='password',required=true)
-          .form-group.row
-            .col-12
-              input.btn.btn-lg.btn-primary(type="submit",value='Kirjaudu')
-          .form-group.row
-            .col-12
-              a(href=root+'/forgotpassword')
-                small Unohtuiko salasana?
+extends layout/admin-layout
+
+block custom-head
+  title
+    |Kirjautuminen
+  link(rel='stylesheet', href='/css/login.min.css')
+
+block body
+  .container
+    form(role='form', action='/login', method='post')
+      .row.mt-4
+        .col-12
+          h2
+            |Kirjautuminen
+      .form-group.row
+        .col-12
+          label(for='email')
+            |Sähköpostiosoite
+        .col-12
+          input.form-control(id='email',name='email',type='email',required=true)
+      .form-group.row
+        .col-12
+          label(for='password')
+            |Sähköpostiosoite
+        .col-12
+          input.form-control(id='password',name='password',type='password',required=true)
+      .form-group.row
+        .col-12
+          input.btn.btn-lg.btn-primary(type="submit",value='Kirjaudu')
+      .form-group.row
+        .col-12
+          a(href=root+'/forgotpassword')
+            small Unohtuiko salasana?

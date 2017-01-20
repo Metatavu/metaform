@@ -1,24 +1,31 @@
-extends admin-layout
+extends layout/admin-layout
 
-block content
-  +admin-menu('user-management')
-  .row.mt-4
-    .col-12
-      h2
-        |Käyttäjänhallinta
-  .row.mt-4
-    .col-12
-      button(id='add-user-button', class='btn btn-success') Uusi käyttäjä
-          
-  .row.mt-4
-    .col-12
-      table(class='table table-hover')
-        thead
-          tr
-            th Email
-            th Rooli
-            th
-        tbody(id='all-users-table')
+block custom-head
+  title
+    =viewModel.title
+  script(defer='defer', src='/js/usermanagement.js')
+    
+block body
+  .container
+    +admin-menu('replies')
+  .container .form-container
+    .row.mt-4
+      .col-12
+        h2
+          |Käyttäjänhallinta
+    .row.mt-4
+      .col-12
+        button(id='add-user-button', class='btn btn-success') Uusi käyttäjä
+            
+    .row.mt-4
+      .col-12
+        table(class='table table-hover')
+          thead
+            tr
+              th Email
+              th Rooli
+              th
+          tbody(id='all-users-table')
         
   div(id='add-new-user-modal', class='modal fade')
     div(class='modal-dialog')
@@ -54,6 +61,3 @@ block content
           div(class='modal-footer')
             button(class='btn btn-danger', data-dismiss='modal') Peruuta
             button(class='btn btn-success', data-dismiss='modal') Poista
-            
-block custom_script
-  script(defer='defer', src='/js/usermanagement.js')

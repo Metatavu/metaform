@@ -1,0 +1,33 @@
+extends layout/admin-layout
+include mixins/fields
+
+block custom-head
+  link(rel='stylesheet', href='/css/themes/' + viewModel.theme  + '/form-reply.min.css')
+
+block body
+  .container
+    +admin-menu('replies')
+  .container.form-container
+    .row.mt-4
+      .col-12
+        h2
+          |Vastaus
+    .row
+      .col-12
+        h1
+          =viewModel.title
+    .row
+      .col-12
+        form
+          each section in viewModel.sections 
+            .row
+              section.col-12
+                .row
+                  .col-12
+                    h2
+                      =section.title
+                .row
+                  fieldset.col-12
+                    each field in section.fields
+                      if field.contexts.indexOf('MANAGEMENT') > -1
+                        +field(field, formReply[field.name], !field.editable)

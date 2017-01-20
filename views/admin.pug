@@ -1,22 +1,28 @@
-extends admin-layout
+extends layout/admin-layout
 
-block content
-  +admin-menu('replies')
-  .row.mt-4
-    .col-12
-      h2
-        |Vastaukset
-  .row.mt-4.table-container
-    .col-12
-      table#formsTable
-        thead
-          tr
-            each field in listFields 
-              th
-                =field.title
-        tbody
-          each reply in replies
-            tr(data-reply-id=reply._id)
-              each field in listFields 
+block body
+  .container
+    +admin-menu('replies')
+  .container
+    .row.mt-4
+      .col-12
+        h2
+          |Vastaukset
+    .row.mt-4.table-container
+      .col-12
+        table#formsTable
+          thead
+            tr
+              each field in fields
+                th
+                  =field.title
+              th(style="width:0")
+          tbody
+            each reply in replies
+              tr(data-reply-id=reply._id)
+                each field in fields 
+                  td
+                    =reply[field.name]
                 td
-                  =reply[field.name]
+                  a(href="/admin/replies/" + reply._id)
+                    |Avaa

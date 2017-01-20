@@ -35,6 +35,7 @@ html(lang='en')
                   .row
                     fieldset.col-12
                       each field in section.fields
-                        +field(field)
+                        if field.contexts.indexOf('FORM') > -1
+                          +field(field)
     
     
