@@ -4,35 +4,34 @@ html
     meta(charset='utf-8')
     meta(http-equiv='X-UA-Compatible', content='IE=edge')
     meta(name='viewport', content='width=device-width, initial-scale=1')
-    
     title Kirjaudu sisään
-    
     link(rel='stylesheet', href='//cdn.metatavu.io/libs/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css')
-    link(rel='stylesheet', href='/css/login.css')
-
+    link(rel='stylesheet', href='/css/login.min.css')
     script(defer='defer', src='//cdn.metatavu.io/libs/jquery/3.1.1/jquery.min.js',type='text/javascript')
   body
-    div(class='container')
-    
-      div(class='panel panel-default')
-        div(class='panel-heading') 
-          h1 
-            span(class='glyphicon glyphicon-log-in')
-            | &nbsp;Kirjaudu sisään
-        div(class='panel-body')
-          form(role='form', action=root+'/login', method='post')
-            div(class='form-group')
-              label(for='usernameInputField') Email
-              div(class='input-group')
-                span(class='input-group-addon glyphicon glyphicon-user')
-                input(name='email' type='text', class='form-control', id='usernameInputField', placeholder='')
-            div(class='form-group')
-              label(for='passwordInputField') Salasana
-              div(class='input-group')
-                span(class='input-group-addon glyphicon glyphicon-lock')
-                input(name='password', type='password', class='form-control', id='passwordInputField', placeholder='')
-            button(class='btn btn-warning btn-lg') Kirjaudu 
-        a(href=root+'/forgotpassword', style='margin:10px; padding-bottom:10px;')
-          small Unohtuiko salasana?
-      if message.length > 0
-        div(class='alert alert-danger') #{message}
+    .container
+      block content
+        form(role='form', action='/login', method='post')
+          .row.mt-4
+            .col-12
+              h2
+                |Kirjautuminen
+          .form-group.row
+            .col-12
+              label(for='email')
+                |Sähköpostiosoite
+            .col-12
+              input.form-control(id='email',name='email',type='email',required=true)
+          .form-group.row
+            .col-12
+              label(for='password')
+                |Sähköpostiosoite
+            .col-12
+              input.form-control(id='password',name='password',type='password',required=true)
+          .form-group.row
+            .col-12
+              input.btn.btn-lg.btn-primary(type="submit",value='Kirjaudu')
+          .form-group.row
+            .col-12
+              a(href=root+'/forgotpassword')
+                small Unohtuiko salasana?
