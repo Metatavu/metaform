@@ -3,7 +3,7 @@
   'use strict';
 
   const Form = require(__dirname + '/../../form');
-  const FormModel = Form.model();
+  const FormReplyModel = Form.replyModel();
   const _ = require('underscore');
   const config = require('../../config');
   const xlsx = require('node-xlsx');
@@ -11,7 +11,7 @@
 
 
   exports.renderAdminView = function (req, res) {
-    FormModel.find()
+    FormReplyModel.find()
       .sort({ added: 1 })
       .batchSize(2000)
       .exec(function(err, replies) {

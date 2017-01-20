@@ -3,7 +3,7 @@
   'use strict';
   
   var Form = require(__dirname + '/../../form');
-  var FormModel = Form.model();
+  var FormReplyModel = Form.replyModel();
   var FileMeta = require('../../model/filemeta');
   var pug = require('pug');
   var mailer = require('../../services/mailer');
@@ -14,7 +14,7 @@
   exports.getForm = (req, res) => {
     var id = req.params.id;
     
-    FormModel.findById(id, (err, form) => {
+    FormReplyModel.findById(id, (err, form) => {
       if (err) {
         res.status(404).send();
       } else {
@@ -43,7 +43,7 @@
     var id = req.body.id;
     var data = req.body.data;
     
-    FormModel.findById(id, (err, form) => {
+    FormReplyModel.findById(id, (err, form) => {
       if (err) {
         res.status(400).send(err);
       } else {
@@ -67,7 +67,7 @@
       res.status(400).send(errors);
     } else {
       var body = Form.sanitizedBody(req);
-      var model = new FormModel(body);
+      var model = new FormReplyModel(body);
 
       model.save((err, model) => {
         if (err) {

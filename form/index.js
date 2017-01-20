@@ -112,9 +112,9 @@
       return value !== undefined && value !== null && value !== '';
     }
     
-    static model() {
-      if (Form._model) {
-        return Form._model;
+    static replyModel() {
+      if (Form._replyModel) {
+        return Form._replyModel;
       }
       
       var fields = Form.fields();
@@ -144,9 +144,9 @@
       }
       
       var schema = new mongoose.Schema(schemaOptions);
-      Form._model = mongoose.model('Form', schema);
+      Form._replyModel = mongoose.model('Reply', schema);
       
-      return Form._model;
+      return Form._replyModel;
     }
     
     static resolveSchemaType (fieldType) {
