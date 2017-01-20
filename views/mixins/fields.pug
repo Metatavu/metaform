@@ -42,7 +42,7 @@ mixin boolean-field(field)
     .col-12
       .form-check
         label.form-check-label
-          input.form-check-input(type="checkbox",name=field.name,title=field.title,checked=field.checked)
+          input.form-check-input(type="checkbox",name=field.name,title=field.title,checked=field.checked,value="true")
           |&nbsp;
           =field.title
           if field.required
