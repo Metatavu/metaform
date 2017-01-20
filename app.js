@@ -9,6 +9,7 @@
   const mongoose = require('mongoose');
   const bodyParser = require('body-parser');
   const expressSession = require('express-session');
+  const MongoStore = require('connect-mongo')(expressSession);
   const cookieParser = require('cookie-parser');
   const expressValidator = require('express-validator');
   const flash = require('connect-flash');
@@ -26,7 +27,11 @@
   app.set('view engine', 'pug');
   
   app.use(cookieParser());
-  app.use(expressSession({secret:config.session_secret}));
+  app.use(expressSession({
+    secret:config.session_secret,
+    store: new MongoStore({ mongooseConnection: mongoose.connection })
+  }));
+  
   app.use(passport.initialize());
   app.use(passport.session());
   app.use(flash());
