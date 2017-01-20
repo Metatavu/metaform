@@ -1,12 +1,45 @@
 (function(){
 	'use strict';
 	
+
+  $.widget("custom.metaform", {
+    
+    _create : function() {
+      this.element.on("submit", $.proxy(this._onFormSubmit, this));
+    },
+    
+    _onFormSubmit: function (event) {
+      event.preventDefault();
+      var data = this.element.serialize();
+      
+      $.ajax({
+        url: '/formReply',
+        data: data,
+        method: 'POST',
+        success: function() {
+          $('<div>')
+            .addClass('alert alert-success fixed-top')
+            .text('Lomake lähetettiin onnistuneesti')
+            .appendTo(document.body);        
+        },
+        error: function (jqXHR, textStatus) {
+          $('<div>')
+            .addClass('alert alert-danger fixed-top')
+            .text('Lomakkeen lähetys epäonnistui: ' + textStatus)
+            .appendTo(document.body);        
+        }
+      });
+    }
+  
+  });
+	
   $.widget("custom.fileField", {
     
     _create : function() {
       this.element.find('.add-file-button').on("click", $.proxy(this._onAddFileButtonClick, this));
       this.element.on('click', '.remove-file-button', $.proxy(this._onRemoveFileButtonClick, this));
       
+      this.element.find('.progress-bar').hide();
       this.element.find('input[type="file"]')
         .css({
           opacity: 0
@@ -25,6 +58,7 @@
        event.preventDefault();
        
        this.element.find('.progress-bar')
+         .show()
          .removeClass('bg-success')
          .addClass('progress-bar-animated progress-bar-striped')
          .css({
@@ -118,8 +152,12 @@
     }
   
   });
+  
+  
 	
   $(document).ready(function () {
+    $('form').metaform();
+    
     $('.file-component').fileField();
   });
   

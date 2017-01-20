@@ -47,7 +47,7 @@
           req.checkBody(field.name, util.format("Syötä %s", field.title)).notEmpty();
         }
         
-        if (req.body[field.name]) {
+        if (Form.isValueSet(req, field.name)) {
           switch (field.type) {
             case 'number':
               req.checkBody(field.name, util.format("%s ei ole numero", field.title)).isInt()
@@ -65,7 +65,7 @@
             default:
             break;
           }
-        }
+        } 
       }
     }
 
@@ -75,27 +75,37 @@
       
       for (var i = 0; i < fields.length; i++) {
         var field = fields[i];
-        
-        switch (field.type) {
-          case 'number':
-            data[field.name] = req.sanitizeBody(field.name).toInt();
-          break;
-          case 'boolean':
-            data[field.name] = req.sanitizeBody(field.name).toBoolean();
-          break;
-          default:
-            data[field.name] = req.sanitizeBody(field.name);
-          break;
+        if (Form.isValueSet(req, field.name)) {
+          switch (field.type) {
+            case 'number':
+              data[field.name] = req.sanitizeBody(field.name).toInt();
+            break;
+            case 'boolean':
+              data[field.name] = req.sanitizeBody(field.name).toBoolean();
+            break;
+            default:
+              data[field.name] = req.sanitizeBody(field.name);
+            break;
+          }
         }
       }
       
       return data;
     }
     
+    static isValueSet(req, name) {
+      var value = req.body[name];
+      return value !== undefined && value !== null && value !== '';
+    }
+    
     static model() {
+      if (Form.model) {
+        return Form.model;
+      }
+      
       var fields = Form.fields();
       
-      var schema = {};
+      var schemaOptions = {};
       for (var i = 0; i < fields.length; i++) {
         var field = fields[i];
         var fieldType = field.type;
@@ -115,11 +125,14 @@
             schemaField.enum = Form.resolveFieldOptions(field);
           }          
   
-          schema[field.name] = schemaField;
+          schemaOptions[field.name] = schemaField;
         }
       }
       
-      return new mongoose.Schema(schema);
+      var schema = new mongoose.Schema(schemaOptions);
+      Form.model = mongoose.model('Form', schema);
+      
+      return Form.model;
     }
     
     static resolveSchemaType (fieldType) {

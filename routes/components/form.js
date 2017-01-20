@@ -39,7 +39,7 @@
     });
   };
   
-  exports.createForm = (req, res) => {
+  exports.postReply = (req, res) => {
     var id = req.body.id;
     var data = req.body.data;
     
@@ -59,16 +59,16 @@
     });
   };
   
-  exports.updateForm = (req, res) => {
+  exports.postReply = (req, res) => {
     Form.validateRequest(req);
     var errors = req.validationErrors();
     if (errors) {
       console.log(errors);
       res.status(400).send(errors);
     } else {
-      var body = Form.sanitizedBody(data);
+      var body = Form.sanitizedBody(req);
       var model = new FormModel(body);
-      
+
       model.save((err, model) => {
         if (err) {
           console.error(err);
