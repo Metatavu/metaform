@@ -41,27 +41,18 @@
   require('./routes')(app);
   
   User.findOne({
-    role: 'admin'
+    email: config.admin.email
   }).then((admin) => {
     if (!admin) {
       var newAdmin = new User();
       newAdmin.email = config.admin.email;
-      newAdmin.password = newAdmin.generateHash(config.admin.password);
+      newAdmin.password = newAdmin.generateHash(config.admin.initialPassword);
       newAdmin.role = 'admin';
       newAdmin.save().then(() => {
         console.log('Created admin user');
       }).catch((err) => {
         console.error('Error creating admin user', err);
       }); 
-    } else {
-      admin.email = config.admin.email;
-      admin.password = admin.generateHash(config.admin.password);
-      admin.archived = false;
-      admin.save().then(() => {
-        console.log('Admin user updated');
-      }).catch((err) => {
-        console.error('Error updating admin user', err);
-      });
     }
   }).catch((err) => {
     console.error(err);
