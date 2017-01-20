@@ -23,6 +23,20 @@
       };
     }
     
+    static reportListFields() {
+      var fields = Form.fields();
+      var result = [];
+      
+      for (var i = 0; i < fields.length; i++) {
+        var field = fields[i];
+        if (field.listInReport) {
+          result.push(field);
+        }
+      }
+      
+      return result;
+    }
+    
     static fields() {
       var fields = [];
       var config = Form.config();
@@ -99,8 +113,8 @@
     }
     
     static model() {
-      if (Form.model) {
-        return Form.model;
+      if (Form._model) {
+        return Form._model;
       }
       
       var fields = Form.fields();
@@ -130,9 +144,9 @@
       }
       
       var schema = new mongoose.Schema(schemaOptions);
-      Form.model = mongoose.model('Form', schema);
+      Form._model = mongoose.model('Form', schema);
       
-      return Form.model;
+      return Form._model;
     }
     
     static resolveSchemaType (fieldType) {

@@ -1,19 +1,22 @@
-extends layout
+extends admin-layout
 
 block content
-  .container-fluid
-    button#menu-toggle.btn.btn-default(href='#menu-toggle') Piilota/näytä valikko
-    .row.table-container
-      .col-lg-12
-        table#applicationTable
-          thead
-            tr
-              th Etunimi
-              th Sukunimi
-              th Synt.aika
-              th Osoite
-              th Puhelin
-              th Email
-              th Aloituspvm
-              th Lopetuspvm
-          tbody
+  +admin-menu('replies')
+  .row.mt-4
+    .col-12
+      h2
+        |Vastaukset
+  .row.mt-4.table-container
+    .col-12
+      table#formsTable
+        thead
+          tr
+            each field in listFields 
+              th
+                =field.title
+        tbody
+          each reply in replies
+            tr(data-reply-id=reply._id)
+              each field in listFields 
+                td
+                  =reply[field.name]

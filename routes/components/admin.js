@@ -11,22 +11,28 @@
 
 
   exports.renderAdminView = function (req, res) {
-    var query = {};
-    if (typeof (req.query.state) !== 'undefined' && req.query.state !== '') {
-      query.state = req.query.state;
-    }
-    if (typeof (req.query.primary) !== 'undefined' && req.query.primary !== '') {
-      query.primaryRequest = req.query.primary;
-    }
-    if (typeof (req.query.secondary) !== 'undefined' && req.query.secondary !== '') {
-      query.secondaryRequest = req.query.secondary;
-    }
-    if (typeof (req.query.department) !== 'undefined' && req.query.department !== '') {
-      query.organizationalUnit = req.query.department;
-    }
+    FormModel.find()
+      .sort({ added: 1 })
+      .batchSize(2000)
+      .exec(function(err, replies) {
+        if (err) {
+          res.status(500).send();
+        } else {
+          res.render('admin', { 
+            user: req.user,
+            viewModel: Form.viewModel(),
+            listFields: Form.reportListFields(),
+            replies: replies
+          });
+        }
+      });
+  };
 
-    res.render('admin', { user: req.user });
-
+  exports.renderUserManagementView = function(req, res){
+    res.render('usermanagement', { 
+      user: req.user,
+      viewModel: Form.viewModel()
+    });
   };
 
   exports.createXlsx = function (req, res) {

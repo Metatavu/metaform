@@ -1,0 +1,13 @@
+mixin admin-menu(active)
+  .row
+    .col-12
+      ul.nav.nav-pills.nav-justified
+        li.nav-item
+          a.nav-link(class=active == 'replies' ? 'active' : '', href='/admin') Vastaukset
+        li.nav-item
+          a.nav-link(class=active == 'change-password' ? 'active' : '', href='/changepass') Vaihda salasana
+        if (user.role === 'admin')
+          li.nav-item
+            a.nav-link(class=active == 'user-management' ? 'active' : '', href='/admin/users') Käyttäjähallinta
+        li.nav-item
+          a.nav-link(href='/logout') Kirjaudu ulos

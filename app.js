@@ -56,6 +56,7 @@
     } else {
       admin.email = config.admin.email;
       admin.password = admin.generateHash(config.admin.password);
+      admin.archived = false;
       admin.save().then(() => {
         console.log('Admin user updated');
       }).catch((err) => {

@@ -68,17 +68,13 @@ exports.logout = function(req, res) {
   res.redirect(config.server_root);
 };
 
-exports.manage = function(req, res){
-  res.render('usermanagement', {user : req.user, root: config.server_root, query: {state: '', primaryRequest: '', secondaryRequest: ''}, positions: config.positions});
-};
-
 exports.archieve = function(req, res){
-  var id = req.body.id;
+  var id = req.param('id');
   User.findById(id, function(err, user){
     if(err){
       res.status(500).send(err);
     }else{
-      user.archieved = true;
+      user.archived = true;
       user.save(function(err, user){
         if(err){
           res.status(500).send(err);

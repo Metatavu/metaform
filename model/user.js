@@ -5,7 +5,7 @@ var userSchema = mongoose.Schema({
   email : String,
   password : String,
   role: { type: String, default: 'manager' },
-  archieved: {type: Boolean, default: false}
+  archived: {type: Boolean, default: false}
 });
 
 userSchema.methods.generateHash = function(password) {

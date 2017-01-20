@@ -53,9 +53,11 @@
      * Forms
      */
 
-    app.post(util.format('%s/form', config.server_root), form.createForm);
-    app.post(util.format('%s/update', config.server_root), authenticate(['manager', 'admin']), form.updateForm);
+    app.post(util.format('%s/formReply', config.server_root), form.postReply);
+    // app.post(util.format('%s/update', config.server_root), authenticate(['manager', 'admin']), form.updateForm);
     app.get(util.format('%s/form/:id', config.server_root), authenticate(['manager', 'admin']), form.getForm);
+    
+    app.post(util.format('%s/reply', config.server_root), form.postReply);
 
     /*
      *  Admin
@@ -63,7 +65,8 @@
 
     app.get(config.server_root + '/admin', authenticate(['manager', 'admin']), admin.renderAdminView);
     app.get(config.server_root + '/export', authenticate(['manager', 'admin']), admin.createXlsx);
-
+    app.get(config.server_root + '/admin/users', authenticate(['admin']), admin.renderUserManagementView);
+    
     /*
      * User
      */
@@ -71,13 +74,12 @@
     app.post(config.server_root + '/login', user.login);
     app.post(config.server_root + '/signup', authenticate(['admin']), user.create);
     app.get(config.server_root + '/user/list', authenticate(['admin']), user.list);
-    app.post(config.server_root + '/user/archieve', authenticate(['admin']), user.archieve);
+    app.delete (config.server_root + '/user/:id', authenticate(['admin']), user.archieve);
     app.get(config.server_root + '/logout', user.logout);
     app.post(config.server_root + '/forgotpassword', user.forgotpassword);
     app.get(config.server_root + '/resetpassword/:token', user.resetpassword);
     app.post(config.server_root + '/setpasstoken', user.setpassToken);
     app.post(config.server_root + '/setpass', authenticate(['manager', 'admin']), user.setpass);
-    app.get(config.server_root + '/user/manage', authenticate(['admin']), user.manage);
     app.get(config.server_root + '/user/get/:id', authenticate(['admin', 'manager']), user.get);
   };
 
