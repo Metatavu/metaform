@@ -145,12 +145,17 @@ mixin table-field(field, value, readonly)
                     =column.title
               tbody
                 each column, columnIndex in field.columns
-                  td
+                  td(data-column-type=column.type)
                     case column.type 
                       when 'text'
-                        input(type="text",data-column-name=column.name)
+                        input.form-control(type="text",data-column-name=column.name)
                       when 'number'
-                        input(type="number",data-column-name=column.name,lang='fi')
+                        input.form-control(type="number",data-column-name=column.name,lang='fi',min=column.min,max=column.max,step=column.step)
+                      when 'enum'
+                        select.form-control(data-column-name=column.name)
+                          each value in column.values
+                            option(data-other=value.other)
+                              =value.text
               tfoot
                 tr
                   each column, columnIndex in field.columns

@@ -28,6 +28,10 @@ block body
                     h2
                       =section.title
                 .row
+                  .col-12
+                    small
+                      =section.description
+                .row
                   fieldset.col-12
                     each field in section.fields
                       if field.contexts.indexOf('FORM') > -1

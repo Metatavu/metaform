@@ -22,7 +22,7 @@
         "title": formConfig.title,
         "theme": formConfig.theme,
         "sections": formConfig.sections
-      };
+      }
     }
     
     static contextFields(context) {
@@ -254,6 +254,7 @@
     static resolveTableSchemaType (type) {
       switch (type) {
         case 'text':
+        case 'enum':
           return String;
         case 'number':
           return Number;

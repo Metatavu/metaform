@@ -39,6 +39,8 @@
       this.element.on('click', '.add-table-row', $.proxy(this._onAddtableRowClick, this));
       this.element.on('click', '.print-table', $.proxy(this._onPrintTableClick, this));
       this.element.on('change', 'input', $.proxy(this._onInputChange, this));
+      this.element.on('change', 'td[data-column-type="enum"] select', $.proxy(this._onEnumSelectChange, this));
+
       this._refresh();
 
       if (this.element.find('th[data-calculate-sum="true"]').length) {
@@ -46,6 +48,10 @@
       } else {
         this.element.find('tfoot').hide();
       }
+      
+      this.element.find('[data-column-type="enum"] select').each($.proxy(function (index, select) {
+        this._refreshEnumSelect($(select));
+      }, this));
     },
     
     _addRow: function () {
@@ -53,6 +59,10 @@
       clonedRow.appendTo(this.element.find('tbody'));
       clonedRow.find('input').each($.proxy(function (index, input) {
         $(input).val('');
+      }, this));
+
+      clonedRow.find('[data-column-type="enum"] select').each($.proxy(function (index, select) {
+        this._refreshEnumSelect($(select));
       }, this));
     },
     
@@ -87,6 +97,20 @@
       this.element.find('input[name="' + this.element.attr('data-field-name') + '"]').val(JSON.stringify(datas));
     },
     
+    _refreshEnumSelect: function (enumSelect) {
+      var other = !!$(enumSelect).find('option:checked').attr('data-other');
+      if (other) {
+        $('<input>')
+          .addClass('enum-other form-control')
+          .css({'width': '50%', 'display': 'inline'})
+          .insertAfter(enumSelect);
+          enumSelect.css({'width': 'calc(50% - 4px)', 'display': 'inline', 'margin-right': '4px'});
+      } else {
+        enumSelect.parent().find('.enum-other').remove();
+        enumSelect.css({'width': '100%', 'display': 'block'})
+      }
+    },
+    
     _onAddtableRowClick: function (event) {
       event.preventDefault();
       this._addRow();
@@ -95,6 +119,10 @@
     _onInputChange: function (event) {
       event.preventDefault();
       this._refresh();
+    },
+    
+    _onEnumSelectChange: function (event) {
+      this._refreshEnumSelect($(event.target));
     },
     
     _generatePrintableTable: function () {
@@ -116,7 +144,23 @@
         var row = [];
         
         $(tr).find('td').each(function (cellIndex, cell) {
-          var value = $(cell).find('input').val();
+          var value;
+          var columnType = $(cell).attr('data-column-type');
+
+          switch (columnType) {
+            case 'enum':
+              var option = $(cell).find('option:checked');
+              if (option.attr('data-other')) {
+                value = option.text() + ' ' + $(cell).find('input.enum-other').val();
+              } else {
+                value = option.text();
+              }
+            break;
+            default:
+              value = $(cell).find('input').val();
+            break;
+          }
+          
           row.push({
             text: value||'' 
           });
@@ -141,7 +185,7 @@
       
       return {
         content: [{ 
-          text: this.element.attr('data-field-title'), 
+          text: this.element.attr('data-field-title')||'', 
           style: 'header' 
         }, {
           table: {
