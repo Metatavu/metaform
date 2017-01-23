@@ -19,7 +19,4 @@
     res.render('forgotpassword', { });
   }
   
-  exports.renderChangePass = (req, res) => {
-    res.render('setpassword', { });
-  }
 }).call(this);

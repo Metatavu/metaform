@@ -35,8 +35,7 @@
     app.get("/", navigation.renderIndex);
     app.get('/login', navigation.renderLogin);
     app.get('/forgotpassword', navigation.renderForgotPass);
-    app.get('/changepass', authenticate(['manager', 'admin']), navigation.renderChangePass);
-
+    
     /*
      * File uploads
      */
@@ -75,7 +74,10 @@
     app.post('/forgotpassword', user.forgotpassword);
     app.get('/resetpassword/:token', user.getResetpassword);
     app.post('/resetpassword/:token', user.postResetpassword);
-    app.post('/setpass', authenticate(['manager', 'admin']), user.setpass);
+    
+    app.get('/changepass', authenticate(['manager', 'admin']), user.getChangePass);
+    app.post('/changepass', authenticate(['manager', 'admin']), user.postChangePass);
+    
     app.get('/user/get/:id', authenticate(['admin', 'manager']), user.get);
   };
 

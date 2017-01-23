@@ -224,25 +224,38 @@
       });
     }
   };
+
   
-  exports.setpass = function(req, res) {
+  exports.getChangePass = (req, res) => {
+    res.render('setpassword', { });
+  }
+  
+  exports.postChangePass = function(req, res) {
     var oldpass = req.body.old_pass;
     var pass = req.body.pass;
     if (req.body.pass2 !== pass) {
-      res.status(400).send('passwords dont match');
+      return res.status(500).render('setpassword', {
+        message: 'Salasanat eivät täsmää'
+      });
     } else {
       User.findById(req.user._id, function(err, user){
-        if(err){
-          res.status(500).send(err);
+        if (err) {
+          return res.status(500).render('setpassword', {
+            message: err
+          });
         }else{
           if(!user.validPassword(oldpass)){
-            res.status(403).send('wrong password');
+            return res.status(403).render('setpassword', {
+              message: 'Väärä salasana'
+            });
           }else{
             user.password = user.generateHash(pass);
             user.save(function(err, user){
-              if(err){
-                res.status(500).send(err);
-              }else{
+              if (err) {
+                return res.status(500).render('setpassword', {
+                  message: err
+                });
+              } else {
                 res.redirect('/admin');
               }
             });
