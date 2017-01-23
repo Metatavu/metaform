@@ -25,6 +25,15 @@
       }
     }
     
+    static getReplyEmail(reply) {
+      var formConfig = Form.config();
+      if (formConfig['email-field']) {
+        return reply[formConfig['email-field']];
+      }
+      
+      return null;
+    }
+    
     static contextFields(context) {
       var fields = Form.fields();
       var result = [];

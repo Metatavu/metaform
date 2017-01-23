@@ -4,12 +4,25 @@
   
   var Form = require(__dirname + '/../../form');
   var FormReplyModel = Form.replyModel();
-  var FileMeta = require('../../model/filemeta');
   var pug = require('pug');
   var mailer = require('../../services/mailer');
-  var config = require('../../config');
-  var async = require('async');
   var _ = require('underscore');
+  
+  function sendEmail(reply) {
+    var email = Form.getReplyEmail(reply);
+    if (email) {
+      try {
+        var emailContent = pug.renderFile(util.format('%s/../../views/mail.pug', __dirname), { 
+          viewModel: Form.viewModel(),
+          reply: reply
+        });
+        
+        mailer.sendMail(email, 'Lomake vastaanotettu.', emailContent);
+      } catch(renderEx){
+        console.error(renderEx)
+      }   
+    }
+  }
   
   exports.postReply = (req, res) => {
     var id = req.body.id;
@@ -35,33 +48,22 @@
     Form.validateRequest(req);
     var errors = req.validationErrors();
     if (errors) {
-      console.log(errors);
+      console.error(errors);
       res.status(400).send(errors);
     } else {
       var body = Form.sanitizedBody(req);
-      var model = new FormReplyModel(body);
+      var reply = new FormReplyModel(body);
 
-      model.save((err, model) => {
+      reply.save((err, reply) => {
         if (err) {
           console.error(err);
           res.status(400).send(err);
         } else {
-          /**
-          TODO: Email
-
-          var emailContent = null;
-          try {
-            emailContent = pug.renderFile(util.format('%s/../../views/mail.pug', __dirname), { form: model });
-          } catch(renderEx){
-            console.log(renderEx)
-          }   
-          
-          mailer.sendMail(form.email, 'Kesätyöhakemuksesi on vastaanotettu.', content);
-          **/
-          
-          res.send(model);
+          sendEmail(reply);
+          res.send(reply);
         }
       });
     }
   };
+  
 }).call(this);

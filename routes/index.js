@@ -2,7 +2,6 @@
 (function () {
   'use strict';
 
-  const util = require('util');
   const form = require(__dirname + '/components/form');
   const admin = require(__dirname + '/components/admin');
   const user = require(__dirname + '/components/user');
@@ -11,9 +10,7 @@
   const multer = require('multer');
   const fileParser = multer({ storage: multer.memoryStorage() });
   const config = require(__dirname + '/../config');
-  const path = require('path');
-  const fs = require('fs');
-
+  
   function authenticate(allowedRoles) {
     return function (req, res, next) {
       if (req.isAuthenticated()) {
@@ -53,10 +50,10 @@
      * Forms
      */
 
-    app.post(util.format('%s/formReply', config.server_root), form.postReply);
-    // app.post(util.format('%s/update', config.server_root), authenticate(['manager', 'admin']), form.updateForm);
+    app.post('/formReply', form.postReply);
+    // app.post('/update', authenticate(['manager', 'admin']), form.updateForm);
     
-    app.post(util.format('%s/reply', config.server_root), form.postReply);
+    app.post('/reply', form.postReply);
 
     /*
      *  Admin
