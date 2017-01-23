@@ -2,12 +2,12 @@
 (function() {
   'use strict';
   
-  var Form = require(__dirname + '/../../form');
-  var FormReplyModel = Form.replyModel();
-  var pug = require('pug');
-  var mailer = require('../../services/mailer');
-  var _ = require('underscore');
-  
+  const Form = require(__dirname + '/../../form');
+  const FormReplyModel = Form.replyModel();
+  const pug = require('pug');
+  const mailer = require('../../services/mailer');
+  const _ = require('underscore');
+
   function sendEmail(reply) {
     var email = Form.getReplyEmail(reply);
     if (email) {

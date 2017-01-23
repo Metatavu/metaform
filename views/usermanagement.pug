@@ -8,7 +8,7 @@ block custom-head
 block body
   .container
     +admin-menu('replies')
-  .container .form-container
+  .container.form-container
     .row.mt-4
       .col-12
         h2
@@ -30,7 +30,7 @@ block body
   div(id='add-new-user-modal', class='modal fade')
     div(class='modal-dialog')
       div(class='modal-content')
-        form(role='form', method='post', action=root+'/signup')
+        form(role='form', method='post', action='/signup')
           div(class='modal-header')
             button(type='button', class='close', data-dismiss='modal', aria-label='Close')
               span(aria-hidden='true') &times;
@@ -51,7 +51,7 @@ block body
   div(id='remove-user-modal', class='modal fade')
     div(class='modal-dialog')
       div(class='modal-content')
-        form(role='form', method='post', action=root+'/signup')
+        form(role='form', method='post', action='/signup')
           div(class='modal-header')
             button(type='button', class='close', data-dismiss='modal', aria-label='Close')
               span(aria-hidden='true') &times;

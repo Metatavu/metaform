@@ -211,7 +211,6 @@
                 var fileMetaResponse = fileMetaResponses[i];
                 var fileMeta = fileMetaResponse.fileMeta;
                 var fileMetas = fieldMetas[fileMetaResponse.fieldName] || [];
-                console.log("Meat files", fileMetas);
                 fieldMetas[fileMetaResponse.fieldName] = fileMetas.concat([fileMeta]);
               }
               
@@ -249,8 +248,6 @@
               "type": this.resolveTableSchemaType(column.type)
             }
           });
-          
-          console.log(tableDef);
           
           return [ tableDef ];
         default:

@@ -2,7 +2,6 @@
   'use strict';
   
   var userData = {};
-  var selectedUser;
   
   function markRowArchived(row) {
     row
