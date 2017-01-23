@@ -32,7 +32,7 @@ mixin number-field(field, value, readonly)
         if field.required
           |&nbsp;*
     .col-12
-      input.form-control(aria-labelledby=id='field-' + field.name,id='field-' + field.name,type="number",name=field.name,title=field.title,required=field.required,min=field.min,max=field.max,step=field.step,readonly=readonly,value=value||field.default)
+      input.form-control(aria-labelledby=id='field-' + field.name,id='field-' + field.name,type="number",name=field.name,title=field.title,required=field.required,min=field.min,max=field.max,step=field.step,readonly=readonly,value=value||field.default,lang='fi')
       if field.help
         small.form-text.text-muted
           =field.help
@@ -122,6 +122,58 @@ mixin files-field(field, fileMetas, readonly)
         small.form-text.text-muted
           =field.help
           
+mixin table-field(field, value, readonly)
+  .form-group.table-field.row(data-field-name=field.name)
+    .col-12
+      .row
+        .col-12
+          label(for='field-' + field.name)
+            =field.title
+            if field.required
+              |&nbsp;*
+      .row
+        .col-12
+          .table-container
+            table.table(data-field-name=field.name)
+              thead
+                each column in field.columns
+                  th(data-calculate-sum=column['calculate-sum'] ? 'true' : 'false')
+                    =column.title
+              tbody
+                each column, columnIndex in field.columns
+                  td
+                    case column.type 
+                      when 'text'
+                        input(type="text",data-column-name=column.name)
+                      when 'number'
+                        input(type="number",data-column-name=column.name,lang='fi')
+              tfoot
+                tr
+                  each column, columnIndex in field.columns
+                    td
+                      if columnIndex == 0
+                        |Yhteensä:
+                      else
+                        if column['calculate-sum']
+                          div.sum-container
+                            span.sum
+                              |0
+                            span.sum-postfix
+                              |&nbsp;
+                              =column['sum-postfix']
+              input(type="hidden",name=field.name)                             
+              
+      if field.addRows
+        .row
+          .col-12
+            a.btn.btn-sm.btn-success.add-table-row
+              |Lisää rivi
+      .row
+        .col-12
+          if field.help
+            small.form-text.text-muted
+              =field.help
+              
 mixin logo-field(field, value, readonly)
   .form-group.row
     .col-12.logo-container
@@ -159,6 +211,8 @@ mixin field(field, value, readonly)
       +radio-field(field, value, readonly)
     when 'files'
       +files-field(field, value, readonly)
+    when 'table'
+      +table-field(field, value, readonly)
     when 'logo'
       +logo-field(field, value, readonly)
     when 'small-text'

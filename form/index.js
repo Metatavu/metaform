@@ -102,6 +102,9 @@
             case 'files':
               data[field.name] = req.body[field.name];
             break;
+            case 'table':
+              data[field.name] = JSON.parse(req.body[field.name]);
+            break;
             default:
               data[field.name] = req.sanitizeBody(field.name);
             break;
@@ -131,7 +134,7 @@
         var skip = NOT_SAVED_FIELDS.indexOf(fieldType) > -1;
         
         if (!skip) {
-          var schemaType = Form.resolveSchemaType(fieldType);
+          var schemaType = Form.resolveSchemaType(field);
           var schemaField = {
             type: schemaType
           };
@@ -216,8 +219,8 @@
       });
     }
         
-    static resolveSchemaType (fieldType) {
-      switch (fieldType) {
+    static resolveSchemaType (field) {
+      switch (field.type) {
         case 'text':
         case 'email':
         case 'memo':
@@ -229,6 +232,31 @@
           return Boolean;
         case 'files':
           return [ mongoose.Schema.Types.ObjectId ];
+        case 'table':
+          var tableDef = {};
+          
+          _.each(field.columns, (column) => {
+            tableDef[column.name] = {
+              "type": this.resolveTableSchemaType(column.type)
+            }
+          });
+          
+          console.log(tableDef);
+          
+          return [ tableDef ];
+        default:
+        break;
+      } 
+      
+      return null;
+    }
+    
+    static resolveTableSchemaType (type) {
+      switch (type) {
+        case 'text':
+          return String;
+        case 'number':
+          return Number;
         default:
         break;
       } 

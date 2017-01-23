@@ -32,6 +32,71 @@
     }
   
   });
+  
+  $.widget("custom.tableField", {
+    
+    _create : function() {
+      this.element.on('click', '.add-table-row', $.proxy(this._onAddtableRowClick, this));
+      this.element.on('change', 'input', $.proxy(this._onInputChange, this));
+      this._refresh();
+
+      if (this.element.find('th[data-calculate-sum="true"]').length) {
+        this.element.find('tfoot').show();
+      } else {
+        this.element.find('tfoot').hide();
+      }
+    },
+    
+    _addRow: function () {
+      var clonedRow = this.element.find('tbody tr:first-child').clone();
+      clonedRow.appendTo(this.element.find('tbody'));
+      clonedRow.find('input').each($.proxy(function (index, input) {
+        $(input).val('');
+      }, this));
+    },
+    
+    _refresh: function () {
+      var datas = [];
+      
+      this.element.find('thead th[data-calculate-sum="true"]').each($.proxy(function (rowIndex, row) {
+        var sum = 0;
+        var columnIndex = $(row).index();
+        
+        this.element.find('tbody td:nth-of-type(' + (columnIndex + 1) + ' )').each(function (index, column) {
+          var value = $(column).find('input').val();
+          if (value) {
+            sum += parseFloat(value);
+          }
+        });
+        
+        
+        this.element.find('tfoot td:nth-of-type(' + (columnIndex + 1) + ' ) .sum').text(sum);
+      }, this));
+      
+      this.element.find('tbody tr').each(function () {
+        var rowDatas = {};
+        
+        $(this).find('input').each(function () {
+          rowDatas[$(this).attr('data-column-name')] = $(this).val();
+        });
+        
+        datas.push(rowDatas);
+      });
+      
+      this.element.find('input[name="' + this.element.attr('data-field-name') + '"]').val(JSON.stringify(datas));
+    },
+    
+    _onAddtableRowClick: function (event) {
+      event.preventDefault();
+      this._addRow();
+    },
+    
+    _onInputChange: function (event) {
+      event.preventDefault();
+      this._refresh();
+    }
+    
+  });
 	
   $.widget("custom.fileField", {
     
@@ -157,8 +222,8 @@
 	
   $(document).ready(function () {
     $('form').metaform();
-    
     $('.file-component').fileField();
+    $('.table-field').tableField();
   });
   
 }).call(this);
