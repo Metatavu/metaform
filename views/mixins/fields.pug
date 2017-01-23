@@ -123,7 +123,7 @@ mixin files-field(field, fileMetas, readonly)
           =field.help
           
 mixin table-field(field, value, readonly)
-  .form-group.table-field.row(data-field-name=field.name)
+  .form-group.table-field.row(data-field-name=field.name,data-field-title=field.title)
     .col-12
       .row
         .col-12
@@ -134,6 +134,10 @@ mixin table-field(field, value, readonly)
       .row
         .col-12
           .table-container
+            if field.printable
+              a(href='#').print-table.float-right
+                i.fa.fa-print(aria-hidden="true")
+                |&nbsp;Tulosta
             table.table(data-field-name=field.name)
               thead
                 each column in field.columns

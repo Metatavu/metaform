@@ -37,6 +37,7 @@
     
     _create : function() {
       this.element.on('click', '.add-table-row', $.proxy(this._onAddtableRowClick, this));
+      this.element.on('click', '.print-table', $.proxy(this._onPrintTableClick, this));
       this.element.on('change', 'input', $.proxy(this._onInputChange, this));
       this._refresh();
 
@@ -94,6 +95,83 @@
     _onInputChange: function (event) {
       event.preventDefault();
       this._refresh();
+    },
+    
+    _generatePrintableTable: function () {
+      var tableHeaders = $.map(this.element.find('thead tr th'), function (th) {
+        return {
+          text: $(th).text(),
+          style: 'tableHeader'
+        };
+      });
+      
+      var tableWidths = ['*'];
+      for (var i = 1; i < tableHeaders.length; i++) {
+        tableWidths.push('auto');  
+      }
+      
+      var tableBody = [ tableHeaders ];
+      
+      this.element.find('tbody tr').each(function (rowIndex, tr) {
+        var row = [];
+        
+        $(tr).find('td').each(function (cellIndex, cell) {
+          var value = $(cell).find('input').val();
+          row.push({
+            text: value||'' 
+          });
+        });
+        
+        tableBody.push(row);
+      });
+      
+      this.element.find('tfoot tr').each(function (rowIndex, tr) {
+        var row = [];
+        
+        $(tr).find('td').each(function (cellIndex, cell) {
+          var value = $(cell).text();
+          row.push({
+            text: value||'',
+            style: 'tableFooter'
+          });
+        });
+        
+        tableBody.push(row);
+      });
+      
+      return {
+        content: [{ 
+          text: this.element.attr('data-field-title'), 
+          style: 'header' 
+        }, {
+          table: {
+            body: tableBody,
+            widths: tableWidths
+          }
+        }],
+        styles: { 
+          header: {
+            fontSize: 18,
+            bold: true,
+            marginBottom: 10
+          },
+          tableHeader: {
+            bold: true
+          },
+          tableFooter: {
+            bold: true
+          }
+        }
+      };
+    },
+    
+    _onPrintTableClick: function (event) {
+      event.preventDefault();
+      
+      var docDefinition = this._generatePrintableTable();
+      
+      pdfMake.createPdf(docDefinition)
+        .download(this.element.attr('data-field-name') + '.pdf');
     }
     
   });
@@ -213,13 +291,9 @@
           $(button).closest('.file').remove();
         }, this)
       });
-      
     }
-  
   });
   
-  
-	
   $(document).ready(function () {
     $('form').metaform();
     $('.file-component').fileField();
