@@ -7,6 +7,9 @@ block custom-head
 
 block body
   .container
+    if message && message.length
+      .alert.alert-danger
+        =message
     form(role='form', action='/login', method='post')
       .row.mt-4
         .col-12

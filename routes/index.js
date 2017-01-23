@@ -24,7 +24,7 @@
           res.status(403).send('Go away!');
         }
       } else {
-        res.redirect(config.server_root + '/login');
+        res.redirect('/login');
       }
     };
   }
@@ -36,17 +36,17 @@
      */
 
     app.get(config.server_root, navigation.renderIndex);
-    app.get(config.server_root + '/login', navigation.renderLogin);
-    app.get(config.server_root + '/forgotpassword', navigation.renderForgotPass);
-    app.get(config.server_root + '/changepass', authenticate(['manager', 'admin']), navigation.renderChangePass);
+    app.get('/login', navigation.renderLogin);
+    app.get('/forgotpassword', navigation.renderForgotPass);
+    app.get('/changepass', authenticate(['manager', 'admin']), navigation.renderChangePass);
 
     /*
      * File uploads
      */
 
-    app.post(config.server_root + '/upload', fileParser.array('file'), upload.uploadFile);
-    app.get(config.server_root + '/upload/:id', upload.getFileData);
-    app.delete(config.server_root + '/upload/:id', upload.removeFile);
+    app.post('/upload', fileParser.array('file'), upload.uploadFile);
+    app.get('/upload/:id', upload.getFileData);
+    app.delete('/upload/:id', upload.removeFile);
 
 
     /*
@@ -71,16 +71,16 @@
      * User
      */
 
-    app.post(config.server_root + '/login', user.login);
-    app.post(config.server_root + '/signup', authenticate(['admin']), user.create);
-    app.get(config.server_root + '/user/list', authenticate(['admin']), user.list);
-    app.delete (config.server_root + '/user/:id', authenticate(['admin']), user.archieve);
-    app.get(config.server_root + '/logout', user.logout);
-    app.post(config.server_root + '/forgotpassword', user.forgotpassword);
-    app.get(config.server_root + '/resetpassword/:token', user.resetpassword);
-    app.post(config.server_root + '/setpasstoken', user.setpassToken);
-    app.post(config.server_root + '/setpass', authenticate(['manager', 'admin']), user.setpass);
-    app.get(config.server_root + '/user/get/:id', authenticate(['admin', 'manager']), user.get);
+    app.post('/login', user.login);
+    app.post('/signup', authenticate(['admin']), user.create);
+    app.get('/user/list', authenticate(['admin']), user.list);
+    app.delete ('/user/:id', authenticate(['admin']), user.archieve);
+    app.get('/logout', user.logout);
+    app.post('/forgotpassword', user.forgotpassword);
+    app.get('/resetpassword/:token', user.resetpassword);
+    app.post('/setpasstoken', user.setpassToken);
+    app.post('/setpass', authenticate(['manager', 'admin']), user.setpass);
+    app.get('/user/get/:id', authenticate(['admin', 'manager']), user.get);
   };
 
 }).call(this);

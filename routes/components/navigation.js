@@ -11,8 +11,7 @@
   
   exports.renderLogin = (req, res) => {
     res.render('login', {
-      message: req.flash('loginMessage'),
-      root: config.server_root
+      message: req.flash('loginMessage')
     });
   }
   

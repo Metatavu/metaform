@@ -6,8 +6,8 @@ const config = require('../../config');
 const ResetToken = require('../../model/resettoken');
 
 exports.login = passport.authenticate('local-login', {
-  successRedirect : config.server_root+'/admin',
-  failureRedirect : config.server_root+'/login',
+  successRedirect : '/admin',
+  failureRedirect : '/login',
   failureFlash : false
 });
 
