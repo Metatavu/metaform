@@ -4,11 +4,11 @@
   
   const util = require('util');
   const Form = require(__dirname + '/../../form');
-  const FormReplyModel = Form.replyModel();
+  const User = require('../../model/user');
   const pug = require('pug');
   const mailer = require('../../services/mailer');
   
-  function sendEmail(reply) {
+  function sendSenderEmail(reply) {
     var email = Form.getReplyEmail(reply);
     if (email) {
       try {
@@ -22,6 +22,20 @@
         console.error(renderEx)
       }   
     }
+  }
+  
+  function sendManagerEmail(email) {
+    try {
+      var viewModel = Form.viewModel();
+      var emailContent = pug.renderFile(util.format('%s/../../views/mails/received-manager.pug', __dirname), { 
+        viewModel: viewModel,
+        reply: reply
+      });
+      
+      mailer.sendMail(email, util.format('Uusi vastaus lomakkeessa %s', viewModel.title), emailContent);
+    } catch(renderEx){
+      console.error(renderEx)
+    }   
   }
   
   exports.putReply = (req, res) => {
@@ -59,7 +73,21 @@
           console.error(err);
           res.status(400).send(err);
         } else {
-          sendEmail(reply);
+          sendSenderEmail(reply);
+          
+          User.find({
+            archived: false
+          }, (err, users) => {
+            if (!err){
+              for (var i = 0; i < users.length; i++) {
+                sendManagerEmail(users[i].email);
+              }
+            } else {
+              console.error(err);
+            }
+          });
+          
+          
           res.send(reply);
         }
       });

@@ -8,7 +8,6 @@
   const Form = require(__dirname + '/../../form');
   const mailer = require('../../services/mailer');
   const User = require('../../model/user');
-  const config = require('../../config');
   const ResetToken = require('../../model/resettoken');
   const pug = require('pug');
   
@@ -65,7 +64,7 @@
   };
   
   exports.list = function(req, res) {
-    User.find({}, function(err, users){
+    User.find({}, function(err, users) {
       if(err){
         res.status(500).send(err);
       }else{
