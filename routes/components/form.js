@@ -28,8 +28,7 @@
     try {
       var viewModel = Form.viewModel();
       var emailContent = pug.renderFile(util.format('%s/../../views/mails/received-manager.pug', __dirname), { 
-        viewModel: viewModel,
-        reply: reply
+        viewModel: viewModel
       });
       
       mailer.sendMail(email, util.format('Uusi vastaus lomakkeessa %s', viewModel.title), emailContent);
