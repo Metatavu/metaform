@@ -108,7 +108,7 @@ mixin files-field(field, fileMetas, readonly)
           each fileMeta in fileMetas
             .row
               .col-12
-                a(href='/upload/' + fileMeta.fileData)
+                a(href='/upload/' + fileMeta.fileData,target='_blank')
                   =fileMeta.originalname
       else
         .file-component(data-field-name=field.name)
