@@ -141,7 +141,7 @@ mixin table-field(field, value, readonly)
             table.table(data-field-name=field.name)
               thead
                 each column in field.columns
-                  th(data-calculate-sum=column['calculate-sum'] ? 'true' : 'false')
+                  th(data-calculate-sum=column['calculate-sum'] ? 'true' : 'false',width=column['column-width'])
                     =column.title
               tbody
                 if readonly
