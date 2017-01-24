@@ -3,24 +3,21 @@
   'use strict';
 
   const Form = require(__dirname + '/../../form');
-  const FormReplyModel = Form.replyModel();
-
+  
   exports.renderAdminView = function (req, res) {
-    FormReplyModel.find()
-      .sort({ added: 1 })
-      .batchSize(2000)
-      .exec(function(err, replies) {
-        if (err) {
-          res.status(500).send();
-        } else {
-          res.render('admin', { 
-            user: req.user,
-            viewModel: Form.viewModel(),
-            fields: Form.contextFields('MANAGEMENT_LIST'),
-            replies: replies
-          });
-        }
-      });
+    var includeFiltered = req.query.includeFiltered||false;
+    Form.listReplies(includeFiltered, (err, replies) => {
+      if (err) {
+        res.status(500).send();
+      } else {
+        res.render('admin', { 
+          user: req.user,
+          viewModel: Form.viewModel(),
+          fields: Form.contextFields('MANAGEMENT_LIST'),
+          replies: replies
+        });
+      }
+    });
   };
 
   exports.renderUserManagementView = function(req, res){

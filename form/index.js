@@ -48,6 +48,12 @@
       return result;
     }
     
+    static listFilterFields() {
+      return _.filter(Form.contextFields('MANAGEMENT_LIST'), (field) => {
+        return field['list-filter'];
+      });
+    }
+    
     static fields() {
       var fields = [];
       var config = Form.config();
@@ -240,6 +246,37 @@
           });
         }
       });
+    }
+    
+    static listReplies(includeFiltered, callback) {
+      var query = {};
+      
+      var filterFields = Form.listFilterFields();
+      if (filterFields && filterFields.length) {
+        for (var i = 0; i < filterFields.length; i++) {
+          var filterField = filterFields[i];
+          if (filterField.type == 'radio') {
+            var excludeValues = 
+              _.filter(filterField.options, (option) => {
+                return option['filter-exclude'];
+              })
+              .map((option) => {
+                return option.name;
+              });
+            
+            query[filterField.name] = {
+              "$nin": excludeValues
+            };
+          }
+        }
+      }
+      
+      Form.replyModel().find(query)
+        .sort({ 
+          added: 1 
+        })
+        .batchSize(2000)
+        .exec(callback);
     }
         
     static resolveSchemaType (field) {
