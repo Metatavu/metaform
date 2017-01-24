@@ -22,7 +22,13 @@ block body
               tr(data-reply-id=reply._id)
                 each field in fields 
                   td
-                    =reply[field.name]
+                    case field.type 
+                      when 'radio'
+                        each option in field.options
+                          if reply[field.name] == option.name
+                            =option.text
+                      default
+                        =reply[field.name]
                 td
                   a(href="/admin/replies/" + reply._id)
                     |Avaa

@@ -4,11 +4,6 @@
 
   const Form = require(__dirname + '/../../form');
   const FormReplyModel = Form.replyModel();
-  const async = require('async');
-  const _ = require('underscore');
-  const config = require('../../config');
-  const xlsx = require('node-xlsx');
-  const moment = require('moment');
 
   exports.renderAdminView = function (req, res) {
     FormReplyModel.find()
