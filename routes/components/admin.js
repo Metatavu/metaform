@@ -5,7 +5,7 @@
   const Form = require(__dirname + '/../../form');
   
   exports.renderAdminView = function (req, res) {
-    var includeFiltered = req.query.includeFiltered||false;
+    var includeFiltered = req.query.includeFiltered=="true";
     Form.listReplies(includeFiltered, (err, replies) => {
       if (err) {
         res.status(500).send();
@@ -14,7 +14,8 @@
           user: req.user,
           viewModel: Form.viewModel(),
           fields: Form.contextFields('MANAGEMENT_LIST'),
-          replies: replies
+          replies: replies,
+          includeFiltered: includeFiltered
         });
       }
     });

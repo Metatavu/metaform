@@ -54,9 +54,7 @@
       res.status(400).send(errors);
     } else {
       var body = Form.sanitizedBody(req);
-      var reply = new FormReplyModel(body);
-
-      reply.save((err, reply) => {
+      Form.createReply(body, (err, reply) => {
         if (err) {
           console.error(err);
           res.status(400).send(err);

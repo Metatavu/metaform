@@ -8,6 +8,12 @@ block body
       .col-12
         h2
           |Vastaukset
+          if includeFiltered
+            a.filter-toggle-link(href="?")
+              |Oletusnäkymä
+          else
+            a.filter-toggle-link(href="?includeFiltered=true")
+              |Näytä kaikki
     .row.mt-4.table-container
       .col-12
         table#formsTable

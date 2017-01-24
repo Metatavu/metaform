@@ -166,6 +166,9 @@
           schemaOptions[field.name] = schemaField;
         }
       }
+
+      schemaOptions['created'] = Date;
+      schemaOptions['modified'] = Date;
       
       var schema = new mongoose.Schema(schemaOptions);
       Form._replyModel = mongoose.model('Reply', schema);
@@ -188,6 +191,16 @@
       }
     }
     
+    static createReply(data, callback) {
+      var FormReplyModel = Form.replyModel();      
+      var reply = new FormReplyModel(_.extend(data, {
+        created: new Date(),
+        modified: new Date()
+      }));
+      
+      reply.save(callback); 
+    }
+    
     static updateReply(id, data, callback) {
       Form.replyModel().findById(id, (loadErr, formReply) => {
         if (loadErr) {
@@ -196,7 +209,10 @@
           if (!formReply) {
             callback('Could not find a form');
           } else {
-            formReply = _.extend(formReply, data);
+            formReply = _.extend(_.extend(formReply, data), {
+              modified: new Date()  
+            });
+            
             formReply.save(callback);
           }
         }
@@ -251,29 +267,31 @@
     static listReplies(includeFiltered, callback) {
       var query = {};
       
-      var filterFields = Form.listFilterFields();
-      if (filterFields && filterFields.length) {
-        for (var i = 0; i < filterFields.length; i++) {
-          var filterField = filterFields[i];
-          if (filterField.type == 'radio') {
-            var excludeValues = 
-              _.filter(filterField.options, (option) => {
-                return option['filter-exclude'];
-              })
-              .map((option) => {
-                return option.name;
-              });
-            
-            query[filterField.name] = {
-              "$nin": excludeValues
-            };
+      if (!includeFiltered) {
+        var filterFields = Form.listFilterFields();
+        if (filterFields && filterFields.length) {
+          for (var i = 0; i < filterFields.length; i++) {
+            var filterField = filterFields[i];
+            if (filterField.type == 'radio') {
+              var excludeValues = 
+                _.filter(filterField.options, (option) => {
+                  return option['filter-exclude'];
+                })
+                .map((option) => {
+                  return option.name;
+                });
+              
+              query[filterField.name] = {
+                "$nin": excludeValues
+              };
+            }
           }
         }
       }
       
       Form.replyModel().find(query)
         .sort({ 
-          added: 1 
+          modified: -1 
         })
         .batchSize(2000)
         .exec(callback);
