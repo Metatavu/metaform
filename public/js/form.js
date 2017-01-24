@@ -20,6 +20,10 @@
             .addClass('alert alert-success fixed-top')
             .text('Lomake lähetettiin onnistuneesti')
             .appendTo(document.body);        
+          
+          setTimeout(function () {
+            window.location.reload(true);
+          }, 2000);
         },
         error: function (jqXHR, textStatus) {
           var errorMessage = textStatus ? jqXHR.responseText || jqXHR.statusText || textStatus : null;
