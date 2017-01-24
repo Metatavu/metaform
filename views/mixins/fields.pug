@@ -134,7 +134,7 @@ mixin table-field(field, value, readonly)
       .row
         .col-12
           .table-container
-            if field.printable
+            if !readonly && field.printable
               a(href='#').print-table.float-right
                 i.fa.fa-print(aria-hidden="true")
                 |&nbsp;Tulosta
@@ -144,18 +144,25 @@ mixin table-field(field, value, readonly)
                   th(data-calculate-sum=column['calculate-sum'] ? 'true' : 'false')
                     =column.title
               tbody
-                each column, columnIndex in field.columns
-                  td(data-column-type=column.type)
-                    case column.type 
-                      when 'text'
-                        input.form-control(type="text",data-column-name=column.name)
-                      when 'number'
-                        input.form-control(type="number",data-column-name=column.name,lang='fi',min=column.min,max=column.max,step=column.step)
-                      when 'enum'
-                        select.form-control(data-column-name=column.name)
-                          each value in column.values
-                            option(data-other=value.other)
-                              =value.text
+                if readonly
+                  each row in value
+                    tr
+                      each column, columnIndex in field.columns
+                        td
+                          =row[column.name]
+                else
+                  each column, columnIndex in field.columns
+                    td(data-column-type=column.type,data-column-name=column.name)
+                      case column.type 
+                        when 'text'
+                          input.form-control(type="text")
+                        when 'number'
+                          input.form-control(type="number",lang='fi',min=column.min,max=column.max,step=column.step)
+                        when 'enum'
+                          select.form-control
+                            each value in column.values
+                              option(data-other=value.other)
+                                =value.text
               tfoot
                 tr
                   each column, columnIndex in field.columns
@@ -166,13 +173,13 @@ mixin table-field(field, value, readonly)
                         if column['calculate-sum']
                           div.sum-container
                             span.sum
-                              |0
+                              =column['calculated-sum']|0
                             span.sum-postfix
                               |&nbsp;
                               =column['sum-postfix']
-              input(type="hidden",name=field.name)                             
-              
-      if field.addRows
+              if !readonly
+                input(type="hidden",name=field.name)                             
+      if !readonly && field.addRows
         .row
           .col-12
             a.btn.btn-sm.btn-success.add-table-row

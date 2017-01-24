@@ -83,16 +83,18 @@
         
         this.element.find('tfoot td:nth-of-type(' + (columnIndex + 1) + ' ) .sum').text(sum);
       }, this));
-      
-      this.element.find('tbody tr').each(function () {
+
+      this.element.find('tbody tr').each($.proxy(function (indexRow, row) {
         var rowDatas = {};
         
-        $(this).find('input').each(function () {
-          rowDatas[$(this).attr('data-column-name')] = $(this).val();
-        });
+        $(row).find('td').each($.proxy(function (index, cell) {
+          var value = this._getCellValue(cell);
+          var columnName = $(cell).attr('data-column-name');
+          rowDatas[columnName] = value;
+        }, this));
         
         datas.push(rowDatas);
-      });
+      }, this));
       
       this.element.find('input[name="' + this.element.attr('data-field-name') + '"]').val(JSON.stringify(datas));
     },
@@ -123,6 +125,27 @@
     
     _onEnumSelectChange: function (event) {
       this._refreshEnumSelect($(event.target));
+      this._refresh();
+    },
+    
+    _getCellValue: function (cell) {
+      var columnType = $(cell).attr('data-column-type');
+      
+      switch (columnType) {
+        case 'enum':
+          var option = $(cell).find('option:checked');
+          if (option.attr('data-other')) {
+            return option.text() + ' ' + $(cell).find('input.enum-other').val();
+          } else {
+            return option.text();
+          }
+        break;
+        default:
+          return $(cell).find('input').val();
+        break;
+      }
+      
+      return null;
     },
     
     _generatePrintableTable: function () {
@@ -140,34 +163,18 @@
       
       var tableBody = [ tableHeaders ];
       
-      this.element.find('tbody tr').each(function (rowIndex, tr) {
+      this.element.find('tbody tr').each($.proxy(function (rowIndex, tr) {
         var row = [];
         
-        $(tr).find('td').each(function (cellIndex, cell) {
-          var value;
-          var columnType = $(cell).attr('data-column-type');
-
-          switch (columnType) {
-            case 'enum':
-              var option = $(cell).find('option:checked');
-              if (option.attr('data-other')) {
-                value = option.text() + ' ' + $(cell).find('input.enum-other').val();
-              } else {
-                value = option.text();
-              }
-            break;
-            default:
-              value = $(cell).find('input').val();
-            break;
-          }
-          
+        $(tr).find('td').each($.proxy(function (cellIndex, cell) {
+          var value = this._getCellValue(cell);
           row.push({
             text: value||'' 
           });
-        });
+        }, this));
         
         tableBody.push(row);
-      });
+      }, this));
       
       this.element.find('tfoot tr').each(function (rowIndex, tr) {
         var row = [];
