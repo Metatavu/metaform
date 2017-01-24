@@ -114,6 +114,9 @@
             case 'boolean':
               data[field.name] = req.sanitizeBody(field.name).toBoolean();
             break;
+            case 'checklist':
+              data[field.name] = req.body[field.name];
+            break;
             case 'files':
               data[field.name] = req.body[field.name];
             break;
@@ -304,6 +307,8 @@
         case 'memo':
         case 'radio':
           return String;
+        case 'checklist':
+          return [ String ];
         case 'number':
           return Number;
         case 'boolean':

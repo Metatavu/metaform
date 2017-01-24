@@ -80,6 +80,30 @@ mixin radio-field(field, value, readonly)
       if field.help
         small.form-text.text-muted
           =field.help
+
+mixin checklist-field(field, value, readonly)
+  .form-group.row
+    .col-12
+      label(for='field-' + field.name)
+        =field.title
+        if field.required
+          |&nbsp;*
+    .col-12
+      each option in field.options
+        .form-check(class=field['display-inline'] ? 'form-check-inline' : '')
+          label.form-check-label
+            if readonly
+              if value == option.name
+                i.fa.fa-check-square-o(aria-hidden="true")
+              else
+                i.fa.fa-square-o(aria-hidden="true")
+            else
+              input.form-check-input(type="checkbox",name=field.name, value=option.name,checked=(value && value.length && value.indexOf(option.name) != -1) || (!value && option.checked))
+            |&nbsp;
+          =option.text
+      if field.help
+        small.form-text.text-muted
+          =field.help
           
 mixin memo-field(field,value,readonly)
   .form-group.row
@@ -226,6 +250,8 @@ mixin field(field, value, readonly)
       +boolean-field(field, value, readonly)
     when 'radio'
       +radio-field(field, value, readonly)
+    when 'checklist'
+      +checklist-field(field, value, readonly)
     when 'files'
       +files-field(field, value, readonly)
     when 'table'
