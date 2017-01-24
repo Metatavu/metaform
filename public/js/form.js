@@ -5,6 +5,9 @@
     
     _create : function() {
       this.element.on("submit", $.proxy(this._onFormSubmit, this));
+      if (!Modernizr.formvalidation) {
+        hyperform(this.element[0]);
+      }
     },
     
     _onFormSubmit: function (event) {
