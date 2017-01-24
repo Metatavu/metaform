@@ -145,11 +145,12 @@ mixin table-field(field, value, readonly)
                     =column.title
               tbody
                 if readonly
-                  each row in value
-                    tr
-                      each column, columnIndex in field.columns
-                        td
-                          =row[column.name]
+                  if value && value.length
+                    each row in value
+                      tr
+                        each column, columnIndex in field.columns
+                          td
+                            =row[column.name]
                 else
                   each column, columnIndex in field.columns
                     td(data-column-type=column.type,data-column-name=column.name)
