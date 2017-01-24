@@ -3,6 +3,7 @@ include mixins/fields
 
 block custom-head
   link(rel='stylesheet', href='/css/themes/' + viewModel.theme  + '/form-reply.min.css')
+  script(defer='defer',src='//cdn.metatavu.io/libs/jquery-ui/1.12.1/jquery-ui.min.js',type='text/javascript')
   script(defer='defer',src='/js/form-reply.js')
 
 block body
@@ -19,7 +20,7 @@ block body
           =viewModel.title
     .row
       .col-12
-        form
+        form(data-id=formReply._id)
           each section in viewModel.sections 
             .row
               section.col-12

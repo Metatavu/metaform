@@ -182,6 +182,21 @@
       }
     }
     
+    static updateReply(id, data, callback) {
+      Form.replyModel().findById(id, (loadErr, formReply) => {
+        if (loadErr) {
+          callback(loadErr);
+        } else {
+          if (!formReply) {
+            callback('Could not find a form');
+          } else {
+            formReply = _.extend(formReply, data);
+            formReply.save(callback);
+          }
+        }
+      });
+    }
+    
     static loadReply(id, callback) {
       Form.replyModel().findById(id).lean().exec((err, formReply) => {
         if (err) {

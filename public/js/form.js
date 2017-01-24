@@ -1,7 +1,6 @@
 (function(){
 	'use strict';
 	
-
   $.widget("custom.metaform", {
     
     _create : function() {
@@ -23,9 +22,10 @@
             .appendTo(document.body);        
         },
         error: function (jqXHR, textStatus) {
+          var errorMessage = textStatus ? jqXHR.responseText || jqXHR.statusText || textStatus : null;
           $('<div>')
             .addClass('alert alert-danger fixed-top')
-            .text('Lomakkeen lähetys epäonnistui: ' + textStatus)
+            .text('Lomakkeen lähetys epäonnistui: ' + errorMessage)
             .appendTo(document.body);        
         }
       });

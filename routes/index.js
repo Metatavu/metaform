@@ -50,7 +50,7 @@
      */
 
     app.post('/formReply', form.postReply);
-    // app.post('/update', authenticate(['manager', 'admin']), form.updateForm);
+    app.put('/formReply/:id', authenticate(['manager', 'admin']), form.putReply);
     
     app.post('/reply', form.postReply);
 

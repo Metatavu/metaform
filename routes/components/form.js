@@ -2,6 +2,7 @@
 (function() {
   'use strict';
   
+  const util = require('util');
   const Form = require(__dirname + '/../../form');
   const FormReplyModel = Form.replyModel();
   const pug = require('pug');
@@ -24,22 +25,24 @@
     }
   }
   
-  exports.postReply = (req, res) => {
-    var id = req.body.id;
-    var data = req.body.data;
+  exports.putReply = (req, res) => {
+    var id = req.params.id;
+    var body = Form.sanitizedBody(req);
+    var data = {};
+    var fields = Form.contextFields('MANAGEMENT');
     
-    FormReplyModel.findById(id, (err, form) => {
+    for (var i = 0; i < fields.length; i++) {
+      var field = fields[i];
+      if (field.editable) {
+        data[field.name] = body[field.name];
+      }
+    }
+    
+    Form.updateReply(id, data, (err) => {
       if (err) {
-        res.status(400).send(err);
+        res.status(500).send(util.format("Lomakkeen tallennuksessa tapahtui virhe: %s", err));
       } else {
-        form = _.extend(form, data);
-        form.save((err, form) => {
-          if (err) {
-            res.status(400).send(err);
-          } else {
-            res.send(form);
-          }
-        });  
+        res.status(200).send("OK");
       }
     });
   };
