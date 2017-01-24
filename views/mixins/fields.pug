@@ -93,7 +93,7 @@ mixin checklist-field(field, value, readonly)
         .form-check(class=field['display-inline'] ? 'form-check-inline' : '')
           label.form-check-label
             if readonly
-              if value == option.name
+              if value && value.length && value.indexOf(option.name) != -1
                 i.fa.fa-check-square-o(aria-hidden="true")
               else
                 i.fa.fa-square-o(aria-hidden="true")
