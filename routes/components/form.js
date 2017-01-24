@@ -7,13 +7,12 @@
   const FormReplyModel = Form.replyModel();
   const pug = require('pug');
   const mailer = require('../../services/mailer');
-  const _ = require('underscore');
-
+  
   function sendEmail(reply) {
     var email = Form.getReplyEmail(reply);
     if (email) {
       try {
-        var emailContent = pug.renderFile(util.format('%s/../../views/mail.pug', __dirname), { 
+        var emailContent = pug.renderFile(util.format('%s/../../views/mails/received.pug', __dirname), { 
           viewModel: Form.viewModel(),
           reply: reply
         });
