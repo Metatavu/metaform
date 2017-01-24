@@ -74,7 +74,7 @@ mixin radio-field(field, value, readonly)
               else
                 i.fa.fa-circle-o(aria-hidden="true")
             else
-              input.form-check-input(type="radio",name=field.name, value=option.name,checked=option.checked)
+              input.form-check-input(type="radio",name=field.name, value=option.name,checked=(value && value == option.name) || (!value && option.checked))
             |&nbsp;
           =option.text
       if field.help
