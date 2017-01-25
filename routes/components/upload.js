@@ -12,6 +12,7 @@
       if (err || !fileData) {
         res.status(404).send();
       } else {
+        res.set('Content-Type', fileData.contentType);
         FileData.readById(id).pipe(res);
       }
     });
