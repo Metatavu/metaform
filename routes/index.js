@@ -8,8 +8,8 @@
   const navigation = require(__dirname + '/components/navigation');
   const upload = require(__dirname + '/components/upload');
   const multer = require('multer');
-  const fileParser = multer({ storage: multer.memoryStorage() });
-  const config = require(__dirname + '/../config');
+  const gridFsStorage = require(__dirname + '/../multer/gridfs-storage');
+  const fileParser = multer({ storage: gridFsStorage() });
   
   function authenticate(allowedRoles) {
     return function (req, res, next) {
