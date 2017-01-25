@@ -8,12 +8,26 @@
       if (!Modernizr.formvalidation) {
         hyperform(this.element[0]);
       }
+      
+      this._createDatepickers();
+    },
+    
+    _createDatepickers: function () {
+      this.element.find('input[data-type="date"]').each(function (index, input) {
+        $(input).flatpickr({
+          "locale": "fi",
+          "altFormat": "d.m.Y",
+          "altInput": true,
+          "utc": true,
+          "allowInput": true
+        });
+      });
     },
     
     _onFormSubmit: function (event) {
       event.preventDefault();
       var data = this.element.serialize();
-      
+
       $.ajax({
         url: '/formReply',
         data: data,
@@ -51,11 +65,13 @@
       this._refresh();
 
       if (this.element.find('th[data-calculate-sum="true"]').length) {
-        this.element.find('tfoot').show();
+        this.element.find('tfoot').find('td:nth-of-type(1)')
+          .html('Yhteensä:');
       } else {
-        this.element.find('tfoot').hide();
+        this.element.find('tfoot').find('td')
+          .html('&nbsp;');
       }
-      
+
       this.element.find('[data-column-type="enum"] select').each($.proxy(function (index, select) {
         this._refreshEnumSelect($(select));
       }, this));
@@ -86,8 +102,7 @@
             sum += parseFloat(value);
           }
         });
-        
-        
+
         this.element.find('tfoot td:nth-of-type(' + (columnIndex + 1) + ' ) .sum').text(sum);
       }, this));
 

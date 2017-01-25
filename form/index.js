@@ -115,8 +115,6 @@
               data[field.name] = req.sanitizeBody(field.name).toBoolean();
             break;
             case 'checklist':
-              data[field.name] = req.body[field.name];
-            break;
             case 'files':
               data[field.name] = req.body[field.name];
             break;
@@ -307,6 +305,8 @@
         case 'memo':
         case 'radio':
           return String;
+        case 'date':
+          return Date;
         case 'checklist':
           return [ String ];
         case 'number':
@@ -317,13 +317,11 @@
           return [ mongoose.Schema.Types.ObjectId ];
         case 'table':
           var tableDef = {};
-          
           _.each(field.columns, (column) => {
             tableDef[column.name] = {
               "type": this.resolveTableSchemaType(column.type)
             }
           });
-          
           return [ tableDef ];
         default:
         break;

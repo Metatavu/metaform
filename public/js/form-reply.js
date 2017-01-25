@@ -21,6 +21,11 @@
           $(table).find('tfoot td:nth-of-type(' + (columnIndex + 1) + ' ) .sum').text(sum);
         });
       });
+      
+      this.element.find('input[data-type="date"][readonly]').each(function (index, input) {
+        var isoDate = $(input).attr('data-iso-date');
+        $(input).val(moment(isoDate).format('DD.MM.YYYY'));
+      });
     },
     
     _onFormSubmit: function (event) {

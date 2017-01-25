@@ -24,6 +24,19 @@ mixin email-field(field, value, readonly)
         small.form-text.text-muted
           =field.help
           
+mixin date-field(field, value, readonly)
+  .form-group.row
+    .col-12
+      label(for='field-' + field.name)
+        =field.title
+        if field.required
+          |&nbsp;*
+    .col-12
+      input.form-control(aria-labelledby=id='field-' + field.name,id='field-' + field.name,type="text",name=field.name,title=field.title,required=field.required,readonly=readonly,data-iso-date=value,data-type="date")
+      if field.help
+        small.form-text.text-muted
+          =field.help
+          
 mixin number-field(field, value, readonly)
   .form-group.row
     .col-12
@@ -192,16 +205,13 @@ mixin table-field(field, value, readonly)
                 tr
                   each column, columnIndex in field.columns
                     td
-                      if columnIndex == 0
-                        |Yhteensä:
-                      else
-                        if column['calculate-sum']
-                          div.sum-container
-                            span.sum
-                              =column['calculated-sum']|0
-                            span.sum-postfix
-                              |&nbsp;
-                              =column['sum-postfix']
+                      if column['calculate-sum']
+                        div.sum-container
+                          span.sum
+                            =column['calculated-sum']|0
+                          span.sum-postfix
+                            |&nbsp;
+                            =column['sum-postfix']
               if !readonly
                 input(type="hidden",name=field.name)                             
       if !readonly && field.addRows
@@ -252,6 +262,8 @@ mixin field(field, value, readonly)
       +radio-field(field, value, readonly)
     when 'checklist'
       +checklist-field(field, value, readonly)
+    when 'date'
+      +date-field(field, value, readonly)
     when 'files'
       +files-field(field, value, readonly)
     when 'table'
