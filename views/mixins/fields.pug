@@ -236,6 +236,11 @@ mixin small-text-field(field, value, readonly)
       small
         =field.text
 
+mixin html-field(field, value, readonly)
+  .form-group.row
+    .col-12.html-container
+      !=field.html
+
 mixin submit-field(field, value, readonly)
   .form-group.row
     .col-12
@@ -272,6 +277,8 @@ mixin field(field, value, readonly)
       +logo-field(field, value, readonly)
     when 'small-text'
       +small-text-field(field, value, readonly)
+    when 'html'
+      +html-field(field, value, readonly)
     when 'submit'
       +submit-field(field, value, readonly)
     default

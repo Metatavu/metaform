@@ -8,7 +8,7 @@
   const _ = require('underscore');
   const FileMeta = require(__dirname + '/../model/filemeta');
   const config = require(__dirname + '/../config.js');
-  const NOT_SAVED_FIELDS = ['logo', 'submit', 'small-text'];
+  const NOT_SAVED_FIELDS = ['logo', 'submit', 'small-text', 'html'];
   
   class Form {
     
