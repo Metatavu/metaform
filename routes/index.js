@@ -25,6 +25,16 @@
       }
     };
   }
+  
+  function extendTimeout(timeout) {
+    return (req, res, next) => {
+      res.setTimeout(timeout, () => {
+        console.log('Request has timed out.');
+        res.send(408);
+      });
+      next();
+    };
+  }
 
   module.exports = function (app) {
 
@@ -40,7 +50,7 @@
      * File uploads
      */
 
-    app.post('/upload', fileParser.array('file'), upload.uploadFile);
+    app.post('/upload', extendTimeout(1000 * 60 * 60), fileParser.array('file'), upload.uploadFile);
     app.get('/upload/:id', upload.getFileData);
     app.delete('/upload/:id', upload.removeFile);
 

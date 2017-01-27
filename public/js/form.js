@@ -261,6 +261,7 @@
           opacity: 0
         })
         .fileupload({
+          maxFileSize: 209715200,
           dataType: 'json',
           url: '/upload',
           add : $.proxy(this._onUploadAdd, this),
