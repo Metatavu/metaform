@@ -1,4 +1,6 @@
 /*jshint esversion: 6 */
+/* global __dirname */
+
 (function() {
   'use strict';
   
@@ -17,7 +19,7 @@
   const User = require(__dirname + '/model/user');
   const config = require(__dirname + '/config');
   const port = argv.port||3000;
-  
+
   mongoose.connect('mongodb://' + config.database.host + '/' + config.database.table);
   require('./auth/passport')(passport);
   
@@ -46,22 +48,22 @@
   require('./routes')(app);
   
   User.findOne({
-    email: config.admin.email
-  }).then((admin) => {
-    if (!admin) {
-      var newAdmin = new User();
-      newAdmin.email = config.admin.email;
-      newAdmin.password = newAdmin.generateHash(config.admin.initialPassword);
-      newAdmin.role = 'admin';
-      newAdmin.save().then(() => {
-        console.log('Created admin user');
-      }).catch((err) => {
-        console.error('Error creating admin user', err);
-      }); 
-    }
-  }).catch((err) => {
-    console.error(err);
-  });
+    email: config.admin.email
+  }).then((admin) => {
+    if (!admin) {
+      var newAdmin = new User();
+      newAdmin.email = config.admin.email;
+      newAdmin.password = newAdmin.generateHash(config.admin.initialPassword);
+      newAdmin.role = 'admin';
+      newAdmin.save().then(() => {
+        console.log('Created admin user');
+      }).catch((err) => {
+        console.error('Error creating admin user', err);
+      }); 
+    }
+  }).catch((err) => {
+    console.error(err);
+  });
 
   http.createServer(app).listen(app.get('port'), function() {
     console.log('Express server listening on port ' + app.get('port'));
