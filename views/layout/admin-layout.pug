@@ -1,0 +1,13 @@
+extends layout
+include ../mixins/admin
+
+block custom-head
+  link(rel='stylesheet', href='/css/admin.min.css')
+  link(rel='stylesheet', href='//cdn.datatables.net/1.10.10/css/jquery.dataTables.min.css')
+  script(defer='defer', src='//cdn.datatables.net/1.10.10/js/jquery.dataTables.min.js')
+  script(defer='defer', src='/js/admin.js')
+  block custom-head
+
+block body
+  .container
+    block content

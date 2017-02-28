@@ -13,28 +13,21 @@
         res.status(404).send();
       } else {
         res.set('Content-Type', fileData.contentType);
-        res.send(fileData.data);
+        FileData.readById(id).pipe(res);
       }
     });
   };
   
   exports.uploadFile = (req, res, next) => {
     var savedFiles = [];
-    async.each(req.files, function (file, callback) {
-      var fileData = new FileData();
-      fileData.data = file.buffer;
-      fileData.contentType = file.mimetype;
-      fileData.save().then((fileData) => {
-        var fileMeta = new FileMeta();
-        fileMeta.originalname = file.originalname;
-        fileMeta.filename = file.filename;
-        fileMeta.fileData = fileData._id;
-        fileMeta.save().then((fileMeta) => {
-          savedFiles.push(fileMeta);
-          callback();
-        }).catch((err) => {
-          callback(err);
-        });
+    async.each(req.files, (fileData, callback) => {
+      var fileMeta = new FileMeta();
+      fileMeta.originalname = fileData.originalname;
+      fileMeta.filename = fileData.originalname;
+      fileMeta.fileData = fileData.id;
+      fileMeta.save().then((fileMeta) => {
+        savedFiles.push(fileMeta);
+        callback();
       }).catch((err) => {
         callback(err);
       });
@@ -53,7 +46,7 @@
       if (err || !fileMeta) {
         res.status(404).send();
       } else {
-        FileData.findByIdAndRemove(fileMeta.fileData, () => {
+        FileData.unlinkById(fileMeta.fileData, () => {
           FileMeta.findByIdAndRemove(id, function () {
             res.send({ status: 'removed' });
           });

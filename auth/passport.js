@@ -40,8 +40,8 @@ module.exports = function(passport) {
         return done(null, false, req.flash('loginMessage',
             'Oops! Wrong password.'));
 
-      if(user.archieved)
-        return done(null, false, req.flash('loginMessage', 'Account has been archieved.'))
+      if(user.archived)
+        return done(null, false, req.flash('loginMessage', 'Account has been archived.'))
       
       return done(null, user);
     });

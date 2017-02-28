@@ -1,43 +1,44 @@
+extends layout/layout
 include mixins/fields
-doctype html
-html(lang='en')
-  head
-    meta(charset='utf-8')
-    meta(http-equiv='X-UA-Compatible', content='IE=edge')
-    meta(name='viewport', content='width=device-width, initial-scale=1')
-    meta(name='description', content='')
-    meta(name='author', content='')
-    title #{viewModel.title}
-    link(rel='stylesheet', href='//cdn.metatavu.io/libs/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css')
-    script(defer="defer",src="//cdn.metatavu.io/libs/jquery/3.1.1/jquery.min.js",type="text/javascript")
-    script(defer="defer",src="//cdn.metatavu.io/libs/jquery-ui/1.12.1/jquery-ui.min.js",type="text/javascript")
-    script(defer='defer',src='//cdn.metatavu.io/libs/jquery.fileupload/9.14.2/js/jquery.iframe-transport.js',type="text/javascript")
-    script(defer='defer',src='//cdn.metatavu.io/libs/jquery.fileupload/9.14.2/js/jquery.fileupload.js',type="text/javascript")
-    script(defer='defer',src='/js/form.js')
-  body
-    .container
-      .row
-        .col-12
-          h1
-            =viewModel.title
-      .row
-        .col-12
-          form
-            each section in viewModel.sections 
-              .row
-                section.col-12
-                  .row
-                    .col-12
-                      h2
-                        =section.title
-                  .row
-                    fieldset.col-12
-                      each field in section.fields
-                        +field(field)
+
+block custom-head
+  title #{viewModel.title}
+  link(rel='stylesheet', href='/css/form.min.css')
+  link(rel='stylesheet', href='/css/themes/' + viewModel.theme  + '/form.min.css')
+  link(rel='stylesheet', href='//cdn.metatavu.io/libs/hyperform/0.8.15/hyperform.min.css')
+  link(rel='stylesheet', href='//cdnjs.cloudflare.com/ajax/libs/flatpickr/2.3.4/flatpickr.min.css')
+  script(defer='defer',src='//cdn.metatavu.io/libs/jquery-ui/1.12.1/jquery-ui.min.js',type='text/javascript')
+  script(defer='defer',src='//cdn.metatavu.io/libs/jquery.fileupload/9.14.2/js/jquery.iframe-transport.js',type='text/javascript')
+  script(defer='defer',src='//cdn.metatavu.io/libs/jquery.fileupload/9.14.2/js/jquery.fileupload.js',type='text/javascript')
+  script(defer='defer',src='//cdn.metatavu.io/libs/pdfmake/0.1.24/pdfmake.min.js')
+  script(defer='defer',src='//cdn.metatavu.io/libs/pdfmake/0.1.24/vfs_fonts.js')
+  script(defer='defer',src='//cdn.metatavu.io/libs/hyperform/0.8.15/hyperform.min.js',type='text/javascript')
+  script(defer='defer',src='//cdnjs.cloudflare.com/ajax/libs/flatpickr/2.3.4/flatpickr.min.js',type='text/javascript')
+  script(defer='defer',src='//cdnjs.cloudflare.com/ajax/libs/flatpickr/2.3.4/l10n/fi.js',type='text/javascript')
+  script(defer='defer',src='/js/modernizr.js')
+  script(defer='defer',src='/js/form.js')
+block body
+  .container
+    .row
+      .col-12
+        h1
+          =viewModel.title
+    .row
+      .col-12
+        form
+          each section in viewModel.sections 
             .row
-              .col-12
-                input.btn.btn-primary(type="submit",value=viewModel.sendButton)
-            
-        
-    
-    
+              section.col-12
+                .row
+                  .col-12
+                    h2
+                      =section.title
+                .row
+                  .col-12
+                    small
+                      =section.description
+                .row
+                  fieldset.col-12
+                    each field in section.fields
+                      if field.contexts.indexOf('FORM') > -1
+                        +field(field)

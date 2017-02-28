@@ -1,8 +1,12 @@
-var mongoose = require('mongoose');
+/*jshint esversion: 6 */
+(function() {
+  'use strict';
 
-var schema = new mongoose.Schema({
-  contentType: String,
-  data: Buffer
-});
-
-module.exports = mongoose.model('FileData', schema);
+  const gridfs = require('mongoose-gridfs')({
+    collection:'attachments',
+    model:'FileData'
+  });
+  
+  module.exports = gridfs.model;
+  
+}).call(this);

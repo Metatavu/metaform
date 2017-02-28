@@ -1,0 +1,19 @@
+.archived {
+  text-decoration: line-through;
+  background: #eee;
+  cursor: not-allowed;
+}
+
+.filter-toggle-link {
+  font-size: 18px;
+  margin-left: 5px;
+  vertical-align: middle;
+  
+  &::before {
+    content: ' (';
+  }
+
+  &::after {
+    content: ')';
+  }
+}

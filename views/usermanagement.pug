@@ -1,21 +1,36 @@
-extends layout
+extends layout/admin-layout
 
-block content
-  br
-  span
-    button(id='add-user-button', class='btn btn-success') Uusi käyttäjä
-    button(id='delete-user-button', class='btn btn-danger') Poista käyttäjä
-  table(class='table table-hover')
-    caption Käyttäjät:
-    thead
-      tr
-        th Email
-        th Rooli
-    tbody(id='all-users-table')
+block custom-head
+  title
+    =viewModel.title
+  script(defer='defer', src='/js/usermanagement.js')
+    
+block body
+  .container
+    +admin-menu('replies')
+  .container.form-container
+    .row.mt-4
+      .col-12
+        h2
+          |Käyttäjänhallinta
+    .row.mt-4
+      .col-12
+        button(id='add-user-button', class='btn btn-success') Uusi käyttäjä
+            
+    .row.mt-4
+      .col-12
+        table(class='table table-hover')
+          thead
+            tr
+              th Email
+              th Rooli
+              th
+          tbody(id='all-users-table')
+        
   div(id='add-new-user-modal', class='modal fade')
     div(class='modal-dialog')
       div(class='modal-content')
-        form(role='form', method='post', action=root+'/signup')
+        form(role='form', method='post', action='/signup')
           div(class='modal-header')
             button(type='button', class='close', data-dismiss='modal', aria-label='Close')
               span(aria-hidden='true') &times;
@@ -23,7 +38,7 @@ block content
           div(class='modal-body')
             div(class='form-group')
               label(for='add-new-user-email-input') Email:
-              input(name='email', type='email', class='form-control', id='add-new-user-email-input')
+              input(name='email', type='email', class='form-control', id='add-new-user-email-input', required="required")
             div(class='form-group')
               label(for='add-new-user-role-input') Rooli:
               select(name='role', class='form-control', id='add-new-user-role-input')
@@ -32,5 +47,17 @@ block content
           div(class='modal-footer')
             a(class='btn btn-danger', data-dismiss='modal') Peruuta
             input(type='submit', class='btn btn-success', value='Lisää käyttäjä')
-block custom_script
-  script(defer='defer', src='/js/usermanagement.js')
+        
+  div(id='remove-user-modal', class='modal fade')
+    div(class='modal-dialog')
+      div(class='modal-content')
+        form(role='form', method='post', action='/signup')
+          div(class='modal-header')
+            button(type='button', class='close', data-dismiss='modal', aria-label='Close')
+              span(aria-hidden='true') &times;
+            h4(class='modal-title') Oletko varma
+          div(class='modal-body')
+            div(class='form-group question')
+          div(class='modal-footer')
+            button(class='btn btn-danger', data-dismiss='modal') Peruuta
+            button(class='btn btn-success', data-dismiss='modal') Poista

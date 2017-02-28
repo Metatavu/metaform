@@ -2,20 +2,22 @@
 (function() {
   'use strict';
   
-  var argv = require('minimist')(process.argv.slice(2));
-  var express = require('express');
-  var http = require('http');
-  var path = require('path');
-  var mongoose = require('mongoose');
-  var bodyParser = require('body-parser');
-  var expressSession = require('express-session');
-  var cookieParser = require('cookie-parser');
-  var config = require('./config');
-  var expressValidator = require('express-validator');
-  var flash = require('connect-flash');
-  var passport = require('passport');
-  var port = argv.port||3000;
-
+  const argv = require('minimist')(process.argv.slice(2));
+  const express = require('express');
+  const http = require('http');
+  const path = require('path');
+  const mongoose = require('mongoose');
+  const bodyParser = require('body-parser');
+  const expressSession = require('express-session');
+  const MongoStore = require('connect-mongo')(expressSession);
+  const cookieParser = require('cookie-parser');
+  const expressValidator = require('express-validator');
+  const flash = require('connect-flash');
+  const passport = require('passport');
+  const User = require(__dirname + '/model/user');
+  const config = require(__dirname + '/config');
+  const port = argv.port||3000;
+  
   mongoose.connect('mongodb://' + config.database.host + '/' + config.database.table);
   require('./auth/passport')(passport);
   
@@ -25,7 +27,11 @@
   app.set('view engine', 'pug');
   
   app.use(cookieParser());
-  app.use(expressSession({secret:config.session_secret}));
+  app.use(expressSession({
+    secret:config.session_secret,
+    store: new MongoStore({ mongooseConnection: mongoose.connection })
+  }));
+  
   app.use(passport.initialize());
   app.use(passport.session());
   app.use(flash());
@@ -39,6 +45,24 @@
   
   require('./routes')(app);
   
+  User.findOne({
+    email: config.admin.email
+  }).then((admin) => {
+    if (!admin) {
+      var newAdmin = new User();
+      newAdmin.email = config.admin.email;
+      newAdmin.password = newAdmin.generateHash(config.admin.initialPassword);
+      newAdmin.role = 'admin';
+      newAdmin.save().then(() => {
+        console.log('Created admin user');
+      }).catch((err) => {
+        console.error('Error creating admin user', err);
+      }); 
+    }
+  }).catch((err) => {
+    console.error(err);
+  });
+
   http.createServer(app).listen(app.get('port'), function() {
     console.log('Express server listening on port ' + app.get('port'));
   });

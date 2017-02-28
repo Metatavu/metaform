@@ -3,3 +3,7 @@ node_modules
 config.js
 /.project
 /.tern-project
+/.externalToolBuilders/
+/.sass-cache/
+/essote-debt.json
+/mikkeli-asuntomessut.json

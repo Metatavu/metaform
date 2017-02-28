@@ -1,19 +1,40 @@
-extends layout
+extends layout/admin-layout
 
-block content
-  .container-fluid
-    button#menu-toggle.btn.btn-default(href='#menu-toggle') Piilota/näytä valikko
-    .row.table-container
-      .col-lg-12
-        table#applicationTable
+block body
+  .container
+    +admin-menu('replies')
+  .container
+    .row.mt-4
+      .col-12
+        h2
+          |Vastaukset
+          if includeFiltered
+            a.filter-toggle-link(href="?")
+              |Oletusnäkymä
+          else
+            a.filter-toggle-link(href="?includeFiltered=true")
+              |Näytä kaikki
+    .row.mt-4.table-container
+      .col-12
+        table#formsTable
           thead
             tr
-              th Etunimi
-              th Sukunimi
-              th Synt.aika
-              th Osoite
-              th Puhelin
-              th Email
-              th Aloituspvm
-              th Lopetuspvm
+              each field in fields
+                th
+                  =field.title
+              th(style="width:0")
           tbody
+            each reply in replies
+              tr(data-reply-id=reply._id)
+                each field in fields 
+                  td
+                    case field.type 
+                      when 'radio'
+                        each option in field.options
+                          if reply[field.name] == option.name
+                            =option.text
+                      default
+                        =reply[field.name]
+                td
+                  a(href="/admin/replies/" + reply._id)
+                    |Avaa
