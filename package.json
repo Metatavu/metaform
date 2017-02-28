@@ -7,6 +7,9 @@
     "name": "Metatavu",
     "email": "devs@metatavu.fi"
   },
+  "scripts":{
+    "start":"node app.js"
+  },
   "devDependencies": {
     "grunt": "^1.0.1",
     "grunt-contrib-sass": "^1.0.0",
@@ -28,7 +31,7 @@
     "mongoose": "^4.7.7",
     "mongoose-gridfs": "^0.1.0",
     "multer": "1.2.1",
-    "node-xlsx": "0.7.4",
+    "node-xlsx": "^0.7.4",
     "passport": "0.3.2",
     "passport-local": "1.0.0",
     "password-generator": "2.1.0",

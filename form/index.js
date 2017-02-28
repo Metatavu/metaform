@@ -1,4 +1,6 @@
 /*jshint esversion: 6 */
+/* global __dirname */
+
 (function() {
   'use strict';
     
@@ -66,6 +68,25 @@
       } 
       
       return fields;
+    }
+    
+    static dataFields() {
+      var result = [];
+      var config = Form.config();
+      
+      var sectionNames = Object.keys(config.sections);
+      
+      for (let i = 0; i < sectionNames.length; i++) {
+        let sectionName = sectionNames[i];
+        let fields = config.sections[sectionName].fields;
+        for (let j = 0; j < fields.length; j++) {
+          if (NOT_SAVED_FIELDS.indexOf(fields[j].type) === -1) {
+            result.push(fields[j]);
+          } 
+        }
+      } 
+      
+      return result;
     }
     
     static validateRequest(req) {

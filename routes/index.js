@@ -1,4 +1,6 @@
 /*jshint esversion: 6 */
+/* global __dirname */
+
 (function () {
   'use strict';
 
@@ -71,6 +73,8 @@
     app.get('/admin', authenticate(['manager', 'admin']), admin.renderAdminView);
     app.get('/admin/users', authenticate(['admin']), admin.renderUserManagementView);
     app.get('/admin/replies/:id', authenticate(['manager', 'admin']), admin.getFormReply);
+    app.get('/admin/fields', authenticate(['manager', 'admin']), admin.getFields);
+    app.get('/admin/export/xlsx', authenticate(['manager', 'admin']), admin.createXlsx);
     
     /*
      * User

@@ -11,9 +11,13 @@ block body
           if includeFiltered
             a.filter-toggle-link(href="?")
               |Oletusnäkymä
+            a.xlsx-export(href="#", data-include-filtered=includeFiltered)
+              |Vie xlsx-muodossa
           else
             a.filter-toggle-link(href="?includeFiltered=true")
               |Näytä kaikki
+            a.xlsx-export(href="#", data-include-filtered=includeFiltered)
+              |Vie xlsx-muodossa
     .row.mt-4.table-container
       .col-12
         table#formsTable
