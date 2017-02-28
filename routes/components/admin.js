@@ -85,7 +85,7 @@
             } else if (typeof(replyField) === 'object') {
               if (Array.isArray(replyField)) {
                 if(replyField[0] && typeof(replyField[0]) === 'object') {
-                  row.push(stringifyObjects(replyField))
+                  row.push(stringifyObjects(replyField));
                 } else {
                   row.push(replyField.join(', ')); 
                 }
