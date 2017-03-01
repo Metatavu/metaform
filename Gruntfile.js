@@ -1,11 +1,34 @@
+/*jshint esversion: 6 */
 /*global module:false*/
 
-var fs = require('fs');
+const fs = require('fs');
+const pug = require('pug');
+const PUG_ADMIN_TEMPLATE = __dirname + '/public/js/admin-templates.js';
 
 module.exports = function(grunt) {
   require('load-grunt-tasks')(grunt);
   
+  grunt.registerMultiTask('compile-template', 'Compiles pug templates', function () {
+    var clientTemplates = fs.readdirSync(this.data.sourceFolder);
+    var compiledClientTemplates = [];
+    for (var i = 0; i < clientTemplates.length; i++) {
+      var templateName = clientTemplates[i].replace('.pug', '');
+      templateName = 'render' + templateName[0].toUpperCase() + templateName.substring(1);
+      compiledClientTemplates.push(pug.compileFileClient(
+        this.data.sourceFolder + clientTemplates[i],
+        { name: templateName, compileDebug: false }
+      ));
+    }
+    fs.writeFileSync(this.data.destFile, compiledClientTemplates.join(''));
+  });
+  
   grunt.initConfig({
+    'compile-template': {
+      'compile-admin-pug-template': {
+        'sourceFolder': __dirname + '/views/templates/admin/',
+        'destFile': PUG_ADMIN_TEMPLATE,
+      }
+    },
     'sass': {
       dist: {
         options: {
@@ -22,5 +45,5 @@ module.exports = function(grunt) {
     }
   });
   
-  grunt.registerTask('default', [ 'sass']);
+  grunt.registerTask('default', ['sass',  'compile-template:compile-admin-pug-template']);
 };
