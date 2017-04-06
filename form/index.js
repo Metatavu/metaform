@@ -25,6 +25,11 @@
       }
     }
     
+    static get notifications() {
+      var formConfig = Form.config();
+      return formConfig.notifications||[]
+    }
+    
     static getReplyEmail(reply) {
       var formConfig = Form.config();
       if (formConfig['email-field']) {
