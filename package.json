@@ -1,6 +1,6 @@
 {
   "name": "metaform",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "",
   "main": "app.js",
   "author": {
@@ -36,6 +36,7 @@
     "passport-local": "1.0.0",
     "password-generator": "2.1.0",
     "pug": "2.0.0-beta6",
+    "request": "^2.81.0",
     "underscore": "1.8.3"
   }
 }
