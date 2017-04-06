@@ -28,13 +28,10 @@
         }
       }
       
-      var url = queryParams.length 
-        ? util.format('%s?%s', settings.url, queryParams.join('&'))
-        : util.format('%s', settings.url);
-        
+      var url = queryParams.length ? util.format('%s?%s', settings.url, queryParams.join('&')) : util.format('%s', settings.url);        
       request.get(url)
         .on('error', function(err) {
-          console.error(err)
+          console.error(err);
         });
     }
     

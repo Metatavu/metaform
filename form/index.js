@@ -27,7 +27,7 @@
     
     static get notifications() {
       var formConfig = Form.config();
-      return formConfig.notifications||[]
+      return formConfig.notifications||[];
     }
     
     static getReplyEmail(reply) {
