@@ -7,6 +7,7 @@
   const User = require('../../model/user');
   const pug = require('pug');
   const mailer = require('../../services/mailer');
+  const Notifications = require(__dirname + '/../../notifications');
   
   function sendSenderEmail(reply) {
     var email = Form.getReplyEmail(reply);
@@ -72,6 +73,8 @@
           console.error(err);
           res.status(400).send(err);
         } else {
+          Notifications.notify(Form.notifications, reply);
+          
           sendSenderEmail(reply);
           
           User.find({
