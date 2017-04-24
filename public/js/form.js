@@ -1,3 +1,5 @@
+/* global Modernizr, pdfMake */
+
 (function(){
 	'use strict';
 	
@@ -10,6 +12,11 @@
       }
       
       this.element.find('.form-group[data-visible-if]').each(function (index, element) {
+        $(element).find('*[required]').each(function (inputIndex, inputElement) {
+          $(inputElement).removeAttr('required');
+          $(inputElement).attr('data-required', 'required');
+        }.bind(this));
+        
         var formGroupId = $(element).attr('id');
         var rule = JSON.parse($(element).attr('data-visible-if'));
         this._registerVisibleIfRule(formGroupId, rule);
@@ -32,11 +39,40 @@
     
     _registerVisibleIfRule: function (formGroupId, rules) {
       for (var i = 0; i < rules.length; i++) {
-        console.log(rules[i]);  
+        var rule = rules[i];
+        $('input[name="'+rule.field+'"]').change(this._createFormChangeFunction(formGroupId, rule.equals));
       }
       
       $('#' + formGroupId).hide();
-      console.log(name, rules);
+      $('input[name="'+rule.field+'"]').change();
+    },
+    
+    _createFormChangeFunction: function(formGroupId, equals) {
+      return function(e) {
+       var checked = $(this).is(":checked");
+       var formGroup = $('#' + formGroupId);
+       var action = 'NONE';
+       
+        if(checked && equals && !formGroup.is(":visible")) {
+         formGroup.slideToggle();
+         action = 'SHOW';
+       } else if(!checked && !equals && !formGroup.is(":visible")) {
+         formGroup.slideToggle();
+         action = 'SHOW';
+       } else if(formGroup.is(":visible")){
+         formGroup.slideToggle();
+         action = 'HIDE';
+       }
+       
+        formGroup.find('*[data-required]').each(function (inputIndex, inputElement) {
+          if (action === 'SHOW') {
+            $(inputElement).attr('required', 'required');
+          } else if (action === 'HIDE') {
+            $(inputElement).removeAttr('required');
+          }
+        });
+        
+      };
     },
     
     _onFormSubmit: function (event) {
@@ -146,7 +182,7 @@
           enumSelect.css({'width': 'calc(50% - 4px)', 'display': 'inline', 'margin-right': '4px'});
       } else {
         enumSelect.parent().find('.enum-other').remove();
-        enumSelect.css({'width': '100%', 'display': 'block'})
+        enumSelect.css({'width': '100%', 'display': 'block'});
       }
     },
     
