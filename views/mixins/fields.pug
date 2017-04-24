@@ -1,5 +1,5 @@
 mixin text-field(field, value, readonly)
-  .form-group.row
+  .form-group.row(data-visible-if=field['visible-if'],id="fg-" + field.name)
     if field.title
       .col-12
         label(for='field-' + field.name)
@@ -13,7 +13,7 @@ mixin text-field(field, value, readonly)
           =field.help
           
 mixin email-field(field, value, readonly)
-  .form-group.row
+  .form-group.row(data-visible-if=field['visible-if'],id="fg-" + field.name)
     if field.title
       .col-12
         label(for='field-' + field.name)
@@ -27,7 +27,7 @@ mixin email-field(field, value, readonly)
           =field.help
           
 mixin date-field(field, value, readonly)
-  .form-group.row
+  .form-group.row(data-visible-if=field['visible-if'],id="fg-" + field.name)
     if field.title
       .col-12
         label(for='field-' + field.name)
@@ -41,7 +41,7 @@ mixin date-field(field, value, readonly)
           =field.help
           
 mixin number-field(field, value, readonly)
-  .form-group.row
+  .form-group.row(data-visible-if=field['visible-if'],id="fg-" + field.name)
     if field.title
       .col-12
         label(for='field-' + field.name)
@@ -55,7 +55,7 @@ mixin number-field(field, value, readonly)
           =field.help
           
 mixin boolean-field(field, value, readonly)
-  .form-group.row
+  .form-group.row(data-visible-if=field['visible-if'],id="fg-" + field.name)
     .col-12
       .form-check
         label.form-check-label
@@ -75,7 +75,7 @@ mixin boolean-field(field, value, readonly)
           =field.help
 
 mixin radio-field(field, value, readonly)
-  .form-group.row
+  .form-group.row(data-visible-if=field['visible-if'],id="fg-" + field.name)
     if field.title
       .col-12
         label(for='field-' + field.name)
@@ -100,7 +100,7 @@ mixin radio-field(field, value, readonly)
           =field.help
 
 mixin checklist-field(field, value, readonly)
-  .form-group.row
+  .form-group.row(data-visible-if=field['visible-if'],id="fg-" + field.name)
     if field.title
       .col-12
         label(for='field-' + field.name)
@@ -140,7 +140,7 @@ mixin memo-field(field, value, readonly)
           =field.help          
           
 mixin files-field(field, fileMetas, readonly)
-  .form-group.row
+  .form-group.row(data-visible-if=field['visible-if'],id="fg-" + field.name)
     if field.title
       .col-12
         label(for='field-' + field.name)
@@ -168,7 +168,7 @@ mixin files-field(field, fileMetas, readonly)
           =field.help
           
 mixin table-field(field, value, readonly)
-  .form-group.table-field.row(data-field-name=field.name,data-field-title=field.title)
+  .form-group.table-field.row(data-field-name=field.name,data-field-title=field.title, data-visible-if=field['visible-if'],id="fg-" + field.name)
     .col-12
       .row
         .col-12
@@ -234,23 +234,23 @@ mixin table-field(field, value, readonly)
               =field.help
               
 mixin logo-field(field, value, readonly)
-  .form-group.row
+  .form-group.row(data-visible-if=field['visible-if'],id="fg-" + field.name)
     .col-12.logo-container
       img.logo(src=field.src)
 
 mixin small-text-field(field, value, readonly)
-  .form-group.row
+  .form-group.row(data-visible-if=field['visible-if'],id="fg-" + field.name)
     .col-12.small-text-container
       small
         =field.text
 
 mixin html-field(field, value, readonly)
-  .form-group.row
+  .form-group.row(data-visible-if=field['visible-if'],id="fg-" + field.name)
     .col-12.html-container
       !=field.html
 
 mixin submit-field(field, value, readonly)
-  .form-group.row
+  .form-group.row(data-visible-if=field['visible-if'],id="fg-" + field.name)
     .col-12
       input.btn.btn-lg.btn-primary(type="submit",value=field.text,disabled=readonly)
 
