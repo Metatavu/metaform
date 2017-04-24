@@ -1,10 +1,11 @@
 mixin text-field(field, value, readonly)
   .form-group.row
-    .col-12
-      label(for='field-' + field.name)
-        =field.title
-        if field.required
-          |&nbsp;*
+    if field.title
+      .col-12
+        label(for='field-' + field.name)
+          =field.title
+          if field.required
+            |&nbsp;*
     .col-12
       input.form-control(aria-labelledby=id='field-' + field.name,id='field-' + field.name,type="text",name=field.name,title=field.title,required=field.required,readonly=readonly,value=value)
       if field.help
@@ -13,11 +14,12 @@ mixin text-field(field, value, readonly)
           
 mixin email-field(field, value, readonly)
   .form-group.row
-    .col-12
-      label(for='field-' + field.name)
-        =field.title
-        if field.required
-          |&nbsp;*
+    if field.title
+      .col-12
+        label(for='field-' + field.name)
+          =field.title
+          if field.required
+            |&nbsp;*
     .col-12
       input.form-control(aria-labelledby=id='field-' + field.name,id='field-' + field.name,type="email",name=field.name,title=field.title,required=field.required,readonly=readonly,value=value)
       if field.help
@@ -26,11 +28,12 @@ mixin email-field(field, value, readonly)
           
 mixin date-field(field, value, readonly)
   .form-group.row
-    .col-12
-      label(for='field-' + field.name)
-        =field.title
-        if field.required
-          |&nbsp;*
+    if field.title
+      .col-12
+        label(for='field-' + field.name)
+          =field.title
+          if field.required
+            |&nbsp;*
     .col-12
       input.form-control(aria-labelledby=id='field-' + field.name,id='field-' + field.name,type="text",name=field.name,title=field.title,required=field.required,readonly=readonly,data-iso-date=value,data-type="date")
       if field.help
@@ -39,11 +42,12 @@ mixin date-field(field, value, readonly)
           
 mixin number-field(field, value, readonly)
   .form-group.row
-    .col-12
-      label(for='field-' + field.name)
-        =field.title
-        if field.required
-          |&nbsp;*
+    if field.title
+      .col-12
+        label(for='field-' + field.name)
+          =field.title
+          if field.required
+            |&nbsp;*
     .col-12
       input.form-control(aria-labelledby=id='field-' + field.name,id='field-' + field.name,type="number",name=field.name,title=field.title,required=field.required,min=field.min,max=field.max,step=field.step,readonly=readonly,value=value||field.default,lang='fi')
       if field.help
@@ -72,11 +76,12 @@ mixin boolean-field(field, value, readonly)
 
 mixin radio-field(field, value, readonly)
   .form-group.row
-    .col-12
-      label(for='field-' + field.name)
-        =field.title
-        if field.required
-          |&nbsp;*
+    if field.title
+      .col-12
+        label(for='field-' + field.name)
+          =field.title
+          if field.required
+            |&nbsp;*
     .col-12
       each option in field.options
         .form-check
@@ -96,11 +101,12 @@ mixin radio-field(field, value, readonly)
 
 mixin checklist-field(field, value, readonly)
   .form-group.row
-    .col-12
-      label(for='field-' + field.name)
-        =field.title
-        if field.required
-          |&nbsp;*
+    if field.title
+      .col-12
+        label(for='field-' + field.name)
+          =field.title
+          if field.required
+            |&nbsp;*
     .col-12
       each option in field.options
         .form-check(class=field['display-inline'] ? 'form-check-inline' : '')
@@ -118,13 +124,14 @@ mixin checklist-field(field, value, readonly)
         small.form-text.text-muted
           =field.help
           
-mixin memo-field(field,value,readonly)
-  .form-group.row
-    .col-12
-      label(for='field-' + field.name)
-        =field.title
-        if field.required
-          |&nbsp;*
+mixin memo-field(field, value, readonly)
+  .form-group.row(data-visible-if=field['visible-if'],id="fg-" + field.name)
+    if field.title
+      .col-12
+        label(for='field-' + field.name)
+          =field.title
+          if field.required
+            |&nbsp;*
     .col-12
       textarea.form-control(aria-labelledby=id='field-' + field.name,id='field-' + field.name,name=field.name,title=field.title,required=field.required,readonly=readonly)
         =value
@@ -134,11 +141,12 @@ mixin memo-field(field,value,readonly)
           
 mixin files-field(field, fileMetas, readonly)
   .form-group.row
-    .col-12
-      label(for='field-' + field.name)
-        =field.title
-        if field.required
-          |&nbsp;*
+    if field.title
+      .col-12
+        label(for='field-' + field.name)
+          =field.title
+          if field.required
+            |&nbsp;*
     .col-12
       if readonly
         if fileMetas
