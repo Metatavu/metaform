@@ -9,6 +9,12 @@
         hyperform(this.element[0]);
       }
       
+      this.element.find('.form-group[data-visible-if]').each(function (index, element) {
+        var formGroupId = $(element).attr('id');
+        var rule = JSON.parse($(element).attr('data-visible-if'));
+        this._registerVisibleIfRule(formGroupId, rule);
+      }.bind(this));
+      
       this._createDatepickers();
     },
     
@@ -22,6 +28,15 @@
           "allowInput": false
         });
       });
+    },
+    
+    _registerVisibleIfRule: function (formGroupId, rules) {
+      for (var i = 0; i < rules.length; i++) {
+        console.log(rules[i]);  
+      }
+      
+      $('#' + formGroupId).hide();
+      console.log(name, rules);
     },
     
     _onFormSubmit: function (event) {
