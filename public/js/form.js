@@ -11,7 +11,7 @@
         hyperform(this.element[0]);
       }
       
-      this.element.find('.form-group[data-visible-if]').each(function (index, element) {
+      this.element.find('*[data-visible-if]').each(function (index, element) {
         $(element).find('*[required]').each(function (inputIndex, inputElement) {
           $(inputElement).removeAttr('required');
           $(inputElement).attr('data-required', 'required');
@@ -22,6 +22,7 @@
         this._registerVisibleIfRule(formGroupId, rule);
       }.bind(this));
       
+      this.element.find('input:checked').change();
       this._createDatepickers();
     },
     
@@ -40,29 +41,37 @@
     _registerVisibleIfRule: function (formGroupId, rules) {
       for (var i = 0; i < rules.length; i++) {
         var rule = rules[i];
-        $('input[name="'+rule.field+'"]').change(this._createFormChangeFunction(formGroupId, rule.equals));
+        $('input[name="'+rule.field+'"]').change(this._createFormChangeFunction(formGroupId, rule));
       }
-      
+    
       $('#' + formGroupId).hide();
-      $('input[name="'+rule.field+'"]').change();
     },
     
-    _createFormChangeFunction: function(formGroupId, equals) {
+    _createFormChangeFunction: function(formGroupId, rule) {
       return function(e) {
-       var checked = $(this).is(":checked");
-       var formGroup = $('#' + formGroupId);
-       var action = 'NONE';
-       
-        if(checked && equals && !formGroup.is(":visible")) {
-         formGroup.slideToggle();
-         action = 'SHOW';
-       } else if(!checked && !equals && !formGroup.is(":visible")) {
-         formGroup.slideToggle();
-         action = 'SHOW';
-       } else if(formGroup.is(":visible")){
-         formGroup.slideToggle();
-         action = 'HIDE';
-       }
+        var checked = $(this).is(":checked");
+        var formGroup = $('#' + formGroupId);
+        var action = 'NONE';
+        var currentValue = $(this).val();
+        var equals = false;
+        
+        if (rule.equals === true) {
+          equals = checked;
+        } else if (typeof(rule.equals) !== 'undefined') {
+          equals = rule.equals === currentValue;
+        } else if (rule['not-equals'] === true) {
+          equals = !checked;
+        } else if (typeof(rule['not-equals']) !== 'undefined') {
+          equals = rule['not-equals'] !== currentValue;
+        }
+
+        if(equals && !formGroup.is(":visible")) {
+          formGroup.slideToggle();
+          action = 'SHOW';
+        } else if(!equals && formGroup.is(":visible")){
+          formGroup.slideToggle();
+          action = 'HIDE';
+        }
        
         formGroup.find('*[data-required]').each(function (inputIndex, inputElement) {
           if (action === 'SHOW') {
