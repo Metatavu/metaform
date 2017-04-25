@@ -77,7 +77,7 @@
       };
     },
 
-    _onRequiredFieldsVisibilityChange(container, action) {  
+    _onRequiredFieldsVisibilityChange: function(container, action) {  
       $(container).find('*[data-required]').each(function (inputIndex, inputElement) {
         if (action === 'SHOW' && $(inputElement).is(':visible')) {
           $(inputElement).attr('required', 'required');
