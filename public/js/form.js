@@ -41,7 +41,7 @@
     _registerVisibleIfRule: function (formGroupId, rules) {
       for (var i = 0; i < rules.length; i++) {
         var rule = rules[i];
-        $('input[name="'+rule.field+'"]').change(this._createFormChangeFunction(formGroupId, rule));
+        $('input[name="'+rule.field+'"]').change($.proxy(this._createFormChangeFunction(formGroupId, rule), this));
       }
     
       $('#' + formGroupId).hide();
@@ -49,10 +49,10 @@
     
     _createFormChangeFunction: function(formGroupId, rule) {
       return function(e) {
-        var checked = $(this).is(":checked");
+        var checked = $(e.target).is(':checked');
         var formGroup = $('#' + formGroupId);
         var action = 'NONE';
-        var currentValue = $(this).val();
+        var currentValue = $(e.target).val();
         var equals = false;
         
         if (rule.equals === true) {
@@ -65,25 +65,28 @@
           equals = rule['not-equals'] !== currentValue;
         }
 
-        if(equals && !formGroup.is(":visible")) {
-          formGroup.slideToggle();
-          action = 'SHOW';
-        } else if(!equals && formGroup.is(":visible")){
-          formGroup.slideToggle();
-          action = 'HIDE';
+        if(equals && !formGroup.is(':visible')) {
+          formGroup.slideToggle(400, function() {
+            this._onRequiredFieldsVisibilityChange(formGroup, 'SHOW');
+          }.bind(this));
+        } else if(!equals && formGroup.is(':visible')){
+          formGroup.slideToggle(400, function() {
+            this._onRequiredFieldsVisibilityChange(formGroup, 'HIDE');
+          }.bind(this));
         }
-       
-        formGroup.find('*[data-required]').each(function (inputIndex, inputElement) {
-          if (action === 'SHOW') {
-            $(inputElement).attr('required', 'required');
-          } else if (action === 'HIDE') {
-            $(inputElement).removeAttr('required');
-          }
-        });
-        
       };
     },
-    
+
+    _onRequiredFieldsVisibilityChange: function(container, action) {  
+      $(container).find('*[data-required]').each(function (inputIndex, inputElement) {
+        if (action === 'SHOW' && $(inputElement).is(':visible')) {
+          $(inputElement).attr('required', 'required');
+        } else if (action === 'HIDE') {
+          $(inputElement).removeAttr('required');
+        }
+      });
+    },
+
     _onFormSubmit: function (event) {
       event.preventDefault();
       var data = this.element.serialize();
