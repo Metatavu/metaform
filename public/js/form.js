@@ -1,3 +1,5 @@
+/* global Modernizr, pdfMake */
+
 (function(){
 	'use strict';
 	
@@ -9,6 +11,18 @@
         hyperform(this.element[0]);
       }
       
+      this.element.find('*[data-visible-if]').each(function (index, element) {
+        $(element).find('*[required]').each(function (inputIndex, inputElement) {
+          $(inputElement).removeAttr('required');
+          $(inputElement).attr('data-required', 'required');
+        }.bind(this));
+        
+        var formGroupId = $(element).attr('id');
+        var rule = JSON.parse($(element).attr('data-visible-if'));
+        this._registerVisibleIfRule(formGroupId, rule);
+      }.bind(this));
+      
+      this.element.find('input:checked').change();
       this._createDatepickers();
     },
     
@@ -24,6 +38,55 @@
       });
     },
     
+    _registerVisibleIfRule: function (formGroupId, rules) {
+      for (var i = 0; i < rules.length; i++) {
+        var rule = rules[i];
+        $('input[name="'+rule.field+'"]').change($.proxy(this._createFormChangeFunction(formGroupId, rule), this));
+      }
+    
+      $('#' + formGroupId).hide();
+    },
+    
+    _createFormChangeFunction: function(formGroupId, rule) {
+      return function(e) {
+        var checked = $(e.target).is(':checked');
+        var formGroup = $('#' + formGroupId);
+        var action = 'NONE';
+        var currentValue = $(e.target).val();
+        var equals = false;
+        
+        if (rule.equals === true) {
+          equals = checked;
+        } else if (typeof(rule.equals) !== 'undefined') {
+          equals = rule.equals === currentValue;
+        } else if (rule['not-equals'] === true) {
+          equals = !checked;
+        } else if (typeof(rule['not-equals']) !== 'undefined') {
+          equals = rule['not-equals'] !== currentValue;
+        }
+
+        if(equals && !formGroup.is(':visible')) {
+          formGroup.slideToggle(400, function() {
+            this._onRequiredFieldsVisibilityChange(formGroup, 'SHOW');
+          }.bind(this));
+        } else if(!equals && formGroup.is(':visible')){
+          formGroup.slideToggle(400, function() {
+            this._onRequiredFieldsVisibilityChange(formGroup, 'HIDE');
+          }.bind(this));
+        }
+      };
+    },
+
+    _onRequiredFieldsVisibilityChange: function(container, action) {  
+      $(container).find('*[data-required]').each(function (inputIndex, inputElement) {
+        if (action === 'SHOW' && $(inputElement).is(':visible')) {
+          $(inputElement).attr('required', 'required');
+        } else if (action === 'HIDE') {
+          $(inputElement).removeAttr('required');
+        }
+      });
+    },
+
     _onFormSubmit: function (event) {
       event.preventDefault();
       var data = this.element.serialize();
@@ -131,7 +194,7 @@
           enumSelect.css({'width': 'calc(50% - 4px)', 'display': 'inline', 'margin-right': '4px'});
       } else {
         enumSelect.parent().find('.enum-other').remove();
-        enumSelect.css({'width': '100%', 'display': 'block'})
+        enumSelect.css({'width': '100%', 'display': 'block'});
       }
     },
     

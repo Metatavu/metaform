@@ -26,9 +26,9 @@ block body
     .row
       .col-12
         form
-          each section in viewModel.sections 
+          each section, index in viewModel.sections 
             .row
-              section.col-12
+              section.col-12(data-visible-if=section['visible-if'], id="section-" + index)
                 .row
                   .col-12
                     h2
