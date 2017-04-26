@@ -85,6 +85,9 @@
         for (var i = 0; i < rule.and.length; i++) {
           var andSubRule = rule.and[i];
           andResult = andResult && this._evaluateFormRule(andSubRule);
+          if (!andResult) {
+            break;
+          }
         }
         equals = analyzed ? equals && andResult : andResult;
       }
@@ -94,6 +97,9 @@
         for (var j = 0; j < rule.or.length; j++) {
           var orSubRule = rule.or[j];
           orResult = orResult || this._evaluateFormRule(orSubRule);
+          if (orResult) {
+            break;
+          }
         }
         equals = analyzed ? equals || orResult : orResult;
       }
