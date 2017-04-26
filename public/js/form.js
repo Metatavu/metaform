@@ -78,9 +78,7 @@
     },
     _createFormChangeFunction: function(formGroupId, rule) {
       return function(e) {
-        //var checked = $(e.target).is(':checked') && $(e.target).is(':visible');
         var formGroup = $('#' + formGroupId);
-        //var currentValue = $(e.target).val();
         var equals = this._evaluateFormRule(rule);
 
         if(equals && !formGroup.is(':visible')) {
