@@ -24,6 +24,7 @@
       
       this.element.find('input:checked').change();
       this._createDatepickers();
+      this._createTimepickers();
     },
     
     _createDatepickers: function () {
@@ -34,6 +35,18 @@
           "altInput": true,
           "utc": true,
           "allowInput": false
+        });
+      });
+    },
+    
+    _createTimepickers: function () {
+      this.element.find('input[data-type="time"]').each(function (index, input) {
+        $(input).flatpickr({
+          "locale": "fi",
+          "allowInput": false,
+          "noCalendar": true,
+          "enableTime" : true,
+          "time_24hr": true
         });
       });
     },

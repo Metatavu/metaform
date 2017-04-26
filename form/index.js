@@ -330,6 +330,7 @@
         case 'email':
         case 'memo':
         case 'radio':
+        case 'time':
           return String;
         case 'date':
           return Date;
