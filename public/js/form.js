@@ -39,23 +39,36 @@
     },
     
     _registerVisibleIfRule: function (formGroupId, currentRule, rule) {
-      $('input[name="'+currentRule.field+'"]').change($.proxy(this._createFormChangeFunction(formGroupId, rule), this));
-      $('#' + formGroupId).hide();
+      if (typeof(currentRule.field) !== 'undefined') {
+        $('input[name="'+currentRule.field+'"]').change($.proxy(this._createFormChangeFunction(formGroupId, rule), this));
+      }
       
       if (typeof(currentRule.and) !== 'undefined') {
-        this._registerVisibleIfRule(formGroupId, rule.and, rule);
+        for (var i = 0; i < currentRule.and.length; i++) {
+          var andSubRule = currentRule.and[i];
+          this._registerVisibleIfRule(formGroupId, andSubRule, rule);
+        }
       }
       
       if (typeof(currentRule.or) !== 'undefined') {
-        this._registerVisibleIfRule(formGroupId, rule.or, rule);
+        for (var j = 0; j < currentRule.or.length; j++) {
+          var orSubRule = currentRule.or[j];
+          this._registerVisibleIfRule(formGroupId, orSubRule, rule);
+        }
       }
       
+      $('#' + formGroupId).hide();
     },
     _evaluateFormRule: function(rule) {
+      
+      var equals = false;
+      var analyzed = false;
+
+      if (typeof(rule.field) !== 'undefined') {
         var checked = $('input[name="'+rule.field+'"]:checked').length > 0;
         var currentValue = $('input[name="'+rule.field+'"]:checked').val();
-        var equals = false;
-
+        analyzed = true;
+        
         if (rule.equals === true) {
           equals = checked;
         } else if (typeof(rule.equals) !== 'undefined') {
@@ -65,16 +78,27 @@
         } else if (typeof(rule['not-equals']) !== 'undefined') {
           equals = rule['not-equals'] !== currentValue;
         }
-        
-        if (typeof(rule.and) !== 'undefined') {
-          equals = equals && this._evaluateFormRule(rule.and);
+      }
+
+      if (typeof(rule.and) !== 'undefined') {
+        var andResult = true;
+        for (var i = 0; i < rule.and.length; i++) {
+          var andSubRule = rule.and[i];
+          andResult = andResult && this._evaluateFormRule(andSubRule);
         }
-        
-        if (typeof(rule.or) !== 'undefined') {
-          equals = equals || this._evaluateFormRule(rule.or);
+        equals = analyzed ? equals && andResult : andResult;
+      }
+
+      if (typeof(rule.or) !== 'undefined') {
+        var orResult = false;
+        for (var j = 0; j < rule.or.length; j++) {
+          var orSubRule = rule.or[j];
+          orResult = orResult || this._evaluateFormRule(orSubRule);
         }
-        
-        return equals;
+        equals = analyzed ? equals || orResult : orResult;
+      }
+
+      return equals;
     },
     _createFormChangeFunction: function(formGroupId, rule) {
       return function(e) {
