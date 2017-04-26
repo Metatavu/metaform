@@ -19,7 +19,7 @@
         
         var formGroupId = $(element).attr('id');
         var rule = JSON.parse($(element).attr('data-visible-if'));
-        this._registerVisibleIfRule(formGroupId, rule);
+        this._registerVisibleIfRule(formGroupId, rule, rule);
       }.bind(this));
       
       this.element.find('input:checked').change();
@@ -38,23 +38,24 @@
       });
     },
     
-    _registerVisibleIfRule: function (formGroupId, rules) {
-      for (var i = 0; i < rules.length; i++) {
-        var rule = rules[i];
-        $('input[name="'+rule.field+'"]').change($.proxy(this._createFormChangeFunction(formGroupId, rule), this));
-      }
-    
+    _registerVisibleIfRule: function (formGroupId, currentRule, rule) {
+      $('input[name="'+currentRule.field+'"]').change($.proxy(this._createFormChangeFunction(formGroupId, rule), this));
       $('#' + formGroupId).hide();
+      
+      if (typeof(currentRule.and) !== 'undefined') {
+        this._registerVisibleIfRule(formGroupId, rule.and, rule);
+      }
+      
+      if (typeof(currentRule.or) !== 'undefined') {
+        this._registerVisibleIfRule(formGroupId, rule.or, rule);
+      }
+      
     },
-    
-    _createFormChangeFunction: function(formGroupId, rule) {
-      return function(e) {
-        var checked = $(e.target).is(':checked');
-        var formGroup = $('#' + formGroupId);
-        var action = 'NONE';
-        var currentValue = $(e.target).val();
+    _evaluateFormRule: function(rule) {
+        var checked = $('input[name="'+rule.field+'"]:checked').length > 0;
+        var currentValue = $('input[name="'+rule.field+'"]:checked').val();
         var equals = false;
-        
+
         if (rule.equals === true) {
           equals = checked;
         } else if (typeof(rule.equals) !== 'undefined') {
@@ -64,6 +65,23 @@
         } else if (typeof(rule['not-equals']) !== 'undefined') {
           equals = rule['not-equals'] !== currentValue;
         }
+        
+        if (typeof(rule.and) !== 'undefined') {
+          equals = equals && this._evaluateFormRule(rule.and);
+        }
+        
+        if (typeof(rule.or) !== 'undefined') {
+          equals = equals || this._evaluateFormRule(rule.or);
+        }
+        
+        return equals;
+    },
+    _createFormChangeFunction: function(formGroupId, rule) {
+      return function(e) {
+        //var checked = $(e.target).is(':checked') && $(e.target).is(':visible');
+        var formGroup = $('#' + formGroupId);
+        //var currentValue = $(e.target).val();
+        var equals = this._evaluateFormRule(rule);
 
         if(equals && !formGroup.is(':visible')) {
           formGroup.slideToggle(400, function() {
