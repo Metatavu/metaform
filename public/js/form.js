@@ -1,7 +1,8 @@
-/* global Modernizr, pdfMake */
+/* global Modernizr, pdfMake, MetaformUtils */
 
 (function(){
-	'use strict';
+  
+  'use strict';
 	
   $.widget("custom.metaform", {
     
@@ -24,17 +25,18 @@
       
       this.element.find('input:checked').change();
       this._createDatepickers();
+      this._createTimepickers();
     },
     
     _createDatepickers: function () {
       this.element.find('input[data-type="date"]').each(function (index, input) {
-        $(input).flatpickr({
-          "locale": "fi",
-          "altFormat": "d.m.Y",
-          "altInput": true,
-          "utc": true,
-          "allowInput": false
-        });
+        MetaformUtils.createDatePicker(input);
+      });
+    },
+    
+    _createTimepickers: function () {
+      this.element.find('input[data-type="time"]').each(function (index, input) {
+        MetaformUtils.createTimePicker(input);
       });
     },
     
@@ -166,6 +168,7 @@
   $.widget("custom.tableField", {
     
     _create : function() {
+      this.tableRow = this.element.find('tbody tr:first-child').clone();
       this.element.on('click', '.add-table-row', $.proxy(this._onAddtableRowClick, this));
       this.element.on('click', '.print-table', $.proxy(this._onPrintTableClick, this));
       this.element.on('change', 'input', $.proxy(this._onInputChange, this));
@@ -180,22 +183,35 @@
         this.element.find('tfoot').find('td')
           .html('&nbsp;');
       }
-
-      this.element.find('[data-column-type="enum"] select').each($.proxy(function (index, select) {
+      
+      this.element.find('tbody tr').each($.proxy(function (index, row) {
+        this._processTableRow(row);
+      }, this));
+      
+    },
+    
+    _processTableRow: function(row) {
+      $(row).find('[data-column-type="enum"] select').each($.proxy(function (index, select) {
         this._refreshEnumSelect($(select));
+      }, this));
+      
+      $(row).find('input[data-type="table-date"]').each($.proxy(function (index, input) {
+        MetaformUtils.createDatePicker(input);
+      }, this));
+
+      $(row).find('input[data-type="table-time"]').each($.proxy(function (index, input) {
+        MetaformUtils.createTimePicker(input);
       }, this));
     },
     
     _addRow: function () {
-      var clonedRow = this.element.find('tbody tr:first-child').clone();
+      var clonedRow = this.tableRow.clone();
       clonedRow.appendTo(this.element.find('tbody'));
       clonedRow.find('input').each($.proxy(function (index, input) {
         $(input).val('');
       }, this));
-
-      clonedRow.find('[data-column-type="enum"] select').each($.proxy(function (index, select) {
-        this._refreshEnumSelect($(select));
-      }, this));
+      
+      this._processTableRow(clonedRow);
     },
     
     _refresh: function () {

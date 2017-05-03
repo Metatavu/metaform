@@ -9,13 +9,13 @@
   const async = require('async');
   const _ = require('underscore');
   const FileMeta = require(__dirname + '/../model/filemeta');
-  const config = require(__dirname + '/../config.js');
+  const config = require('nconf');
   const NOT_SAVED_FIELDS = ['logo', 'submit', 'small-text', 'html'];
   
   class Form {
     
     static config() {
-      return require(util.format(__dirname + '/../%s.json', config.form));
+      return require(util.format(__dirname + '/../%s.json', config.get('form')));
     }
     
     static viewModel() {
@@ -330,6 +330,7 @@
         case 'email':
         case 'memo':
         case 'radio':
+        case 'time':
           return String;
         case 'date':
           return Date;

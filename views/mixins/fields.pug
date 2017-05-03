@@ -39,6 +39,20 @@ mixin date-field(field, value, readonly)
       if field.help
         small.form-text.text-muted
           =field.help
+
+mixin time-field(field, value, readonly)
+  .form-group.row(data-visible-if=field['visible-if'],id="fg-" + field.name)
+    if field.title
+      .col-12
+        label(for='field-' + field.name)
+          =field.title
+          if field.required
+            |&nbsp;*
+    .col-12
+      input.form-control(aria-labelledby=id='field-' + field.name,id='field-' + field.name,type="text",name=field.name,title=field.title,required=field.required,readonly=readonly,data-iso-date=value,data-type="time")
+      if field.help
+        small.form-text.text-muted
+          =field.help
           
 mixin number-field(field, value, readonly)
   .form-group.row(data-visible-if=field['visible-if'],id="fg-" + field.name)
@@ -209,6 +223,11 @@ mixin table-field(field, value, readonly)
                             each value in column.values
                               option(data-other=value.other)
                                 =value.text
+                        when 'date'
+                          input.form-control(type="text",name=column.name,title=column.title,required=column.required,data-type="table-date")
+                        when 'time'
+                           input.form-control(type="text",name=column.name,title=column.title,required=column.required,data-type="table-time")
+                          
               tfoot
                 tr
                   each column, columnIndex in field.columns
@@ -277,6 +296,8 @@ mixin field(field, value, readonly)
       +checklist-field(field, value, readonly)
     when 'date'
       +date-field(field, value, readonly)
+    when 'time'
+      +time-field(field, value, readonly)
     when 'files'
       +files-field(field, value, readonly)
     when 'table'
