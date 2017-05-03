@@ -8,7 +8,9 @@
     "email": "devs@metatavu.fi"
   },
   "scripts":{
-    "start":"node app.js"
+    "start":"node app.js",
+    "test": "nyc --reporter=lcov -- mocha",
+    "coverage": "cat ./coverage/lcov.info | coveralls"
   },
   "devDependencies": {
     "grunt": "^1.0.1",
@@ -38,5 +40,11 @@
     "pug": "2.0.0-beta6",
     "request": "^2.81.0",
     "underscore": "1.8.3"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "coveralls": "2.13.0",
+    "mocha": "^3.2.0",
+    "nyc": "10.2.0"
   }
 }
