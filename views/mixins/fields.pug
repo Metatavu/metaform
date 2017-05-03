@@ -223,6 +223,11 @@ mixin table-field(field, value, readonly)
                             each value in column.values
                               option(data-other=value.other)
                                 =value.text
+                        when 'date'
+                          input.form-control(type="text",name=column.name,title=column.title,required=column.required,data-type="table-date")
+                        when 'time'
+                           input.form-control(type="text",name=column.name,title=column.title,required=column.required,data-type="table-time")
+                          
               tfoot
                 tr
                   each column, columnIndex in field.columns
