@@ -185,12 +185,12 @@
       }
       
       this.element.find('tbody tr').each($.proxy(function (index, row) {
-        this.processTableRow(row);
-      }, this))
+        this._processTableRow(row);
+      }, this));
       
     },
     
-    processTableRow(row) {
+    _processTableRow: function(row) {
       $(row).find('[data-column-type="enum"] select').each($.proxy(function (index, select) {
         this._refreshEnumSelect($(select));
       }, this));
@@ -211,7 +211,7 @@
         $(input).val('');
       }, this));
       
-      this.processTableRow(clonedRow);
+      this._processTableRow(clonedRow);
     },
     
     _refresh: function () {
