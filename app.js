@@ -50,7 +50,7 @@
   require('./routes')(app);
   
   User.findOne({
-    email: config.get('config:admin:email')
+    email: config.get('admin:email')
   }).then((admin) => {
     if (!admin) {
       var newAdmin = new User();
