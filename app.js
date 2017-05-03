@@ -16,11 +16,13 @@
   const expressValidator = require('express-validator');
   const flash = require('connect-flash');
   const passport = require('passport');
+  const config = require('nconf');
+  config.file({ file: argv.config || 'config.json' });
+  
   const User = require(__dirname + '/model/user');
-  const config = require(__dirname + '/config');
   const port = argv.port||3000;
 
-  mongoose.connect('mongodb://' + config.database.host + '/' + config.database.table);
+  mongoose.connect('mongodb://' + config.get('database:host') + '/' + config.get('database:table'));
   require('./auth/passport')(passport);
   
   var app = express();
@@ -30,7 +32,7 @@
   
   app.use(cookieParser());
   app.use(expressSession({
-    secret:config.session_secret,
+    secret: config.get('session_secret'),
     store: new MongoStore({ mongooseConnection: mongoose.connection })
   }));
   
@@ -48,12 +50,12 @@
   require('./routes')(app);
   
   User.findOne({
-    email: config.admin.email
+    email: config.get('config:admin:email')
   }).then((admin) => {
     if (!admin) {
       var newAdmin = new User();
-      newAdmin.email = config.admin.email;
-      newAdmin.password = newAdmin.generateHash(config.admin.initialPassword);
+      newAdmin.email = config.get('admin:email');
+      newAdmin.password = newAdmin.generateHash(config.get('admin:initialPassword'));
       newAdmin.role = 'admin';
       newAdmin.save().then(() => {
         console.log('Created admin user');
