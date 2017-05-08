@@ -1,0 +1,27 @@
+{
+  "title": "Integration test for text fields",
+  "theme": "integration-test",
+  "sections": [{
+    "fields": [{
+      "name": "required-text",
+      "type": "text",
+      "title": "Required text",
+      "required": true,
+      "contexts": ["FORM", "MANAGEMENT_LIST", "MANAGEMENT"]
+    }]
+  }, {
+    "fields": [{
+      "name": "submit",
+      "type": "submit",
+      "text": "Send",
+      "contexts": ["FORM"],
+      "editable": true
+    }, {
+      "name": "submit",
+      "type": "submit",
+      "text": "Save",
+      "contexts": ["MANAGEMENT"],
+      "editable": true
+    }]
+  }]
+}
