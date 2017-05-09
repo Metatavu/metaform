@@ -206,5 +206,43 @@
         .deep
         .property('[0].required-text', testText);
     });
+    
+    it('Test for required fields', () => { 
+      const testText = "";
+      const result = expect(new Promise((resolve, reject) => {     
+        config.file({file: 'test/text-field-config.json' });
+        
+        app = TestUtils.startServer('node', ['app.js', '--config=test/text-field-config.json']);
+
+        driver = new webdriver.Builder()
+          .withCapabilities(webdriver.Capabilities.chrome())
+          .build();
+
+        driver.get('http://localhost:3000');
+        driver.wait(until.elementLocated(webdriver.By.name('required-text')));
+
+        let textField = driver.findElement(webdriver.By.name('required-text'));
+        textField.sendKeys(testText);
+        
+        driver.findElement(webdriver.By.className('btn')).click();
+        
+        driver.wait(driver.findElement(webdriver.By.css("input:invalid")), 30 * 1000).then(() => {
+          mongoose.connect('mongodb://' + config.get('database:host') + '/' + config.get('database:table'));
+
+          TestUtils.getRepliesLength().then((value) => {
+            if(value === 0) {
+              resolve(value);
+            } else {
+              reject('Found replies when should not find.');
+            }    
+          });
+        });         
+      }));
+           
+      return result
+        .to
+        .eventually
+        .equal(0);
+    });
   });
 })();

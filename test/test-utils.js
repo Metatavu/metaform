@@ -31,8 +31,7 @@
             }
           })
           .catch(reject);
-      });
-        
+      });    
     }
     
     static getReplies(callback) {
@@ -42,6 +41,20 @@
     static removeReplies() {
       let formModel = Form.replyModel();
       return formModel.find({}).remove().exec();
+    }
+    
+    static getRepliesLength() {
+      return new Promise((resolve, reject) => {
+        TestUtils.getReplies()
+          .then((replies) => {
+            if (replies.length > 0) {
+              reject('Found replies.');
+            } else {
+              resolve(replies.length);
+            }
+          })
+          .catch(reject);
+      });
     }
   }
   module.exports = TestUtils;
