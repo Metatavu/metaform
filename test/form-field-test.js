@@ -25,20 +25,67 @@
     this.timeout(600000);
     
     afterEach(() =>{
-      if (app) {
-        app.kill(); 
-      } 
+      delete mongoose.models.Reply;
+      delete mongoose.modelSchemas.Reply;
+      mongoose.connection.close();
       
-      if (driver) {
-        driver.quit();
-      } 
+      if(driver) {
+        driver.close();
+        driver = null;
+      }
+      
+      if(app) {
+        app.kill();
+      }
     }); 
     
-    it('Test text field', () => { 
+    it('Test text field by English', () => { 
       const testText = "Test text";
       const result = expect(new Promise((resolve, reject) => {     
         config.file({file: 'test/text-field-config.json' });
-        mongoose.connect('mongodb://' + config.get('database:host') + '/' + config.get('database:table'));
+        
+        app = TestUtils.startServer('node', ['app.js', '--config=test/text-field-config.json']);
+
+        driver = new webdriver.Builder()
+          .withCapabilities(webdriver.Capabilities.chrome())
+          .build();
+  
+        driver.get('http://localhost:3000');
+        driver.wait(until.elementLocated(webdriver.By.name('required-text')));
+
+        let textField = driver.findElement(webdriver.By.name('required-text'));
+        textField.sendKeys(testText);
+        
+        driver.findElement(webdriver.By.className('btn')).click(); 
+        
+        driver.wait(until.elementLocated(webdriver.By.className('alert-success'))).then(() => {
+          mongoose.connect('mongodb://' + config.get('database:host') + '/' + config.get('database:table'));
+
+          TestUtils.getReplyCount().then((value) => {
+            if(value) {
+              TestUtils.removeReplies().then(() => {
+                resolve(value);
+              });
+            } else {
+              reject('Replies not found');
+            }    
+          });
+        });      
+      }));
+           
+      return result
+        .to
+        .eventually
+        .have
+        .deep
+        .property('[0].required-text', testText);
+    }); 
+    
+    it('Test text field by Chinese', () => { 
+      const testText = "測試文本";
+      const result = expect(new Promise((resolve, reject) => {     
+        config.file({file: 'test/text-field-config.json' });
+        
         app = TestUtils.startServer('node', ['app.js', '--config=test/text-field-config.json']);
 
         driver = new webdriver.Builder()
@@ -51,18 +98,21 @@
         let textField = driver.findElement(webdriver.By.name('required-text'));
         textField.sendKeys(testText);
         
-        driver.findElement(webdriver.By.className('btn')).click().then(function(){        
-          driver.wait(until.elementLocated(webdriver.By.className('success')));
+        driver.findElement(webdriver.By.className('btn')).click();
         
+        driver.wait(until.elementLocated(webdriver.By.className('alert-success'))).then(() => {
+          mongoose.connect('mongodb://' + config.get('database:host') + '/' + config.get('database:table'));
+
           TestUtils.getReplyCount().then((value) => {
             if(value) {
-              resolve(value);
-              TestUtils.removeReplies();
+              TestUtils.removeReplies().then(() => {
+                resolve(value);
+              });
             } else {
               reject('Replies not found');
             }    
-          });        
-        });       
+          });
+        });         
       }));
            
       return result
@@ -71,6 +121,90 @@
         .have
         .deep
         .property('[0].required-text', testText);
-    });    
+    });
+    
+    it('Test text field by Finnish', () => { 
+      const testText = "Ääkkösiä";
+      const result = expect(new Promise((resolve, reject) => {     
+        config.file({file: 'test/text-field-config.json' });
+        
+        app = TestUtils.startServer('node', ['app.js', '--config=test/text-field-config.json']);
+
+        driver = new webdriver.Builder()
+          .withCapabilities(webdriver.Capabilities.chrome())
+          .build();
+
+        driver.get('http://localhost:3000');
+        driver.wait(until.elementLocated(webdriver.By.name('required-text')));
+
+        let textField = driver.findElement(webdriver.By.name('required-text'));
+        textField.sendKeys(testText);
+        
+        driver.findElement(webdriver.By.className('btn')).click(); 
+        
+        driver.wait(until.elementLocated(webdriver.By.className('alert-success'))).then(() => {
+          mongoose.connect('mongodb://' + config.get('database:host') + '/' + config.get('database:table'));
+
+          TestUtils.getReplyCount().then((value) => {
+            if(value) {
+              TestUtils.removeReplies().then(() => {
+                resolve(value);
+              });
+            } else {
+              reject('Replies not found');
+            }    
+          });
+        });         
+      }));
+           
+      return result
+        .to
+        .eventually
+        .have
+        .deep
+        .property('[0].required-text', testText);
+    });
+    
+    it('Test text field by Russian', () => { 
+      const testText = "Тестовый текст";
+      const result = expect(new Promise((resolve, reject) => {     
+        config.file({file: 'test/text-field-config.json' });
+        
+        app = TestUtils.startServer('node', ['app.js', '--config=test/text-field-config.json']);
+
+        driver = new webdriver.Builder()
+          .withCapabilities(webdriver.Capabilities.chrome())
+          .build();
+
+        driver.get('http://localhost:3000');
+        driver.wait(until.elementLocated(webdriver.By.name('required-text')));
+
+        let textField = driver.findElement(webdriver.By.name('required-text'));
+        textField.sendKeys(testText);
+        
+        driver.findElement(webdriver.By.className('btn')).click();
+        
+        driver.wait(until.elementLocated(webdriver.By.className('alert-success'))).then(() => {
+          mongoose.connect('mongodb://' + config.get('database:host') + '/' + config.get('database:table'));
+
+          TestUtils.getReplyCount().then((value) => {
+            if(value) {
+              TestUtils.removeReplies().then(() => {
+                resolve(value);
+              });
+            } else {
+              reject('Replies not found');
+            }    
+          });
+        });         
+      }));
+           
+      return result
+        .to
+        .eventually
+        .have
+        .deep
+        .property('[0].required-text', testText);
+    });
   });
 })();

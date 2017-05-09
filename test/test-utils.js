@@ -41,7 +41,7 @@
     
     static removeReplies() {
       let formModel = Form.replyModel();
-      formModel.find({}).remove().exec();
+      return formModel.find({}).remove().exec();
     }
   }
   module.exports = TestUtils;
