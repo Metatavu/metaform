@@ -4,21 +4,36 @@
   'use strict';
   const spawn = require('child_process').spawn;
   const Promise = require('bluebird');
+  const webdriver = require('selenium-webdriver');
   const Form = require(__dirname + '/../form/index.js');
   
   class TestUtils {
     
-    static startServer(command,options) {
+    static startServer(command,options) {   
       let app;
-      
-      app = spawn(command, options, {cwd: __dirname + '/../'});
-      app.stdout.pipe(process.stdout);
-      app.stderr.pipe(process.stderr);
-      
-      return app;
+      return new Promise((resolve, reject) => {
+        app = spawn(command, options, {cwd: __dirname + '/../'});
+        app.stdout.pipe(process.stdout);
+        app.stderr.pipe(process.stderr); 
+
+        app.stdout.on('data', (data) => {
+          if(data) {
+            resolve(app);
+          }
+        });
+      });  
     }
     
-    static getReplyCount() {
+    static createDriver(browser) {
+      let driver;
+      driver = new webdriver.Builder()
+        .forBrowser(browser)
+        .build();
+
+      return driver;
+    }
+    
+    static getReplies() {
       return new Promise((resolve, reject) => {
         TestUtils.getReplies()
           .then((replies) => {
@@ -31,8 +46,7 @@
             }
           })
           .catch(reject);
-      });
-        
+      });    
     }
     
     static getReplies(callback) {
@@ -42,6 +56,16 @@
     static removeReplies() {
       let formModel = Form.replyModel();
       return formModel.find({}).remove().exec();
+    }
+    
+    static getRepliesLength() {
+      return new Promise((resolve, reject) => {
+        TestUtils.getReplies()
+          .then((replies) => {
+            resolve(replies.length);
+          })
+          .catch(reject);
+      });
     }
   }
   module.exports = TestUtils;

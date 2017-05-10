@@ -15,6 +15,7 @@
   const Promise = require('bluebird');
   const TestUtils = require(__dirname + '/test-utils');
   const Form = require(__dirname + '/../form/index.js');
+  const browser = process.env.METAFORM_BROWSER || 'chrome';
   
   chai.use(require('chai-as-promised'));
   
@@ -44,33 +45,33 @@
       const result = expect(new Promise((resolve, reject) => {     
         config.file({file: 'test/text-field-config.json' });
         
-        app = TestUtils.startServer('node', ['app.js', '--config=test/text-field-config.json']);
+        TestUtils.startServer('node', ['app.js', '--config=test/text-field-config.json']).then((server) => {
+          app = server;
+          
+          driver = TestUtils.createDriver(browser);
+          driver.get('http://localhost:3000');
 
-        driver = new webdriver.Builder()
-          .withCapabilities(webdriver.Capabilities.chrome())
-          .build();
-  
-        driver.get('http://localhost:3000');
-        driver.wait(until.elementLocated(webdriver.By.name('required-text')));
+          driver.wait(until.elementLocated(webdriver.By.name('required-text'))).then(() => {
+            let textField = driver.findElement(webdriver.By.name('required-text'));
+            textField.sendKeys(testText);
 
-        let textField = driver.findElement(webdriver.By.name('required-text'));
-        textField.sendKeys(testText);
-        
-        driver.findElement(webdriver.By.className('btn')).click(); 
-        
-        driver.wait(until.elementLocated(webdriver.By.className('alert-success'))).then(() => {
-          mongoose.connect('mongodb://' + config.get('database:host') + '/' + config.get('database:table'));
+            driver.findElement(webdriver.By.className('btn')).click(); 
 
-          TestUtils.getReplyCount().then((value) => {
-            if(value) {
-              TestUtils.removeReplies().then(() => {
-                resolve(value);
+            driver.wait(until.elementLocated(webdriver.By.className('alert-success'))).then(() => {
+              mongoose.connect('mongodb://' + config.get('database:host') + '/' + config.get('database:table'));
+
+              TestUtils.getReplies().then((value) => {
+                if(value) {
+                  TestUtils.removeReplies().then(() => {
+                    resolve(value);
+                  });
+                } else {
+                  reject('Replies not found');
+                }    
               });
-            } else {
-              reject('Replies not found');
-            }    
+            });                
           });
-        });      
+        });
       }));
            
       return result
@@ -86,33 +87,33 @@
       const result = expect(new Promise((resolve, reject) => {     
         config.file({file: 'test/text-field-config.json' });
         
-        app = TestUtils.startServer('node', ['app.js', '--config=test/text-field-config.json']);
+        TestUtils.startServer('node', ['app.js', '--config=test/text-field-config.json']).then((server) => {
+          app = server;
+          
+          driver = TestUtils.createDriver(browser);
+          driver.get('http://localhost:3000');
+          
+          driver.wait(until.elementLocated(webdriver.By.name('required-text'))).then(() => {
+            let textField = driver.findElement(webdriver.By.name('required-text'));
+            textField.sendKeys(testText);
 
-        driver = new webdriver.Builder()
-          .withCapabilities(webdriver.Capabilities.chrome())
-          .build();
+            driver.findElement(webdriver.By.className('btn')).click(); 
 
-        driver.get('http://localhost:3000');
-        driver.wait(until.elementLocated(webdriver.By.name('required-text')));
+            driver.wait(until.elementLocated(webdriver.By.className('alert-success'))).then(() => {
+              mongoose.connect('mongodb://' + config.get('database:host') + '/' + config.get('database:table'));
 
-        let textField = driver.findElement(webdriver.By.name('required-text'));
-        textField.sendKeys(testText);
-        
-        driver.findElement(webdriver.By.className('btn')).click();
-        
-        driver.wait(until.elementLocated(webdriver.By.className('alert-success'))).then(() => {
-          mongoose.connect('mongodb://' + config.get('database:host') + '/' + config.get('database:table'));
-
-          TestUtils.getReplyCount().then((value) => {
-            if(value) {
-              TestUtils.removeReplies().then(() => {
-                resolve(value);
+              TestUtils.getReplies().then((value) => {
+                if(value) {
+                  TestUtils.removeReplies().then(() => {
+                    resolve(value);
+                  });
+                } else {
+                  reject('Replies not found');
+                }    
               });
-            } else {
-              reject('Replies not found');
-            }    
-          });
-        });         
+            });                
+          }); 
+        });
       }));
            
       return result
@@ -128,33 +129,33 @@
       const result = expect(new Promise((resolve, reject) => {     
         config.file({file: 'test/text-field-config.json' });
         
-        app = TestUtils.startServer('node', ['app.js', '--config=test/text-field-config.json']);
+        TestUtils.startServer('node', ['app.js', '--config=test/text-field-config.json']).then((server) => {
+          app = server;
 
-        driver = new webdriver.Builder()
-          .withCapabilities(webdriver.Capabilities.chrome())
-          .build();
+          driver = TestUtils.createDriver(browser);
+          driver.get('http://localhost:3000');
+          
+          driver.wait(until.elementLocated(webdriver.By.name('required-text'))).then(() => {
+            let textField = driver.findElement(webdriver.By.name('required-text'));
+            textField.sendKeys(testText);
 
-        driver.get('http://localhost:3000');
-        driver.wait(until.elementLocated(webdriver.By.name('required-text')));
+            driver.findElement(webdriver.By.className('btn')).click(); 
 
-        let textField = driver.findElement(webdriver.By.name('required-text'));
-        textField.sendKeys(testText);
-        
-        driver.findElement(webdriver.By.className('btn')).click(); 
-        
-        driver.wait(until.elementLocated(webdriver.By.className('alert-success'))).then(() => {
-          mongoose.connect('mongodb://' + config.get('database:host') + '/' + config.get('database:table'));
+            driver.wait(until.elementLocated(webdriver.By.className('alert-success'))).then(() => {
+              mongoose.connect('mongodb://' + config.get('database:host') + '/' + config.get('database:table'));
 
-          TestUtils.getReplyCount().then((value) => {
-            if(value) {
-              TestUtils.removeReplies().then(() => {
-                resolve(value);
+              TestUtils.getReplies().then((value) => {
+                if(value) {
+                  TestUtils.removeReplies().then(() => {
+                    resolve(value);
+                  });
+                } else {
+                  reject('Replies not found');
+                }    
               });
-            } else {
-              reject('Replies not found');
-            }    
+            });                
           });
-        });         
+        });
       }));
            
       return result
@@ -170,33 +171,33 @@
       const result = expect(new Promise((resolve, reject) => {     
         config.file({file: 'test/text-field-config.json' });
         
-        app = TestUtils.startServer('node', ['app.js', '--config=test/text-field-config.json']);
+        TestUtils.startServer('node', ['app.js', '--config=test/text-field-config.json']).then((server) => {
+          app = server;
 
-        driver = new webdriver.Builder()
-          .withCapabilities(webdriver.Capabilities.chrome())
-          .build();
+          driver = TestUtils.createDriver(browser);
+          driver.get('http://localhost:3000');
+          
+          driver.wait(until.elementLocated(webdriver.By.name('required-text'))).then(() => {
+            let textField = driver.findElement(webdriver.By.name('required-text'));
+            textField.sendKeys(testText);
 
-        driver.get('http://localhost:3000');
-        driver.wait(until.elementLocated(webdriver.By.name('required-text')));
+            driver.findElement(webdriver.By.className('btn')).click(); 
 
-        let textField = driver.findElement(webdriver.By.name('required-text'));
-        textField.sendKeys(testText);
-        
-        driver.findElement(webdriver.By.className('btn')).click();
-        
-        driver.wait(until.elementLocated(webdriver.By.className('alert-success'))).then(() => {
-          mongoose.connect('mongodb://' + config.get('database:host') + '/' + config.get('database:table'));
+            driver.wait(until.elementLocated(webdriver.By.className('alert-success'))).then(() => {
+              mongoose.connect('mongodb://' + config.get('database:host') + '/' + config.get('database:table'));
 
-          TestUtils.getReplyCount().then((value) => {
-            if(value) {
-              TestUtils.removeReplies().then(() => {
-                resolve(value);
+              TestUtils.getReplies().then((value) => {
+                if(value) {
+                  TestUtils.removeReplies().then(() => {
+                    resolve(value);
+                  });
+                } else {
+                  reject('Replies not found');
+                }    
               });
-            } else {
-              reject('Replies not found');
-            }    
-          });
-        });         
+            });                
+          }); 
+        });
       }));
            
       return result
@@ -205,6 +206,44 @@
         .have
         .deep
         .property('[0].required-text', testText);
+    });
+    
+    it('Test for required fields', () => { 
+      const testText = "";
+      const result = expect(new Promise((resolve, reject) => {     
+        config.file({file: 'test/text-field-config.json' });
+        
+        TestUtils.startServer('node', ['app.js', '--config=test/text-field-config.json']).then((server) => {
+          app = server;
+
+          driver = TestUtils.createDriver(browser);
+          driver.get('http://localhost:3000');
+          
+          driver.wait(until.elementLocated(webdriver.By.name('required-text'))).then(() => {
+            let textField = driver.findElement(webdriver.By.name('required-text'));
+            textField.sendKeys(testText);
+
+            driver.findElement(webdriver.By.className('btn')).click();
+
+            driver.wait(driver.findElement(webdriver.By.css("input:invalid")), 30 * 1000).then(() => {
+              mongoose.connect('mongodb://' + config.get('database:host') + '/' + config.get('database:table'));
+
+              TestUtils.getRepliesLength().then((count) => {
+                if(count === 0) {
+                  resolve(count);
+                } else {
+                  reject('Found replies when should not find.');
+                }    
+              });
+            });
+          });  
+        });
+      }));
+           
+      return result
+        .to
+        .eventually
+        .equal(0);
     });
   });
 })();

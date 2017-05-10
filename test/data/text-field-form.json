@@ -8,7 +8,14 @@
       "title": "Required text",
       "required": true,
       "contexts": ["FORM", "MANAGEMENT_LIST", "MANAGEMENT"]
-    }]
+    },{
+      "name": "not-required",
+      "type": "text",
+      "title": "Not required",
+      "required": false,
+      "contexts": ["FORM", "MANAGEMENT_LIST", "MANAGEMENT"]
+    }
+  ]
   }, {
     "fields": [{
       "name": "submit",
