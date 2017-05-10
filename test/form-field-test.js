@@ -15,6 +15,7 @@
   const Promise = require('bluebird');
   const TestUtils = require(__dirname + '/test-utils');
   const Form = require(__dirname + '/../form/index.js');
+  const browser = process.env.METAFORM_BROWSER || 'chrome';
   
   chai.use(require('chai-as-promised'));
   
@@ -47,7 +48,7 @@
         TestUtils.startServer('node', ['app.js', '--config=test/text-field-config.json']).then((server) => {
           app = server;
           
-          driver = TestUtils.createDriver();
+          driver = TestUtils.createDriver(browser);
           driver.get('http://localhost:3000');
 
           driver.wait(until.elementLocated(webdriver.By.name('required-text'))).then(() => {
@@ -89,7 +90,7 @@
         TestUtils.startServer('node', ['app.js', '--config=test/text-field-config.json']).then((server) => {
           app = server;
           
-          driver = TestUtils.createDriver();
+          driver = TestUtils.createDriver(browser);
           driver.get('http://localhost:3000');
           
           driver.wait(until.elementLocated(webdriver.By.name('required-text'))).then(() => {
@@ -131,7 +132,7 @@
         TestUtils.startServer('node', ['app.js', '--config=test/text-field-config.json']).then((server) => {
           app = server;
 
-          driver = TestUtils.createDriver();
+          driver = TestUtils.createDriver(browser);
           driver.get('http://localhost:3000');
           
           driver.wait(until.elementLocated(webdriver.By.name('required-text'))).then(() => {
@@ -173,7 +174,7 @@
         TestUtils.startServer('node', ['app.js', '--config=test/text-field-config.json']).then((server) => {
           app = server;
 
-          driver = TestUtils.createDriver();
+          driver = TestUtils.createDriver(browser);
           driver.get('http://localhost:3000');
           
           driver.wait(until.elementLocated(webdriver.By.name('required-text'))).then(() => {
@@ -215,7 +216,7 @@
         TestUtils.startServer('node', ['app.js', '--config=test/text-field-config.json']).then((server) => {
           app = server;
 
-          driver = TestUtils.createDriver();
+          driver = TestUtils.createDriver(browser);
           driver.get('http://localhost:3000');
           
           driver.wait(until.elementLocated(webdriver.By.name('required-text'))).then(() => {

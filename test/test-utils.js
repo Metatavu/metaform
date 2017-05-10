@@ -24,10 +24,10 @@
       });  
     }
     
-    static createDriver() {
+    static createDriver(browser) {
       let driver;
       driver = new webdriver.Builder()
-        .withCapabilities(webdriver.Capabilities.phantomjs())
+        .forBrowser(browser)
         .build();
 
       return driver;
