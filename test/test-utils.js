@@ -33,7 +33,7 @@
       return driver;
     }
     
-    static getReplyCount() {
+    static getReplies() {
       return new Promise((resolve, reject) => {
         TestUtils.getReplies()
           .then((replies) => {
@@ -62,11 +62,7 @@
       return new Promise((resolve, reject) => {
         TestUtils.getReplies()
           .then((replies) => {
-            if (replies.length > 0) {
-              reject('Found replies.');
-            } else {
-              resolve(replies.length);
-            }
+            resolve(replies.length);
           })
           .catch(reject);
       });

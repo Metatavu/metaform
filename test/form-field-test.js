@@ -60,7 +60,7 @@
             driver.wait(until.elementLocated(webdriver.By.className('alert-success'))).then(() => {
               mongoose.connect('mongodb://' + config.get('database:host') + '/' + config.get('database:table'));
 
-              TestUtils.getReplyCount().then((value) => {
+              TestUtils.getReplies().then((value) => {
                 if(value) {
                   TestUtils.removeReplies().then(() => {
                     resolve(value);
@@ -102,7 +102,7 @@
             driver.wait(until.elementLocated(webdriver.By.className('alert-success'))).then(() => {
               mongoose.connect('mongodb://' + config.get('database:host') + '/' + config.get('database:table'));
 
-              TestUtils.getReplyCount().then((value) => {
+              TestUtils.getReplies().then((value) => {
                 if(value) {
                   TestUtils.removeReplies().then(() => {
                     resolve(value);
@@ -144,7 +144,7 @@
             driver.wait(until.elementLocated(webdriver.By.className('alert-success'))).then(() => {
               mongoose.connect('mongodb://' + config.get('database:host') + '/' + config.get('database:table'));
 
-              TestUtils.getReplyCount().then((value) => {
+              TestUtils.getReplies().then((value) => {
                 if(value) {
                   TestUtils.removeReplies().then(() => {
                     resolve(value);
@@ -186,7 +186,7 @@
             driver.wait(until.elementLocated(webdriver.By.className('alert-success'))).then(() => {
               mongoose.connect('mongodb://' + config.get('database:host') + '/' + config.get('database:table'));
 
-              TestUtils.getReplyCount().then((value) => {
+              TestUtils.getReplies().then((value) => {
                 if(value) {
                   TestUtils.removeReplies().then(() => {
                     resolve(value);
@@ -228,9 +228,9 @@
             driver.wait(driver.findElement(webdriver.By.css("input:invalid")), 30 * 1000).then(() => {
               mongoose.connect('mongodb://' + config.get('database:host') + '/' + config.get('database:table'));
 
-              TestUtils.getRepliesLength().then((value) => {
-                if(value === 0) {
-                  resolve(value);
+              TestUtils.getRepliesLength().then((count) => {
+                if(count === 0) {
+                  resolve(count);
                 } else {
                   reject('Found replies when should not find.');
                 }    
