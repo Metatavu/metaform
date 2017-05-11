@@ -14,6 +14,24 @@
       "title": "Not required",
       "required": false,
       "contexts": ["FORM", "MANAGEMENT_LIST", "MANAGEMENT"]
+    },{
+      "name": "not-in-form",
+      "type": "text",
+      "title": "Not in form",
+      "required": false,
+      "contexts": ["MANAGEMENT_LIST", "MANAGEMENT"]
+    },{
+      "name": "not-in-management-list",
+      "type": "text",
+      "title": "Not in management list",
+      "required": false,
+      "contexts": ["FORM", "MANAGEMENT"]
+    },{
+      "name": "not-in-management",
+      "type": "text",
+      "title": "Not in management",
+      "required": false,
+      "contexts": ["FORM", "MANAGEMENT_LIST"]
     }
   ]
   }, {

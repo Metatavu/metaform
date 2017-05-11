@@ -6,6 +6,7 @@
   const Promise = require('bluebird');
   const webdriver = require('selenium-webdriver');
   const Form = require(__dirname + '/../form/index.js');
+  const User = require('../model/user');
   
   class TestUtils {
     
@@ -66,6 +67,10 @@
           })
           .catch(reject);
       });
+    }
+    
+    static removeUsers() {
+      return User.find({}).remove({}).exec();
     }
   }
   module.exports = TestUtils;

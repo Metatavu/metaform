@@ -3,8 +3,8 @@
   "server_root": "",
   "session_secret": "Extremely secret",
   "admin": {
-    "email": "admin",
-    "password": "admin"
+    "email": "admin@example.com",
+    "initialPassword": "admin"
   },
   "mail": {
     "api_key": "api-key",

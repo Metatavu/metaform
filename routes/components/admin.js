@@ -16,6 +16,7 @@
         res.status(500).send();
       } else {
         res.render('admin', { 
+          title: 'Hallintapaneeli',
           user: req.user,
           viewModel: Form.viewModel(),
           fields: Form.contextFields('MANAGEMENT_LIST'),
@@ -41,6 +42,7 @@
         res.status(500).send(err);
       } else {
         res.render('form-reply', {
+          title: 'Vastaus',
           user: req.user,
           viewModel: Form.viewModel(),
           formReply: formReply
