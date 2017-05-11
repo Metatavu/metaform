@@ -10,7 +10,7 @@
   "scripts": {
     "start": "node app.js",
     "test": "nyc --reporter=lcov -- mocha",
-    "coverage": "cat ./coverage/lcov.info | coveralls"
+    "test-coverage": "nyc --reporter=lcov -- mocha && cat ./coverage/lcov.info | coveralls"
   },
   "devDependencies": {
     "chai": "^3.5.0",
