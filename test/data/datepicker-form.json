@@ -1,0 +1,58 @@
+{
+  "title": "Test form",
+  "theme": "-",
+  "email-field": "email",
+  "sections": [{
+    "fields": [{
+      "name": "forwarding-link-texts",
+      "type": "html",
+      "html": "<h2>Testing</h2>",
+      "contexts": ["FORM"]
+    }]
+  }, {
+    "title": "Yhteystiedot",
+    "fields": [{
+      "name": "birthday",
+      "type": "date",
+      "title": "Syntymäaika",
+      "required": false,
+      "contexts": ["FORM", "MANAGEMENT"]
+    }]
+  }, {
+    "title": "Table",
+    "fields": [{
+      "name": "prefered-contact-datetimes",
+      "type": "table",
+      "addRows": true,
+      "printable": true,
+      "columns": [{
+          "type": "date",
+          "title": "Date.",
+          "name": "prefered-contact-date"
+        }, {
+          "name": "prefered-contact-time-start",
+          "type": "time",
+          "title": "Time"
+        }, {
+          "name": "prefered-contact-time-end",
+          "type": "time",
+          "title": "-"
+        }],
+      "contexts": ["FORM", "MANAGEMENT"]
+      }]
+    },  {
+    "fields": [{
+      "name": "submit",
+      "type": "submit",
+      "text": "Lähetä",
+      "contexts": ["FORM"],
+      "editable": true
+    }, {
+      "name": "submit",
+      "type": "submit",
+      "text": "Tallenna",
+      "contexts": ["MANAGEMENT"],
+      "editable": true
+    }]
+  }]
+}

@@ -31,7 +31,7 @@
       var url = queryParams.length ? util.format('%s?%s', settings.url, queryParams.join('&')) : util.format('%s', settings.url);        
       request.get(url, (error, response, body) => {
         if (error) {
-          console.error(err);
+          console.error(error);
         } else {
           console.log(util.format("Webhook response: %s", body));
         }

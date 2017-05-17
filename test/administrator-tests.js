@@ -4,7 +4,7 @@
 (function() {
   'use strict';
   
-  const config = require('nconf');
+  const clearRequire = require('clear-require');
   const mongoose = require('mongoose');
   const chai = require('chai');
   const expect = chai.expect;
@@ -23,21 +23,19 @@
     let app;
     let driver;
     
-    this.timeout(600000);
-    
-    afterEach(() =>{
-      delete mongoose.models.Reply;
-      delete mongoose.modelSchemas.Reply;
-      mongoose.connection.close();
+    this.timeout(20000);
       
-      if(driver) {
+    afterEach(function(done){
+      if (driver) {
         driver.close();
         driver = null;
       }
-      
-      if(app) {
-        app.kill();
-      }
+
+      app.close(() => {
+        mongoose.disconnect();
+        clearRequire.all();
+        done();
+      });
     });
     
     it('Login test with correct credentials', () => {
@@ -46,9 +44,7 @@
       const expectedTitle = 'Hallintapaneeli';
       
       const result = expect(new Promise((resolve, reject) =>{
-        config.file({file: 'test/text-field-config.json' });
-        
-        TestUtils.startServer('node', ['app.js', '--config=test/text-field-config.json']).then((server) => {
+        TestUtils.startServer('test/text-field-config.json').then((server) => {
           app = server;
           
           driver = TestUtils.createDriver(browser);
@@ -64,13 +60,11 @@
             driver.findElement(webdriver.By.className('btn')).click(); 
 
             driver.wait(until.titleIs(expectedTitle)).then(() => {
-              mongoose.connect('mongodb://' + config.get('database:host') + '/' + config.get('database:table'));
+               
               driver.getTitle().then((title) => {
                 TestUtils.removeReplies().then(() => {
-                  TestUtils.removeUsers().then(() => {
                     resolve(title);
                   });
-                });
               });         
             });                
           });
@@ -89,9 +83,7 @@
       const expectedTitle = 'Hallintapaneeli';
       
       const result = expect(new Promise((resolve, reject) =>{
-        config.file({file: 'test/text-field-config.json' });
-        
-        TestUtils.startServer('node', ['app.js', '--config=test/text-field-config.json']).then((server) => {
+        TestUtils.startServer('test/text-field-config.json').then((server) => {
           app = server;
           
           driver = TestUtils.createDriver(browser);
@@ -107,11 +99,9 @@
             driver.findElement(webdriver.By.className('btn')).click(); 
 
             driver.getTitle().then((title) => {
-              mongoose.connect('mongodb://' + config.get('database:host') + '/' + config.get('database:table'));
+               
               TestUtils.removeReplies().then(() => {
-                TestUtils.removeUsers().then(() => {
-                  resolve(title);
-                });
+                resolve(title);
               });        
             });                
           });
@@ -131,9 +121,7 @@
       const expectedTitle = 'Hallintapaneeli';
       
       const result = expect(new Promise((resolve, reject) =>{
-        config.file({file: 'test/text-field-config.json' });
-        
-        TestUtils.startServer('node', ['app.js', '--config=test/text-field-config.json']).then((server) => {
+        TestUtils.startServer('test/text-field-config.json').then((server) => {
           app = server;
           
           driver = TestUtils.createDriver(browser);
@@ -149,11 +137,9 @@
             driver.findElement(webdriver.By.className('btn')).click(); 
 
             driver.getTitle().then((title) => {
-              mongoose.connect('mongodb://' + config.get('database:host') + '/' + config.get('database:table'));
+               
               TestUtils.removeReplies().then(() => {
-                TestUtils.removeUsers().then(() => {
-                  resolve(title);
-                });
+                resolve(title);
               });
             });             
           });
@@ -174,9 +160,7 @@
       const expectedTitle = 'Hallintapaneeli';
       
       const result = expect(new Promise((resolve, reject) =>{
-        config.file({file: 'test/text-field-config.json' });
-        
-        TestUtils.startServer('node', ['app.js', '--config=test/text-field-config.json']).then((server) => {
+        TestUtils.startServer('test/text-field-config.json').then((server) => {
           app = server;
           
           driver = TestUtils.createDriver(browser);
@@ -202,14 +186,12 @@
                 driver.findElement(webdriver.By.className('btn')).click();
                 
                 driver.wait(until.titleIs(expectedTitle)).then(() => {
-                  mongoose.connect('mongodb://' + config.get('database:host') + '/' + config.get('database:table'));
+                   
                   let element = driver.findElement(webdriver.By.id('formsTable'));
                   
                   element.getText().then(function(text) {
                     TestUtils.removeReplies().then(() => {
-                      TestUtils.removeUsers().then(() => {
-                        resolve(text);
-                      });
+                      resolve(text);
                     });
                   });
                 });              
@@ -232,9 +214,7 @@
       const expectedTitle = 'Hallintapaneeli';
       
       const result = expect(new Promise((resolve, reject) =>{
-        config.file({file: 'test/text-field-config.json' });
-        
-        TestUtils.startServer('node', ['app.js', '--config=test/text-field-config.json']).then((server) => {
+        TestUtils.startServer('test/text-field-config.json').then((server) => {
           app = server;
           
           driver = TestUtils.createDriver(browser);
@@ -265,14 +245,12 @@
                     
                     driver.wait(until.titleIs('Vastaus')).then(() => {
                       driver.findElement(webdriver.By.css('input[name="required-text"]')).then((element) => {
-                        mongoose.connect('mongodb://' + config.get('database:host') + '/' + config.get('database:table'));
+                         
                         
                         element.getAttribute('value').then((text) => {
                           TestUtils.removeReplies().then(() => {
-                            TestUtils.removeUsers().then(() => {
-                              resolve(text);
-                            });
-                          });       
+                            resolve(text);
+                          }); 
                         });   
                       });
                     });
@@ -297,9 +275,7 @@
       const expectedTitle = 'Hallintapaneeli';
       
       const result = expect(new Promise((resolve, reject) =>{
-        config.file({file: 'test/text-field-config.json' });
-        
-        TestUtils.startServer('node', ['app.js', '--config=test/text-field-config.json']).then((server) => {
+        TestUtils.startServer('test/text-field-config.json').then((server) => {
           app = server;
           
           driver = TestUtils.createDriver(browser);
@@ -334,7 +310,7 @@
                             driver.wait(until.titleIs('Vastaus')).then(() => {
                               driver.findElements(By.id('field-not-in-management')).then((element) => {
                                 if(element.length === 0) {
-                                  mongoose.connect('mongodb://' + config.get('database:host') + '/' + config.get('database:table'));
+                                   
                                   TestUtils.removeReplies().then(() => {
                                     TestUtils.removeUsers().then(() => {
                                       resolve(0);

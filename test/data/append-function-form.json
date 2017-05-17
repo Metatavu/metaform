@@ -1,0 +1,172 @@
+{
+  "title": "Test form",
+  "theme": "-",
+  "email-field": "email",
+  "max-file-size": 209715200,
+  "sections": [{
+    "fields": [{
+      "name": "forwarding-link-texts",
+      "type": "html",
+      "html": "<h2>Testing</h2>",
+      "contexts": ["FORM"]
+    }]
+  },{
+    "title": "Radios",
+    "fields": [{
+      "title": "Pick one",
+      "name": "reason",
+      "type": "radio",
+      "required": true,
+      "options":  [{
+        "name": "healthcare",
+        "text": "Health"
+      }, {
+        "name": "social-services",
+        "text": "Social"
+      }],
+      "contexts": ["FORM", "MANAGEMENT_LIST", "MANAGEMENT"],
+      "editable": true
+    }, {
+      "title": "Pick one",
+      "visible-if": {
+        "field": "reason",
+        "equals": "healthcare"
+      },
+      "name": "healthcare-reason",
+      "type": "radio",
+      "required": true,
+      "options":  [{
+          "name": "health-center",
+          "text": "Hyvinvointiasemat"
+        }, {
+          "name": "rehabilitation-services",
+          "text": "Kuntoutuspalvelut"
+        }],
+      "contexts": ["FORM", "MANAGEMENT_LIST", "MANAGEMENT"],
+      "editable": true
+    }, {
+      "title": "Valitse",
+      "visible-if": {
+        "field": "reason",
+        "equals": "healthcare",
+        "and": [{
+          "field": "healthcare-reason",
+          "equals": true
+        }]
+      },
+      "name": "healthcare-municipality",
+      "type": "radio",
+      "required": true,
+      "options":  [{
+        "text": "Center 1",
+        "name": "center1"
+      }, {
+        "text": "Center 2",
+         "name": "center2"
+      }],
+      "contexts": ["FORM", "MANAGEMENT_LIST", "MANAGEMENT"],
+      "editable": true
+    }]
+  }, {
+    "title": "Mihin asiasi liittyy",
+    "visible-if": {
+      "field": "healthcare-reason",
+      "equals": true,
+      "and": [{
+        "field": "reason",
+        "equals": "healthcare"
+      },{
+        "field": "healthcare-municipality",
+        "equals": true
+      }]
+    },
+    "fields": [{
+      "name": "examination-results",
+      "type": "boolean",
+      "title": "Tutkimustulosten kysely",
+      "contexts": ["FORM", "MANAGEMENT"]
+    }, {
+      "name": "examination-results-text",
+      "type": "memo",
+      "title": "textfield:",
+      "visible-if": {
+        "field": "examination-results",
+        "equals": true
+      },
+      "contexts": ["FORM", "MANAGEMENT"]
+    }, {
+      "name": "new-illness",
+      "type": "boolean",
+      "title": "Uusi kiireetön vaiva tai sairaus -ajanvarauspyyntö",
+      "contexts": ["FORM", "MANAGEMENT"]
+    }, {
+      "name": "new-illness-text",
+      "type": "memo",
+      "title": "Kuvaa asiasi tarkemmin:",
+      "visible-if": {
+        "field": "new-illness",
+        "equals": true
+      },
+      "contexts": ["FORM", "MANAGEMENT"]
+    }, {
+      "name": "message-to-health-center-services",
+      "type": "boolean",
+      "title": "Muu asia - viesti omalle hyvinvointiasemalle",
+      "contexts": ["FORM", "MANAGEMENT"]
+    }, {
+      "name": "message-to-health-center-services-text",
+      "title": "Kuvaa asiasi tarkemmin:",
+      "type": "memo",
+      "visible-if": {
+        "field": "message-to-health-center-services",
+        "equals": true
+      },
+      "contexts": ["FORM", "MANAGEMENT"]
+    }]
+  }, {
+    "title": "Yhteystiedot",
+    "fields": [{
+      "name": "birthday",
+      "type": "date",
+      "title": "Syntymäaika",
+      "required": false,
+      "contexts": ["FORM", "MANAGEMENT"]
+    }]
+  }, {
+    "title": "Table",
+    "fields": [{
+      "name": "prefered-contact-datetimes",
+      "type": "table",
+      "addRows": true,
+      "printable": true,
+      "columns": [{
+          "type": "date",
+          "title": "Date.",
+          "name": "prefered-contact-date"
+        }, {
+          "name": "prefered-contact-time-start",
+          "type": "time",
+          "title": "Time"
+        }, {
+          "name": "prefered-contact-time-end",
+          "type": "time",
+          "title": "-"
+        }],
+      "contexts": ["FORM", "MANAGEMENT"]
+      }]
+    },  {
+    "fields": [{
+      "name": "submit",
+      "type": "submit",
+      "text": "Lähetä",
+      "contexts": ["FORM"],
+      "editable": true
+    }, {
+      "name": "submit",
+      "type": "submit",
+      "text": "Tallenna",
+      "contexts": ["MANAGEMENT"],
+      "editable": true
+    }]
+  }]
+}

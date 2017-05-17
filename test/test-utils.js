@@ -2,15 +2,20 @@
 /*global __dirname*/
 (function() {
   'use strict';
+  
+  const clearRequire = require('clear-require');
   const spawn = require('child_process').spawn;
   const Promise = require('bluebird');
+  const http = require('http');
   const webdriver = require('selenium-webdriver');
-  const Form = require(__dirname + '/../form/index.js');
-  const User = require('../model/user');
+  
+  process.on('unhandledRejection', function(error, promise) {
+    console.error("UNHANDLED REJECTION", error.stack);
+  });
   
   class TestUtils {
     
-    static startServer(command,options) {   
+    static startServerFork(command,options) {   
       let app;
       return new Promise((resolve, reject) => {
         app = spawn(command, options, {cwd: __dirname + '/../'});
@@ -25,6 +30,19 @@
       });  
     }
     
+    static startServer(configPath) {
+      const config = require('nconf');
+      config.file({file: configPath });
+      const app = require(__dirname + '/../index');
+      
+      return new Promise((resolve, reject) => {
+      let server = http.createServer(app);
+      server.listen(app.get('port'), function() {
+        resolve(server);
+      });
+    });
+    }
+    
     static createDriver(browser) {
       let driver;
       driver = new webdriver.Builder()
@@ -34,15 +52,23 @@
       return driver;
     }
     
+    static waitAnimation(duration) {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve();
+        }, duration);
+      });
+    }
+    
     static getReplies() {
       return new Promise((resolve, reject) => {
-        TestUtils.getReplies()
+        TestUtils.getReplies2()
           .then((replies) => {
             if (replies && replies.length) {
               resolve(replies);
             } else {
               setTimeout(() => {
-                return TestUtils.getReplyCount();
+                return TestUtils.getReplies();
               }, 100);
             }
           })
@@ -50,18 +76,20 @@
       });    
     }
     
-    static getReplies(callback) {
+    static getReplies2(callback) {
+      const Form = require(__dirname + '/../form/index.js');
       return Promise.promisify(Form.listReplies)(true);
     }
     
     static removeReplies() {
+      const Form = require(__dirname + '/../form/index.js');
       let formModel = Form.replyModel();
       return formModel.find({}).remove().exec();
     }
     
     static getRepliesLength() {
       return new Promise((resolve, reject) => {
-        TestUtils.getReplies()
+        TestUtils.getReplies2()
           .then((replies) => {
             resolve(replies.length);
           })
@@ -70,8 +98,10 @@
     }
     
     static removeUsers() {
+      const User = require('../model/user');
       return User.find({}).remove({}).exec();
     }
+
   }
   module.exports = TestUtils;
 })();

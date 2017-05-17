@@ -10,15 +10,18 @@
   "scripts": {
     "start": "node app.js",
     "test": "nyc --reporter=lcov -- mocha",
+    "test-email": "nyc --reporter=lcov -- mocha --grep 'Email'",
     "test-coverage": "nyc --reporter=lcov -- mocha && cat ./coverage/lcov.info | coveralls"
   },
   "devDependencies": {
     "chai": "^3.5.0",
+    "chai-as-promised": "^6.0.0",
+    "clear-require": "^2.0.0",
     "coveralls": "2.13.0",
     "mocha": "^3.2.0",
+    "nock": "^9.0.13",
     "nyc": "10.2.0",
-    "selenium-webdriver": "^3.4.0",
-    "chai-as-promised": "^6.0.0"
+    "selenium-webdriver": "3.4.0"
   },
   "dependencies": {
     "async": "2.1.4",

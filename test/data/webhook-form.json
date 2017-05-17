@@ -1,0 +1,65 @@
+{
+  "title": "Integration test for text fields",
+  "theme": "integration-test",
+  "sections": [{
+    "fields": [{
+      "name": "required-text",
+      "type": "text",
+      "title": "Required text",
+      "required": true,
+      "contexts": ["FORM", "MANAGEMENT_LIST", "MANAGEMENT"]
+    },{
+      "name": "not-required",
+      "type": "text",
+      "title": "Not required",
+      "required": false,
+      "contexts": ["FORM", "MANAGEMENT_LIST", "MANAGEMENT"]
+    },{
+      "name": "not-in-form",
+      "type": "text",
+      "title": "Not in form",
+      "required": false,
+      "contexts": ["MANAGEMENT_LIST", "MANAGEMENT"]
+    },{
+      "name": "not-in-management-list",
+      "type": "text",
+      "title": "Not in management list",
+      "required": false,
+      "contexts": ["FORM", "MANAGEMENT"]
+    },{
+      "name": "not-in-management",
+      "type": "text",
+      "title": "Not in management",
+      "required": false,
+      "contexts": ["FORM", "MANAGEMENT_LIST"]
+    }
+  ]
+  }, {
+    "fields": [{
+      "name": "submit",
+      "type": "submit",
+      "text": "Send",
+      "contexts": ["FORM"],
+      "editable": true
+    }, {
+      "name": "submit",
+      "type": "submit",
+      "text": "Save",
+      "contexts": ["MANAGEMENT"],
+      "editable": true
+    }]
+  }],
+  "notifications": [{
+    "type": "webhook",
+    "url": "http://example.com/",
+    "params": [{
+      "in": "query",
+      "name": "id",
+      "value": "staticText"
+    }, {
+      "in": "query",
+      "name": "message",
+      "value": "[required-text]"
+    }]
+  }]
+}

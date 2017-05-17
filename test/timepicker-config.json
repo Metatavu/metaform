@@ -1,0 +1,19 @@
+{
+  "port": 3000,
+  "server_root": "",
+  "session_secret": "Extremely secret",
+  "admin": {
+    "email": "test@example.com",
+    "initialPassword": "admin"
+  },
+  "mail": {
+    "api_key": "key123",
+    "domain": "api.mailgun.net",
+    "sender": "mailgun"
+  },
+  "database": {
+    "host": "localhost",
+    "table": "metaform"
+  },
+  "form": "test/data/timepicker-form"
+}
