@@ -7,6 +7,8 @@
   $.widget("custom.metaform", {
     
     _create : function() {
+      this.attachedVisibleIfListeners = [];
+      
       this.element.on("submit", $.proxy(this._onFormSubmit, this));
       if (!Modernizr.formvalidation) {
         hyperform(this.element[0]);
@@ -21,6 +23,7 @@
         var formGroupId = $(element).attr('id');
         var rule = JSON.parse($(element).attr('data-visible-if'));
         this._registerVisibleIfRule(formGroupId, rule, rule);
+        this.attachedVisibleIfListeners = [];
       }.bind(this));
       
       this.element.find('input:checked').change();
@@ -41,7 +44,9 @@
     },
     
     _registerVisibleIfRule: function (formGroupId, currentRule, rule) {
-      if (typeof(currentRule.field) !== 'undefined') {
+      if (typeof(currentRule.field) !== 'undefined' && this.attachedVisibleIfListeners.indexOf(currentRule.field) === -1) {
+        this.attachedVisibleIfListeners.push(currentRule.field);
+        
         $('input[name="'+currentRule.field+'"],select[name="'+currentRule.field+'"]')
           .change($.proxy(this._createFormChangeFunction(formGroupId, rule), this))
           .keyup($.proxy(this._createFormChangeFunction(formGroupId, rule), this));
@@ -117,14 +122,14 @@
         }
         equals = analyzed ? equals || orResult : orResult;
       }
-
+      
       return equals;
     },
     _createFormChangeFunction: function(formGroupId, rule) {
       return function(e) {
         var formGroup = $('#' + formGroupId);
         var equals = this._evaluateFormRule(rule);
-
+        
         if(equals && !formGroup.is(':visible')) {
           formGroup.slideToggle(400, function() {
             this._onRequiredFieldsVisibilityChange(formGroup, 'SHOW');
