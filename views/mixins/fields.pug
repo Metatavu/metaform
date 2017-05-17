@@ -113,6 +113,24 @@ mixin radio-field(field, value, readonly)
         small.form-text.text-muted
           =field.help
 
+mixin select-field(field, value, readonly)
+  .form-group.row(data-visible-if=field['visible-if'],id="fg-" + field.name)
+    if field.title
+      .col-12
+        label(for='field-' + field.name)
+          =field.title
+          if field.required
+            |&nbsp;*
+    .col-12
+      select.form-control(aria-labelledby=id='field-' + field.name,id='field-' + field.name, name=field.name,title=field.title,required=field.required,readonly=readonly)
+        option(value='') Valitse
+        each option in field.options
+          option(value=option.name,selected=(value && value == option.name) || (!value && option.selected))
+            =option.text
+      if field.help
+        small.form-text.text-muted
+          =field.help
+
 mixin checklist-field(field, value, readonly)
   .form-group.row(data-visible-if=field['visible-if'],id="fg-" + field.name)
     if field.title
@@ -310,6 +328,8 @@ mixin field(field, value, readonly)
       +html-field(field, value, readonly)
     when 'submit'
       +submit-field(field, value, readonly)
+    when 'select'
+      +select-field(field, value, readonly)
     default
       +unknown-field(field)
       

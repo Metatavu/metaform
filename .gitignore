@@ -8,6 +8,7 @@ config.json
 /essote-debt.json
 /mikkeli-asuntomessut.json
 /dna-sovend-form-prototype.json
+/essote-quick-service.json
 /nbproject
 coverage
 /.nyc_output

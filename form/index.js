@@ -115,6 +115,7 @@
             case 'boolean':
               req.checkBody(field.name, util.format("%s on väärin muotoiltu", field.title)).isBoolean();
             break;
+            case 'select':
             case 'radio':
               var options = Form.resolveFieldOptions(field);
               req.checkBody(field.name, util.format("%s ei ole joukossa %s", field.title, options.join(','))).isIn(options);
@@ -185,7 +186,7 @@
             schemaField.required = true;
           }
     
-          if (field.type === 'radio') {
+          if (field.type === 'radio' || field.type === 'select') {
             schemaField.enum = Form.resolveFieldOptions(field);
             schemaField.default = Form.resolveFieldDefaultOption(field);
           }          
@@ -331,6 +332,7 @@
         case 'memo':
         case 'radio':
         case 'time':
+        case 'select':
           return String;
         case 'date':
           return Date;
