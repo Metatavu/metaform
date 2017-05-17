@@ -42,7 +42,9 @@
     
     _registerVisibleIfRule: function (formGroupId, currentRule, rule) {
       if (typeof(currentRule.field) !== 'undefined') {
-        $('input[name="'+currentRule.field+'"]').change($.proxy(this._createFormChangeFunction(formGroupId, rule), this));
+        $('input[name="'+currentRule.field+'"],select[name="'+currentRule.field+'"]')
+          .change($.proxy(this._createFormChangeFunction(formGroupId, rule), this))
+          .keyup($.proxy(this._createFormChangeFunction(formGroupId, rule), this));
       }
       
       if (typeof(currentRule.and) !== 'undefined') {
@@ -67,8 +69,18 @@
       var analyzed = false;
 
       if (typeof(rule.field) !== 'undefined') {
-        var checked = $('input[name="'+rule.field+'"]:checked').length > 0;
-        var currentValue = $('input[name="'+rule.field+'"]:checked').val();
+        var inputElement = $('input[name="'+rule.field+'"],select[name="'+rule.field+'"]').first();
+        var currentValue = '';
+        var checked = false;
+        
+        if( inputElement.is(':checkbox') || inputElement.is(':radio')) {
+          checked = $('input[name="'+rule.field+'"]:checked').length > 0;
+          currentValue = $('input[name="'+rule.field+'"]:checked').val();
+        } else {
+          checked = inputElement.val() ? true : false;
+          currentValue = inputElement.val();
+        }
+
         analyzed = true;
         
         if (rule.equals === true) {
