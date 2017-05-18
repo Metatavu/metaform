@@ -77,9 +77,10 @@
           if (field['visible-if']) {
             field.visibilityRules.push(field['visible-if']);
           }
-          
+
+          fields.push(field);
         }
-        fields.push(field);
+        
       } 
       
       return fields;
