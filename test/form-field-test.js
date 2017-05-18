@@ -25,7 +25,7 @@
     
     this.timeout(60000);
     
-    afterEach(function(done){
+    afterEach((done) => {
       if (driver) {
         driver.close();
         driver = null;
@@ -49,7 +49,7 @@
           driver.get('http://localhost:3000');
 
           driver.wait(until.elementLocated(webdriver.By.name('required-text'))).then(() => {
-            let textField = driver.findElement(webdriver.By.name('required-text'));
+            const textField = driver.findElement(webdriver.By.name('required-text'));
             textField.sendKeys(testText);
 
             driver.findElement(webdriver.By.className('btn')).click(); 
@@ -57,7 +57,7 @@
             driver.wait(until.elementLocated(webdriver.By.className('alert-success'))).then(() => {
 
               TestUtils.getReplies().then((value) => {
-                if(value) {
+                if (value) {
                   TestUtils.removeReplies().then(() => {
                     resolve(value);
                   });
@@ -90,7 +90,7 @@
           driver.get('http://localhost:3000');
           
           driver.wait(until.elementLocated(webdriver.By.name('required-text'))).then(() => {
-            let textField = driver.findElement(webdriver.By.name('required-text'));
+            const textField = driver.findElement(webdriver.By.name('required-text'));
             textField.sendKeys(testText);
 
             driver.findElement(webdriver.By.className('btn')).click(); 
@@ -131,7 +131,7 @@
           driver.get('http://localhost:3000');
           
           driver.wait(until.elementLocated(webdriver.By.name('required-text'))).then(() => {
-            let textField = driver.findElement(webdriver.By.name('required-text'));
+            const textField = driver.findElement(webdriver.By.name('required-text'));
             textField.sendKeys(testText);
 
             driver.findElement(webdriver.By.className('btn')).click(); 
@@ -139,7 +139,7 @@
             driver.wait(until.elementLocated(webdriver.By.className('alert-success'))).then(() => {
 
               TestUtils.getReplies().then((value) => {
-                if(value) {
+                if (value) {
                   TestUtils.removeReplies().then(() => {
                     resolve(value);
                   });
@@ -172,7 +172,7 @@
           driver.get('http://localhost:3000');
           
           driver.wait(until.elementLocated(webdriver.By.name('required-text'))).then(() => {
-            let textField = driver.findElement(webdriver.By.name('required-text'));
+            const textField = driver.findElement(webdriver.By.name('required-text'));
             textField.sendKeys(testText);
 
             driver.findElement(webdriver.By.className('btn')).click(); 
@@ -180,7 +180,7 @@
             driver.wait(until.elementLocated(webdriver.By.className('alert-success'))).then(() => {
 
               TestUtils.getReplies().then((value) => {
-                if(value) {
+                if (value) {
                   TestUtils.removeReplies().then(() => {
                     resolve(value);
                   });
@@ -213,14 +213,14 @@
           driver.get('http://localhost:3000');
           
           driver.wait(until.elementLocated(webdriver.By.name('required-text'))).then(() => {
-            let textField = driver.findElement(webdriver.By.name('required-text'));
+            const textField = driver.findElement(webdriver.By.name('required-text'));
             textField.sendKeys(testText);
 
             driver.findElement(webdriver.By.className('btn')).click();
 
             driver.findElement(webdriver.By.css("input:invalid")).then(() => {
               TestUtils.getRepliesLength().then((count) => {
-                if(count === 0) {
+                if (count === 0) {
                   resolve(count);
                 } else {
                   reject('Found replies when should not find.');

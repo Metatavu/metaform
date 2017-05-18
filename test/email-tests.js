@@ -27,7 +27,7 @@
     
     this.timeout(60000);
     
-    afterEach(function(done){
+    afterEach((done) => {
       if (driver) {
         driver.close();
         driver = null;
@@ -58,7 +58,7 @@
           driver.get('http://localhost:3000');
           
           driver.wait(until.elementLocated(webdriver.By.name('required-text'))).then(() => {
-            let textField = driver.findElement(webdriver.By.name('required-text'));
+            const textField = driver.findElement(webdriver.By.name('required-text'));
             textField.sendKeys("test");
 
             driver.findElement(webdriver.By.className('btn')).click();

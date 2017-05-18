@@ -36,11 +36,11 @@
       const app = require(__dirname + '/../index');
       
       return new Promise((resolve, reject) => {
-      let server = http.createServer(app);
-      server.listen(app.get('port'), function() {
-        resolve(server);
+        const server = http.createServer(app);
+        server.listen(app.get('port'), function() {
+          resolve(server);
+        });
       });
-    });
     }
     
     static createDriver(browser) {
@@ -64,7 +64,7 @@
     
     static getReplies() {
       return new Promise((resolve, reject) => {
-        TestUtils.getReplies2()
+        TestUtils.getRepliesFromDb()
           .then((replies) => {
             if (replies && replies.length) {
               resolve(replies);
@@ -78,7 +78,7 @@
       });    
     }
     
-    static getReplies2(callback) {
+    static getRepliesFromDb(callback) {
       const Form = require(__dirname + '/../form/index.js');
       return Promise.promisify(Form.listReplies)(true);
     }

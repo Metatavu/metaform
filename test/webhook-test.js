@@ -27,7 +27,7 @@
     
     this.timeout(60000);
     
-    afterEach(function(done){
+    afterEach((done) => {
       if (driver) {
         driver.close();
         driver = null;
@@ -50,12 +50,12 @@
           
           driver.wait(until.titleIs('webhooks')).then(() => {
 
-            var webhook = nock('http://metaformtests.com')
+            const webhook = nock('http://metaformtests.com')
               .get('/?id=staticText&message=test')
               .reply(200, 'Domain found');
 
             driver.wait(until.elementLocated(webdriver.By.name('required-text'))).then(() => {
-              let textField = driver.findElement(webdriver.By.name('required-text'));
+              const textField = driver.findElement(webdriver.By.name('required-text'));
               textField.sendKeys("test");
 
               driver.findElement(webdriver.By.className('btn')).click();

@@ -65,13 +65,13 @@
                   let daysArray = [];
                   let wantedIndex = 0;
 
-                  for(var i = 0; i < days.length; i++) {
+                  for (let i = 0; i < days.length; i++) {
                     daysArray.push(days[i].getText());
                   }
 
                   Promise.all(daysArray).then((dayTexts) => {
-                    for(var i = 0; i < dayTexts.length; i++) {
-                      if(dayTexts[i] === '15') {
+                    for (let i = 0; i < dayTexts.length; i++) {
+                      if (dayTexts[i] === '15') {
                         wantedIndex = i;
                       }
                     }
@@ -85,8 +85,7 @@
 
                             TestUtils.getReplies().then((value) => {
                               if (value) {
-                                let string = value.toString();
-                                console.log(string);
+                                const string = value.toString();
                                 TestUtils.removeReplies().then(() => {
                                   resolve(string);
                                 });

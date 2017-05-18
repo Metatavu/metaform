@@ -24,7 +24,7 @@
     
     this.timeout(60000);
       
-    afterEach(function(done){
+    afterEach((done) => {
       if (driver) {
         driver.close();
         driver = null;
@@ -50,8 +50,8 @@
           driver.get('http://localhost:3000/login');
 
           driver.wait(until.elementLocated(webdriver.By.name('email'))).then(() => {
-            let emailField = driver.findElement(webdriver.By.name('email'));
-            let passwordField = driver.findElement(webdriver.By.name('password'));
+            const emailField = driver.findElement(webdriver.By.name('email'));
+            const passwordField = driver.findElement(webdriver.By.name('password'));
             
             emailField.sendKeys(email);
             passwordField.sendKeys(password);
@@ -89,8 +89,8 @@
           driver.get('http://localhost:3000/login');
 
           driver.wait(until.elementLocated(webdriver.By.name('email'))).then(() => {
-            let emailField = driver.findElement(webdriver.By.name('email'));
-            let passwordField = driver.findElement(webdriver.By.name('password'));
+            const emailField = driver.findElement(webdriver.By.name('email'));
+            const passwordField = driver.findElement(webdriver.By.name('password'));
             
             emailField.sendKeys(email);
             passwordField.sendKeys(password);
@@ -127,8 +127,8 @@
           driver.get('http://localhost:3000/login');
 
           driver.wait(until.elementLocated(webdriver.By.name('email'))).then(() => {
-            let emailField = driver.findElement(webdriver.By.name('email'));
-            let passwordField = driver.findElement(webdriver.By.name('password'));
+            const emailField = driver.findElement(webdriver.By.name('email'));
+            const passwordField = driver.findElement(webdriver.By.name('password'));
             
             emailField.sendKeys(email);
             passwordField.sendKeys(password);
@@ -166,7 +166,7 @@
           driver.get('http://localhost:3000/');
           
           driver.wait(until.elementLocated(webdriver.By.name('required-text'))).then(() => {
-            let textField = driver.findElement(webdriver.By.name('required-text'));
+            const textField = driver.findElement(webdriver.By.name('required-text'));
             textField.sendKeys(testText);
 
             driver.findElement(webdriver.By.className('btn')).click(); 
@@ -176,8 +176,8 @@
                           
               driver.wait(until.elementLocated(webdriver.By.name('email'))).then(() => {
                 
-                let emailField = driver.findElement(webdriver.By.name('email'));
-                let passwordField = driver.findElement(webdriver.By.name('password'));
+                const emailField = driver.findElement(webdriver.By.name('email'));
+                const passwordField = driver.findElement(webdriver.By.name('password'));
 
                 emailField.sendKeys(email);
                 passwordField.sendKeys(password);
@@ -186,9 +186,9 @@
                 
                 driver.wait(until.titleIs(expectedTitle)).then(() => {
                    
-                  let element = driver.findElement(webdriver.By.id('formsTable'));
+                  const element = driver.findElement(webdriver.By.id('formsTable'));
                   
-                  element.getText().then(function(text) {
+                  element.getText().then((text) => {
                     TestUtils.removeReplies().then(() => {
                       resolve(text);
                     });
@@ -220,7 +220,7 @@
           driver.get('http://localhost:3000/');
           
           driver.wait(until.elementLocated(webdriver.By.name('required-text'))).then(() => {
-            let textField = driver.findElement(webdriver.By.name('required-text'));
+            const textField = driver.findElement(webdriver.By.name('required-text'));
             textField.sendKeys(testText);
 
             driver.findElement(webdriver.By.className('btn')).click(); 
@@ -230,8 +230,8 @@
                           
               driver.wait(until.elementLocated(webdriver.By.name('email'))).then(() => {
                 
-                let emailField = driver.findElement(webdriver.By.name('email'));
-                let passwordField = driver.findElement(webdriver.By.name('password'));
+                const emailField = driver.findElement(webdriver.By.name('email'));
+                const passwordField = driver.findElement(webdriver.By.name('password'));
 
                 emailField.sendKeys(email);
                 passwordField.sendKeys(password);
@@ -281,7 +281,7 @@
           driver.get('http://localhost:3000/');
           
           driver.wait(until.elementLocated(webdriver.By.name('required-text'))).then(() => {
-            let textField = driver.findElement(webdriver.By.name('required-text'));
+            const textField = driver.findElement(webdriver.By.name('required-text'));
             textField.sendKeys(testText);
 
             driver.findElement(webdriver.By.className('btn')).click();
@@ -292,8 +292,8 @@
                   driver.get('http://localhost:3000/login');
 
                   driver.wait(until.elementLocated(webdriver.By.name('email'))).then(() => {      
-                    let emailField = driver.findElement(webdriver.By.name('email'));
-                    let passwordField = driver.findElement(webdriver.By.name('password'));
+                    const emailField = driver.findElement(webdriver.By.name('email'));
+                    const passwordField = driver.findElement(webdriver.By.name('password'));
 
                     emailField.sendKeys(email);
                     passwordField.sendKeys(password);
@@ -302,14 +302,13 @@
 
                     driver.wait(until.titleIs(expectedTitle)).then(() => {
                       driver.findElement(webdriver.By.tagName('thead')).getText().then((text) => {
-                        if(!text.includes('Not in management list')) {
+                        if (!text.includes('Not in management list')) {
                           driver.findElement(webdriver.By.linkText("Avaa")).then((link) => {
                             link.click();
 
                             driver.wait(until.titleIs('Vastaus')).then(() => {
                               driver.findElements(By.id('field-not-in-management')).then((element) => {
-                                if(element.length === 0) {
-                                   
+                                if (element.length === 0) {
                                   TestUtils.removeReplies().then(() => {
                                     TestUtils.removeUsers().then(() => {
                                       resolve(0);

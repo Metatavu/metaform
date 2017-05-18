@@ -29,7 +29,7 @@
     
     this.timeout(60000);
     
-    afterEach(function(done){
+    afterEach((done) => {
       if (driver) {
         driver.close();
         driver = null;
@@ -73,7 +73,7 @@
                                   element.click();
                                   driver.wait(until.elementLocated(webdriver.By.className('alert-success'))).then(() => {
                                     TestUtils.getReplies().then((value) => {
-                                      if(value) {
+                                      if (value) {
                                         TestUtils.removeReplies().then(() => {
                                           resolve(value);
                                         });
