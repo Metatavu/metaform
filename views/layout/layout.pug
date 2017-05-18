@@ -14,5 +14,7 @@ html(lang='en')
     link(rel='stylesheet', href='//cdn.datatables.net/1.10.10/css/jquery.dataTables.min.css')
     link(rel='stylesheet', href='//cdn.metatavu.io/libs/font-awesome/4.6.3/css/font-awesome.min.css')
     block custom-head
+    if metaformMode === 'test'
+      script(defer="defer" src="js/debug.js")
   body
     block body

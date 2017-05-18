@@ -25,7 +25,7 @@
     let driver;
     let webhookResponse;
     
-    this.timeout(30000);
+    this.timeout(60000);
     
     afterEach(function(done){
       if (driver) {
@@ -45,25 +45,25 @@
         TestUtils.startServer('test/webhook-config.json').then((server) => {
           app = server;
           
-          nock.disableNetConnect();
-          nock.enableNetConnect('127.0.0.1');
-          
-          var webhook = nock('http://example.com')
-            .get('/?id=staticText&message=test')
-            .reply(200, 'Domain found');
-          
           driver = TestUtils.createDriver(browser);
           driver.get('http://localhost:3000');
           
-          driver.wait(until.elementLocated(webdriver.By.name('required-text'))).then(() => {
-            let textField = driver.findElement(webdriver.By.name('required-text'));
-            textField.sendKeys("test");
+          driver.wait(until.titleIs('webhooks')).then(() => {
 
-            driver.findElement(webdriver.By.className('btn')).click();
-            
-            driver.wait(until.elementLocated(webdriver.By.className('alert-success'))).then(() => {
-              TestUtils.removeReplies().then(() => {
-                resolve(webhook.isDone());
+            var webhook = nock('http://metaformtests.com')
+              .get('/?id=staticText&message=test')
+              .reply(200, 'Domain found');
+
+            driver.wait(until.elementLocated(webdriver.By.name('required-text'))).then(() => {
+              let textField = driver.findElement(webdriver.By.name('required-text'));
+              textField.sendKeys("test");
+
+              driver.findElement(webdriver.By.className('btn')).click();
+
+              driver.wait(until.elementLocated(webdriver.By.className('alert-success'))).then(() => {
+                TestUtils.removeReplies().then(() => {
+                  resolve(webhook.isDone());
+                });
               });
             });
           });

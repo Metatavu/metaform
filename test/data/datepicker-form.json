@@ -19,28 +19,6 @@
       "contexts": ["FORM", "MANAGEMENT"]
     }]
   }, {
-    "title": "Table",
-    "fields": [{
-      "name": "prefered-contact-datetimes",
-      "type": "table",
-      "addRows": true,
-      "printable": true,
-      "columns": [{
-          "type": "date",
-          "title": "Date.",
-          "name": "prefered-contact-date"
-        }, {
-          "name": "prefered-contact-time-start",
-          "type": "time",
-          "title": "Time"
-        }, {
-          "name": "prefered-contact-time-end",
-          "type": "time",
-          "title": "-"
-        }],
-      "contexts": ["FORM", "MANAGEMENT"]
-      }]
-    },  {
     "fields": [{
       "name": "submit",
       "type": "submit",

@@ -1,4 +1,4 @@
-/* global Modernizr, pdfMake, MetaformUtils */
+/* global Modernizr, pdfMake, MetaformUtils, hyperform */
 
 (function(){
   

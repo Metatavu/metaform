@@ -1,5 +1,5 @@
 {
-  "title": "Integration test for text fields",
+  "title": "webhooks",
   "theme": "integration-test",
   "sections": [{
     "fields": [{
@@ -51,7 +51,7 @@
   }],
   "notifications": [{
     "type": "webhook",
-    "url": "http://example.com/",
+    "url": "http://metaformtests.com/",
     "params": [{
       "in": "query",
       "name": "id",

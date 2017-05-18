@@ -45,6 +45,8 @@
   }));
   app.use(expressValidator());
   
+  app.locals.metaformMode = config.get('mode') || 'production';
+  
   require('./routes')(app);
   
   User.findOne({

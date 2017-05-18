@@ -48,7 +48,9 @@
       driver = new webdriver.Builder()
         .forBrowser(browser)
         .build();
-
+        
+      driver.manage().window().setSize(1600, 1224);
+      
       return driver;
     }
     

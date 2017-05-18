@@ -15,7 +15,6 @@
   const Condition = webdriver.Condition;
   const Promise = require('bluebird');
   const TestUtils = require(__dirname + '/test-utils');
-  const Form = require(__dirname + '/../form/index.js');
   const browser = process.env.METAFORM_BROWSER || 'chrome';
   
   chai.use(require('chai-as-promised'));
@@ -24,7 +23,7 @@
     let app;
     let driver;
     
-    this.timeout(30000);
+    this.timeout(60000);
     
     afterEach(function(done){
       if (driver) {

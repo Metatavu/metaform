@@ -11,6 +11,9 @@
     "start": "node app.js",
     "test": "nyc --reporter=lcov -- mocha",
     "test-email": "nyc --reporter=lcov -- mocha --grep 'Email'",
+    "test-date": "nyc --reporter=lcov -- mocha --grep 'Date'",
+    "test-form-input": "nyc --reporter=lcov -- mocha --grep 'Form field'",
+    "test-webhook": "nyc --reporter=lcov -- mocha --grep 'Webhooks'",
     "test-coverage": "nyc --reporter=lcov -- mocha && cat ./coverage/lcov.info | coveralls"
   },
   "devDependencies": {
