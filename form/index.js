@@ -41,11 +41,11 @@
     }
     
     static contextFields(context) {
-      let fields = Form.fields();
-      let result = [];
+      const fields = Form.fields();
+      const result = [];
       
       for (let i = 0; i < fields.length; i++) {
-        let field = fields[i];
+        const field = fields[i];
         if ((field.contexts||[]).indexOf(context) > -1) {
           result.push(field);
         }
@@ -61,12 +61,12 @@
     }
     
     static fields() {
-      let fields = [];
+      const fields = [];
       const config = Form.config();
       
       for (let i = 0; i < config.sections.length; i++) {
-        let section = config.sections[i];
-        let sectionFields = section.fields;
+        const section = config.sections[i];
+        const sectionFields = section.fields;
         for (let j = 0; j < sectionFields.length; j++) {
           let field = sectionFields[j];
           field.visibilityRules = [];
@@ -86,7 +86,7 @@
     }
     
     static dataFields() {
-      let result = [];
+      const result = [];
       const config = Form.config();
       
       for (let i = 0; i < config.sections.length; i++) {
@@ -150,7 +150,7 @@
     }
     
     static validateFieldVisibilityRules(req, field) {
-      for(let i = 0; i < field.visibilityRules.length; i++) {
+      for (let i = 0; i < field.visibilityRules.length; i++) {
         const rule = field.visibilityRules[i];
         if (!Form.validateFieldVisibilityRule(req, rule)) {
           return false;
@@ -236,7 +236,7 @@
       
       const fields = Form.fields();
       
-      let schemaOptions = {};
+      const schemaOptions = {};
       for (let i = 0; i < fields.length; i++) {
         const field = fields[i];
         const fieldType = field.type;
@@ -244,7 +244,7 @@
         
         if (!skip) {
           const schemaType = Form.resolveSchemaType(field);
-          let schemaField = {
+          const schemaField = {
             type: schemaType
           };
     
@@ -315,7 +315,7 @@
           callback(err);
         } else {
           const fields = Form.fields();
-          let fileLoads = [];
+          const fileLoads = [];
           
           for (let i = 0; i < fields.length; i++) {
             const field = fields[i];
@@ -331,8 +331,8 @@
             if (fileErr) {
               callback(fileErr);
             } else {
-              let result = formReply;
-              let fieldMetas = {};
+              const result = formReply;
+              const fieldMetas = {};
               
               for (let i = 0; i < fileMetaResponses.length; i++) {
                 let fileMetaResponse = fileMetaResponses[i];
@@ -355,7 +355,7 @@
     }
     
     static listReplies(includeFiltered, callback) {
-      let query = {};
+      const query = {};
       
       if (!includeFiltered) {
         const filterFields = Form.listFilterFields();
@@ -407,7 +407,7 @@
         case 'files':
           return [ mongoose.Schema.Types.ObjectId ];
         case 'table':
-          let tableDef = {};
+          const tableDef = {};
           _.each(field.columns, (column) => {
             tableDef[column.name] = {
               "type": this.resolveTableSchemaType(column.type)
