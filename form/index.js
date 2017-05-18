@@ -65,11 +65,21 @@
       var fields = [];
       var config = Form.config();
       
-      var sectionNames = Object.keys(config.sections);
-      
-      for (var i = 0; i < sectionNames.length; i++) {
-        var sectionName = sectionNames[i];
-        fields = fields.concat(config.sections[sectionName].fields);
+      for (let i = 0; i < config.sections.length; i++) {
+        var section = config.sections[i];
+        var sectionFields = section.fields;
+        for (let j = 0; j < sectionFields.length; j++) {
+          var field = sectionFields[j];
+          field.visibilityRules = [];
+          if (section['visible-if']) {
+            field.visibilityRules.push(section['visible-if']);
+          }
+          if (field['visible-if']) {
+            field.visibilityRules.push(field['visible-if']);
+          }
+          
+        }
+        fields.push(field);
       } 
       
       return fields;
@@ -94,13 +104,72 @@
       return result;
     }
     
+    static validateFieldVisibilityRule(req, rule) {
+      var isVisible = false;
+      var analyzed = false;
+
+      if (typeof(rule.field) !== 'undefined') {
+        var valueSet = Form.isValueSet(req, rule.field);
+        var fieldValue = valueSet ? req.body[rule.field] : null;
+
+        analyzed = true;
+        
+        if (rule.equals === true) {
+          isVisible = valueSet;
+        } else if (rule.equals) {
+          isVisible = rule.equals === fieldValue;
+        } else if (rule['not-isVisible'] === true) {
+          isVisible = !valueSet;
+        } else if (rule['not-isVisible']) {
+          isVisible = rule['not-isVisible'] !== fieldValue;
+        }
+      }
+
+      if (Array.isArray(rule.and)) {
+        var andResult = true;
+        for (let i = 0; i < rule.and.length; i++) {
+          var andSubRule = rule.and[i];
+          andResult = andResult && Form.validateFieldVisibilityRule(req, andSubRule);
+          if (!andResult) {
+            break;
+          }
+        }
+        isVisible = analyzed ? isVisible && andResult : andResult;
+      }
+
+      if (Array.isArray(rule.or)) {
+        var orResult = false;
+        for (let j = 0; j < rule.or.length; j++) {
+          var orSubRule = rule.or[j];
+          orResult = orResult || Form.validateFieldVisibilityRule(req, orSubRule);
+          if (orResult) {
+            break;
+          }
+        }
+        isVisible = analyzed ? isVisible || orResult : orResult;
+      }
+      
+      return isVisible;
+    }
+    
+    static validateFieldVisibilityRules(req, field) {
+      for(let i = 0; i < field.visibilityRules.length; i++) {
+        var rule = field.visibilityRules[i];
+        if (!Form.validateFieldVisibilityRule(req, rule)) {
+          return false;
+        }
+      }
+      
+      return true;
+    }
+    
     static validateRequest(req) {
       var fields = Form.fields();
       
       for (var i = 0; i < fields.length; i++) {
         var field = fields[i];
 
-        if (field.required) {
+        if (field.required && Form.validateFieldVisibilityRules(req, field)) {
           req.checkBody(field.name, util.format("Syötä %s", field.title)).notEmpty();
         }
         
@@ -181,13 +250,9 @@
           var schemaField = {
             type: schemaType
           };
-          
-          if (field.required) {
-            schemaField.required = true;
-          }
     
           if (field.type === 'radio' || field.type === 'select') {
-            schemaField.enum = Form.resolveFieldOptions(field);
+            schemaField.enum = [null].concat(Form.resolveFieldOptions(field));
             schemaField.default = Form.resolveFieldDefaultOption(field);
           }          
   
@@ -363,9 +428,12 @@
       switch (type) {
         case 'text':
         case 'enum':
+        case 'time':
           return String;
         case 'number':
           return Number;
+        case 'date':
+          return Date;
         default:
         break;
       } 
