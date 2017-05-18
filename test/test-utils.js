@@ -91,7 +91,7 @@
     
     static getRepliesLength() {
       return new Promise((resolve, reject) => {
-        TestUtils.getReplies2()
+        TestUtils.getRepliesFromDb()
           .then((replies) => {
             resolve(replies.length);
           })
