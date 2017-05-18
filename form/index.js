@@ -19,7 +19,7 @@
     }
     
     static viewModel() {
-      var formConfig = Form.config();
+      const formConfig = Form.config();
       return {
         "title": formConfig.title,
         "theme": formConfig.theme,
@@ -28,12 +28,11 @@
     }
     
     static get notifications() {
-      var formConfig = Form.config();
-      return formConfig.notifications||[];
+      return Form.config().notifications||[];
     }
     
     static getReplyEmail(reply) {
-      var formConfig = Form.config();
+      const formConfig = Form.config();
       if (formConfig['email-field']) {
         return reply[formConfig['email-field']];
       }
@@ -42,11 +41,11 @@
     }
     
     static contextFields(context) {
-      var fields = Form.fields();
-      var result = [];
+      let fields = Form.fields();
+      let result = [];
       
-      for (var i = 0; i < fields.length; i++) {
-        var field = fields[i];
+      for (let i = 0; i < fields.length; i++) {
+        let field = fields[i];
         if ((field.contexts||[]).indexOf(context) > -1) {
           result.push(field);
         }
@@ -62,14 +61,14 @@
     }
     
     static fields() {
-      var fields = [];
-      var config = Form.config();
+      let fields = [];
+      const config = Form.config();
       
       for (let i = 0; i < config.sections.length; i++) {
-        var section = config.sections[i];
-        var sectionFields = section.fields;
+        let section = config.sections[i];
+        let sectionFields = section.fields;
         for (let j = 0; j < sectionFields.length; j++) {
-          var field = sectionFields[j];
+          let field = sectionFields[j];
           field.visibilityRules = [];
           if (section['visible-if']) {
             field.visibilityRules.push(section['visible-if']);
@@ -87,14 +86,11 @@
     }
     
     static dataFields() {
-      var result = [];
-      var config = Form.config();
+      let result = [];
+      const config = Form.config();
       
-      var sectionNames = Object.keys(config.sections);
-      
-      for (let i = 0; i < sectionNames.length; i++) {
-        let sectionName = sectionNames[i];
-        let fields = config.sections[sectionName].fields;
+      for (let i = 0; i < config.sections.length; i++) {
+        let fields = config.sections[i].fields;
         for (let j = 0; j < fields.length; j++) {
           if (NOT_SAVED_FIELDS.indexOf(fields[j].type) === -1) {
             result.push(fields[j]);
@@ -106,12 +102,12 @@
     }
     
     static validateFieldVisibilityRule(req, rule) {
-      var isVisible = false;
-      var analyzed = false;
+      let isVisible = false;
+      let analyzed = false;
 
-      if (typeof(rule.field) !== 'undefined') {
-        var valueSet = Form.isValueSet(req, rule.field);
-        var fieldValue = valueSet ? req.body[rule.field] : null;
+      if (rule.field) {
+        const valueSet = Form.isValueSet(req, rule.field);
+        const fieldValue = valueSet ? req.body[rule.field] : null;
 
         analyzed = true;
         
@@ -127,9 +123,9 @@
       }
 
       if (Array.isArray(rule.and)) {
-        var andResult = true;
+        let andResult = true;
         for (let i = 0; i < rule.and.length; i++) {
-          var andSubRule = rule.and[i];
+          const andSubRule = rule.and[i];
           andResult = andResult && Form.validateFieldVisibilityRule(req, andSubRule);
           if (!andResult) {
             break;
@@ -139,9 +135,9 @@
       }
 
       if (Array.isArray(rule.or)) {
-        var orResult = false;
+        let orResult = false;
         for (let j = 0; j < rule.or.length; j++) {
-          var orSubRule = rule.or[j];
+          const orSubRule = rule.or[j];
           orResult = orResult || Form.validateFieldVisibilityRule(req, orSubRule);
           if (orResult) {
             break;
@@ -155,7 +151,7 @@
     
     static validateFieldVisibilityRules(req, field) {
       for(let i = 0; i < field.visibilityRules.length; i++) {
-        var rule = field.visibilityRules[i];
+        const rule = field.visibilityRules[i];
         if (!Form.validateFieldVisibilityRule(req, rule)) {
           return false;
         }
@@ -165,10 +161,10 @@
     }
     
     static validateRequest(req) {
-      var fields = Form.fields();
+      const fields = Form.fields();
       
-      for (var i = 0; i < fields.length; i++) {
-        var field = fields[i];
+      for (let i = 0; i < fields.length; i++) {
+        const field = fields[i];
 
         if (field.required && Form.validateFieldVisibilityRules(req, field)) {
           req.checkBody(field.name, util.format("Syötä %s", field.title)).notEmpty();
@@ -187,7 +183,7 @@
             break;
             case 'select':
             case 'radio':
-              var options = Form.resolveFieldOptions(field);
+              let options = Form.resolveFieldOptions(field);
               req.checkBody(field.name, util.format("%s ei ole joukossa %s", field.title, options.join(','))).isIn(options);
             break;
             default:
@@ -198,11 +194,11 @@
     }
 
     static sanitizedBody(req) {
-      var data = {};
-      var fields = Form.fields();
+      let data = {};
+      const fields = Form.fields();
       
-      for (var i = 0; i < fields.length; i++) {
-        var field = fields[i];
+      for (let i = 0; i < fields.length; i++) {
+        const field = fields[i];
         if (Form.isValueSet(req, field.name)) {
           switch (field.type) {
             case 'number':
@@ -229,7 +225,7 @@
     }
     
     static isValueSet(req, name) {
-      var value = req.body[name];
+      const value = req.body[name];
       return value !== undefined && value !== null && value !== '';
     }
     
@@ -238,17 +234,17 @@
         return Form._replyModel;
       }
       
-      var fields = Form.fields();
+      const fields = Form.fields();
       
-      var schemaOptions = {};
-      for (var i = 0; i < fields.length; i++) {
-        var field = fields[i];
-        var fieldType = field.type;
-        var skip = NOT_SAVED_FIELDS.indexOf(fieldType) > -1;
+      let schemaOptions = {};
+      for (let i = 0; i < fields.length; i++) {
+        const field = fields[i];
+        const fieldType = field.type;
+        const skip = NOT_SAVED_FIELDS.indexOf(fieldType) > -1;
         
         if (!skip) {
-          var schemaType = Form.resolveSchemaType(field);
-          var schemaField = {
+          const schemaType = Form.resolveSchemaType(field);
+          let schemaField = {
             type: schemaType
           };
     
@@ -264,7 +260,7 @@
       schemaOptions['created'] = Date;
       schemaOptions['modified'] = Date;
       
-      var schema = new mongoose.Schema(schemaOptions);
+      const schema = new mongoose.Schema(schemaOptions);
       Form._replyModel = mongoose.model('Reply', schema);
       
       return Form._replyModel;
@@ -282,12 +278,12 @@
             });
           }
         });
-      }
+      };
     }
     
     static createReply(data, callback) {
-      var FormReplyModel = Form.replyModel();      
-      var reply = new FormReplyModel(_.extend(data, {
+      const FormReplyModel = Form.replyModel();      
+      const reply = new FormReplyModel(_.extend(data, {
         created: new Date(),
         modified: new Date()
       }));
@@ -318,13 +314,13 @@
         if (err) {
           callback(err);
         } else {
-          var fields = Form.fields();
-          var fileLoads = [];
+          const fields = Form.fields();
+          let fileLoads = [];
           
-          for (var i = 0; i < fields.length; i++) {
-            var field = fields[i];
+          for (let i = 0; i < fields.length; i++) {
+            const field = fields[i];
             if (field.type == 'files') {
-              var fileIds = (formReply[field.name] || []);
+              let fileIds = (formReply[field.name] || []);
               fileLoads = fileLoads.concat(fileIds.map((fileId) => {
                 return this.createFileMetaLoad(field.name, fileId);
               }));
@@ -335,17 +331,17 @@
             if (fileErr) {
               callback(fileErr);
             } else {
-              var result = formReply;
-              var fieldMetas = {};
+              let result = formReply;
+              let fieldMetas = {};
               
-              for (var i = 0; i < fileMetaResponses.length; i++) {
-                var fileMetaResponse = fileMetaResponses[i];
-                var fileMeta = fileMetaResponse.fileMeta;
-                var fileMetas = fieldMetas[fileMetaResponse.fieldName] || [];
+              for (let i = 0; i < fileMetaResponses.length; i++) {
+                let fileMetaResponse = fileMetaResponses[i];
+                let fileMeta = fileMetaResponse.fileMeta;
+                let fileMetas = fieldMetas[fileMetaResponse.fieldName] || [];
                 fieldMetas[fileMetaResponse.fieldName] = fileMetas.concat([fileMeta]);
               }
               
-              for (var j = 0; j < fields.length; j++) {
+              for (let j = 0; j < fields.length; j++) {
                 if (fields[j].type == 'files') {
                   result[fields[j].name] = fieldMetas[fields[j].name];
                 }
@@ -359,15 +355,15 @@
     }
     
     static listReplies(includeFiltered, callback) {
-      var query = {};
+      let query = {};
       
       if (!includeFiltered) {
-        var filterFields = Form.listFilterFields();
+        const filterFields = Form.listFilterFields();
         if (filterFields && filterFields.length) {
-          for (var i = 0; i < filterFields.length; i++) {
-            var filterField = filterFields[i];
+          for (let i = 0; i < filterFields.length; i++) {
+            let filterField = filterFields[i];
             if (filterField.type == 'radio') {
-              var excludeValues = 
+              let excludeValues = 
                 _.filter(filterField.options, (option) => {
                   return option['filter-exclude'];
                 })
@@ -411,7 +407,7 @@
         case 'files':
           return [ mongoose.Schema.Types.ObjectId ];
         case 'table':
-          var tableDef = {};
+          let tableDef = {};
           _.each(field.columns, (column) => {
             tableDef[column.name] = {
               "type": this.resolveTableSchemaType(column.type)
@@ -449,7 +445,7 @@
     }
     
     static resolveFieldDefaultOption(field) {
-      for (var i = 0; i < field.options.length; i++) {
+      for (let i = 0; i < field.options.length; i++) {
         if (field.options[i].checked) {
           return field.options[i].name;
         }
