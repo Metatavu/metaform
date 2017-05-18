@@ -17,7 +17,7 @@
           viewModel: Form.viewModel(),
           reply: reply
         });
-        
+     
         mailer.sendMail(email, 'Lomake vastaanotettu.', emailContent);
       } catch(renderEx){
         console.error(renderEx)
@@ -31,7 +31,7 @@
       var emailContent = pug.renderFile(util.format('%s/../../views/mails/received-manager.pug', __dirname), { 
         viewModel: viewModel
       });
-      
+
       mailer.sendMail(email, util.format('Uusi vastaus lomakkeessa %s', viewModel.title), emailContent);
     } catch(renderEx){
       console.error(renderEx)
@@ -88,7 +88,6 @@
               console.error(err);
             }
           });
-          
           
           res.send(reply);
         }

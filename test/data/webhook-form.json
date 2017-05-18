@@ -1,5 +1,5 @@
 {
-  "title": "Integration test for text fields",
+  "title": "webhooks",
   "theme": "integration-test",
   "sections": [{
     "fields": [{
@@ -47,6 +47,19 @@
       "text": "Save",
       "contexts": ["MANAGEMENT"],
       "editable": true
+    }]
+  }],
+  "notifications": [{
+    "type": "webhook",
+    "url": "http://metaformtests.com/",
+    "params": [{
+      "in": "query",
+      "name": "id",
+      "value": "staticText"
+    }, {
+      "in": "query",
+      "name": "message",
+      "value": "[required-text]"
     }]
   }]
 }

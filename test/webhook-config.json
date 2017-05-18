@@ -15,5 +15,5 @@
     "host": "localhost",
     "table": "metaform"
   },
-  "form": "test/data/text-field-form"
+  "form": "test/data/webhook-form"
 }

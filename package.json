@@ -10,18 +10,24 @@
   "scripts": {
     "start": "node app.js",
     "test": "nyc --reporter=lcov -- mocha",
-    "coverage": "cat ./coverage/lcov.info | coveralls"
+    "test-email": "nyc --reporter=lcov -- mocha --grep 'Email'",
+    "test-date": "nyc --reporter=lcov -- mocha --grep 'Date'",
+    "test-form-input": "nyc --reporter=lcov -- mocha --grep 'Form field'",
+    "test-webhook": "nyc --reporter=lcov -- mocha --grep 'Webhooks'",
+    "test-coverage": "nyc --reporter=lcov -- mocha && cat ./coverage/lcov.info | coveralls"
   },
   "devDependencies": {
 	"grunt": "^1.0.1",
 	"grunt-contrib-sass": "^1.0.0",
 	"load-grunt-tasks": "^3.5.2",
     "chai": "^3.5.0",
+    "chai-as-promised": "^6.0.0",
+    "clear-require": "^2.0.0",
     "coveralls": "2.13.0",
     "mocha": "^3.2.0",
+    "nock": "^9.0.13",
     "nyc": "10.2.0",
-    "selenium-webdriver": "^3.4.0",
-    "chai-as-promised": "^6.0.0"
+    "selenium-webdriver": "3.4.0"
   },
   "dependencies": {
     "async": "2.1.4",

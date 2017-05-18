@@ -8,12 +8,12 @@
   },
   "mail": {
     "api_key": "api-key",
-    "domain": "",
-    "sender": ""
+    "domain": "example.com",
+    "sender": "mg"
   },
   "database": {
     "host": "localhost",
     "table": "metaform"
   },
-  "form": "test/data/text-field-form"
+  "form": "test/data/append-function-form"
 }

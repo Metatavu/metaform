@@ -363,9 +363,12 @@
       switch (type) {
         case 'text':
         case 'enum':
+        case 'time':
           return String;
         case 'number':
           return Number;
+        case 'date':
+          return Date;
         default:
         break;
       } 

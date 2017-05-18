@@ -1,0 +1,41 @@
+{
+  "title": "Integration test for email fields",
+  "theme": "integration-test",
+  "sections": [{
+    "fields": [{
+      "name": "required-text",
+      "type": "text",
+      "title": "Required text",
+      "required": true,
+      "contexts": ["FORM", "MANAGEMENT_LIST", "MANAGEMENT"]
+    }
+  ]
+  }, {
+    "fields": [{
+      "name": "submit",
+      "type": "submit",
+      "text": "Send",
+      "contexts": ["FORM"],
+      "editable": true
+    }, {
+      "name": "submit",
+      "type": "submit",
+      "text": "Save",
+      "contexts": ["MANAGEMENT"],
+      "editable": true
+    }]
+  }],
+  "notifications": [{
+    "type": "webhook",
+    "url": "http://77.86.187.9:803",
+    "params": [{
+      "in": "query",
+      "name": "id",
+      "value": "0001"
+    }, {
+      "in": "query",
+      "name": "message",
+      "value": "[freetext]"
+    }]
+  }]
+}
