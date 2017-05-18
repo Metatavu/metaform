@@ -13,6 +13,9 @@
     "coverage": "cat ./coverage/lcov.info | coveralls"
   },
   "devDependencies": {
+	"grunt": "^1.0.1",
+	"grunt-contrib-sass": "^1.0.0",
+	"load-grunt-tasks": "^3.5.2",
     "chai": "^3.5.0",
     "coveralls": "2.13.0",
     "mocha": "^3.2.0",
