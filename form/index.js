@@ -361,7 +361,7 @@
         const filterFields = Form.listFilterFields();
         if (filterFields && filterFields.length) {
           for (let i = 0; i < filterFields.length; i++) {
-            let filterField = filterFields[i];
+            const filterField = filterFields[i];
             if (filterField.type == 'radio') {
               let excludeValues = 
                 _.filter(filterField.options, (option) => {
