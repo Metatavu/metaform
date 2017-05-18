@@ -81,6 +81,7 @@
                           TestUtils.getReplies().then((value) => {
                             if(value) {
                               let string = value.toString();
+                              console.log(string);
                               TestUtils.removeReplies().then(() => {
                                 resolve(string);
                               });
