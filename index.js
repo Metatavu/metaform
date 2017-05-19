@@ -16,6 +16,8 @@
   const flash = require('connect-flash');
   const passport = require('passport');
   const config = require('nconf');
+  const Keycloak = require('keycloak-connect');
+  const util = require('util');
   
   const User = require(__dirname + '/model/user');
   const port = argv.port||3000;
@@ -23,16 +25,30 @@
   mongoose.connect('mongodb://' + config.get('database:host') + '/' + config.get('database:table'));
   require('./auth/passport')(passport);
   
-  var app = express();
+  const app = express();
   
   app.set('views', path.join(__dirname, 'views'));
   app.set('view engine', 'pug');
   
   app.use(cookieParser());
+  
+  const sessionStore = new MongoStore({ mongooseConnection: mongoose.connection });
+  
   app.use(expressSession({
     secret: config.get('session_secret'),
-    store: new MongoStore({ mongooseConnection: mongoose.connection })
+    store: sessionStore
   }));
+  
+  const keycloak = config.get('authProvider') === 'keycloak' ? new Keycloak({ store: sessionStore}) : null;
+  if (keycloak) {
+    app.use(keycloak.middleware({
+      logout: '/logout',
+      admin: '/admin'
+    })); 
+    
+    const keycloakConfig = require(__dirname + '/keycloak.json');
+    app.locals.keycloakAccountUrl = util.format('%s/realms/%s/account/', keycloakConfig['auth-server-url'], keycloakConfig['realm']);
+  }
   
   app.use(passport.initialize());
   app.use(passport.session());
@@ -47,13 +63,13 @@
   
   app.locals.metaformMode = config.get('mode') || 'production';
   
-  require('./routes')(app);
+  require('./routes')(app, keycloak);
   
   User.findOne({
     email: config.get('admin:email')
   }).then((admin) => {
     if (!admin) {
-      var newAdmin = new User();
+      const newAdmin = new User();
       newAdmin.email = config.get('admin:email');
       newAdmin.password = newAdmin.generateHash(config.get('admin:initialPassword'));
       newAdmin.role = 'admin';
