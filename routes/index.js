@@ -18,10 +18,13 @@
       return keycloak.protect((token, req) => {
         for (let i = 0; i < allowedRoles.length; i++) {
           if (token.hasRole(allowedRoles[i])) {
+            req.metaform = {
+              token: token
+            };
             return true;
           }
         }
-        
+
         return false;
       });
     } else {
@@ -29,6 +32,9 @@
         if (req.isAuthenticated()) {
           const role = req.user.role;
           if (allowedRoles.indexOf(role) !== -1) {
+            req.metaform = {
+              token: null
+            };
             next();
           } else {
             res.status(403).send('Go away!');
@@ -39,7 +45,7 @@
       };
     }
   }
-  
+
   function extendTimeout(timeout) {
     return (req, res, next) => {
       res.setTimeout(timeout, () => {

@@ -80,7 +80,7 @@
     
     static getRepliesFromDb(callback) {
       const Form = require(__dirname + '/../form/index.js');
-      return Promise.promisify(Form.listReplies)(true);
+      return Promise.promisify(Form.listReplies)(null, true);
     }
     
     static removeReplies() {

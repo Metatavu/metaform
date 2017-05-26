@@ -59,6 +59,12 @@
         return field['list-filter'];
       });
     }
+
+    static listTargetingFields() {
+      return _.filter(Form.fields(), (field) => {
+        return field['manager-targeting'];
+      });
+    }
     
     static fields() {
       const fields = [];
@@ -315,7 +321,7 @@
           callback(err);
         } else {
           const fields = Form.fields();
-          const fileLoads = [];
+          let fileLoads = [];
           
           for (let i = 0; i < fields.length; i++) {
             const field = fields[i];
@@ -354,9 +360,33 @@
       });
     }
     
-    static listReplies(includeFiltered, callback) {
+    static listReplies(token, includeFiltered, callback) {
       const query = {};
-      
+      if (token) {
+        const targetingFields = Form.listTargetingFields();
+        const targetingFieldsQuery = [];
+        for (let i = 0; i < targetingFields.length; i++) {
+          let targetingField = targetingFields[i];
+          let targetOptionValues = [];
+          targetOptionValues.push({ [targetingField.name]: null });
+
+          for (let j = 0; j < targetingField.options.length; j++) {
+            let option = targetingField.options[j];
+            if (token.hasRole(option.name)) {
+              targetOptionValues.push({ [targetingField.name]: option.name});
+            }
+          }
+
+          if (targetOptionValues.length > 0) {
+            targetingFieldsQuery.push({
+              '$or': targetOptionValues
+            });
+          }
+        }
+
+        query['$and'] = targetingFieldsQuery;
+      }
+
       if (!includeFiltered) {
         const filterFields = Form.listFilterFields();
         if (filterFields && filterFields.length) {
@@ -370,7 +400,7 @@
                 .map((option) => {
                   return option.name;
                 });
-              
+
               query[filterField.name] = {
                 "$nin": excludeValues
               };
@@ -378,7 +408,7 @@
           }
         }
       }
-      
+
       Form.replyModel().find(query)
         .sort({ 
           modified: -1 

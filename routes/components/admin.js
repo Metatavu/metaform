@@ -10,8 +10,8 @@
   const util = require('util');
   
   exports.renderAdminView = function (req, res) {
-    var includeFiltered = req.query.includeFiltered == "true";
-    Form.listReplies(includeFiltered, (err, replies) => {
+    const includeFiltered = req.query.includeFiltered == "true";
+    Form.listReplies(req.metaform.token, includeFiltered, (err, replies) => {
       if (err) {
         res.status(500).send();
       } else {
@@ -57,7 +57,7 @@
   
   exports.createXlsx = (req, res) => {
     var includeFiltered = req.query.includeFiltered == "true";
-    Form.listReplies(includeFiltered, (err, replies) => {
+    Form.listReplies(req.metaform.token, includeFiltered, (err, replies) => {
       if (err) {
         res.status(500).send();
       } else {
