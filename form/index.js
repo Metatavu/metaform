@@ -366,12 +366,12 @@
         const targetingFields = Form.listTargetingFields();
         const targetingFieldsQuery = [];
         for (let i = 0; i < targetingFields.length; i++) {
-          let targetingField = targetingFields[i];
-          let targetOptionValues = [];
+          const targetingField = targetingFields[i];
+          const targetOptionValues = [];
           targetOptionValues.push({ [targetingField.name]: null });
 
           for (let j = 0; j < targetingField.options.length; j++) {
-            let option = targetingField.options[j];
+            const option = targetingField.options[j];
             if (token.hasRole(option.name)) {
               targetOptionValues.push({ [targetingField.name]: option.name});
             }
