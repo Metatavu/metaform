@@ -1,6 +1,7 @@
 node_modules
 .settings
 config.json
+keycloak.json
 /.project
 /.tern-project
 /.externalToolBuilders/
