@@ -46,8 +46,7 @@
       admin: '/admin'
     })); 
     
-    const keycloakConfig = require(__dirname + '/keycloak.json');
-    app.locals.keycloakAccountUrl = util.format('%s/realms/%s/account/', keycloakConfig['auth-server-url'], keycloakConfig.realm);
+    app.locals.keycloakAccountUrl = keycloak.accountUrl();
   }
   
   app.use(passport.initialize());
