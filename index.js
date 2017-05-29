@@ -26,6 +26,7 @@
   require('./auth/passport')(passport);
   
   const app = express();
+  const http = require('http').Server(app);
   
   app.set('views', path.join(__dirname, 'views'));
   app.set('view engine', 'pug');
@@ -62,6 +63,7 @@
   
   app.locals.metaformMode = config.get('mode') || 'production';
   
+  require(__dirname + '/websocket')(http);
   require('./routes')(app, keycloak);
   
   User.findOne({
@@ -82,6 +84,12 @@
     console.error(err);
   });
   
-  module.exports = app;
+  exports.startServer = (callback) => {
+    http.listen(app.get('port'), callback);
+  };
+  
+  exports.close = (callback) => {
+    http.close(callback);
+  };
   
 }).call(this);

@@ -5,7 +5,17 @@
 
   vex.defaultOptions.className = 'vex-theme-default';
 
-  $('#formsTable').DataTable();	
+  $('#formsTable').DataTable();
+  
+  var socket = io();
+  
+  socket.on('reply:locked', function(replyId) {
+    $('tr[data-reply-id="' + replyId +'"]').addClass('locked');
+  });
+  
+  socket.on('reply:unlocked', function(replyId) {
+    $('tr[data-reply-id="' + replyId +'"]').removeClass('locked');
+  });
   
   $('.xlsx-export').click(function(e) {
     e.preventDefault();

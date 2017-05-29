@@ -36,9 +36,8 @@
       const app = require(__dirname + '/../index');
       
       return new Promise((resolve, reject) => {
-        const server = http.createServer(app);
-        server.listen(app.get('port'), function() {
-          resolve(server);
+        app.startServer(() => {
+          resolve(app);
         });
       });
     }
