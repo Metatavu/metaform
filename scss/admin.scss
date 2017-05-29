@@ -3,6 +3,7 @@
   background: #eee;
   cursor: not-allowed;
 }
+
 table.dataTable {
   tbody {
     tr.locked {
@@ -11,16 +12,17 @@ table.dataTable {
 
       &::after {
         content: "\f023";
-        font-family: 'FontAwesome';
-        position: absolute;
+        font-family: "FontAwesome";
+        font-size: 25px;
         left: 0;
         margin-left: -30px;
         padding-top: 2px;
-        font-size: 25px;
+        position: absolute;
       }
     }
   }
 }
+
 .vex-dialog-input {
   font-size: 12px;
 
