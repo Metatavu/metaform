@@ -14,7 +14,7 @@
     "test-date": "nyc --reporter=lcov -- mocha --grep 'Date'",
     "test-form-input": "nyc --reporter=lcov -- mocha --grep 'Form field'",
     "test-webhook": "nyc --reporter=lcov -- mocha --grep 'Webhooks'",
-    "test-coverage": "nyc --reporter=lcov -- mocha && cat ./coverage/lcov.info | coveralls"
+    "test-coverage": "nyc --reporter=lcov -- mocha -b && cat ./coverage/lcov.info | coveralls"
   },
   "devDependencies": {
     "grunt": "^1.0.1",
