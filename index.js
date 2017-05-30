@@ -85,7 +85,11 @@
   });
   
   exports.startServer = (callback) => {
-    http.listen(app.get('port'), callback);
+    http.listen(app.get('port'), () => {
+      setTimeout(() => {
+        callback();
+      }, 5000);
+    });
   };
   
   exports.close = (callback) => {
