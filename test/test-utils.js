@@ -37,6 +37,8 @@
       
       return new Promise((resolve, reject) => {
         app.startServer(() => {
+          console.log('Server started');
+          console.log(app);
           resolve(app);
         });
       });
