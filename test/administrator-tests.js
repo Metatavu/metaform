@@ -14,9 +14,22 @@
   const Condition = webdriver.Condition;
   const Promise = require('bluebird');
   const TestUtils = require(__dirname + '/test-utils');
+  const fs = require('fs');
+  const path = require('path');
   const browser = process.env.METAFORM_BROWSER || 'chrome';
   
+  function ensureDirectoryExistence(filePath) {
+    var dirname = path.dirname(filePath);
+    if (fs.existsSync(dirname)) {
+      return true;
+    }
+    ensureDirectoryExistence(dirname);
+    fs.mkdirSync(dirname);
+  }
+  
   chai.use(require('chai-as-promised'));
+  
+  
   
   describe('Administrator view tests', function() {
     let app;
@@ -25,11 +38,19 @@
     this.timeout(60000);
       
     afterEach((done) => {
-      if (driver) {
-        driver.close();
-        driver = null;
-      }
-
+      driver.takeScreenshot().then(function(data) {
+        var filepath = '/tmp/metaform/build/' + new Date().getTime();
+        ensureDirectoryExistence(filepath);
+        fs.writeFile(filepath, data.replace(/^data:image\/png;base64,/,''), 'base64', function(scErr) {
+          if(scErr) {
+            console.error(scErr);
+          }
+          if (driver) {
+            driver.close();
+            driver = null;
+          }
+        });
+      });
       app.close(() => {
         mongoose.disconnect();
         clearRequire.all();
@@ -48,18 +69,17 @@
           
           driver = TestUtils.createDriver(browser);
           driver.get('http://localhost:3000/login');
-          console.log('Waiting for email field....');
+
           driver.wait(until.elementLocated(webdriver.By.name('email'))).then(() => {
             const emailField = driver.findElement(webdriver.By.name('email'));
             const passwordField = driver.findElement(webdriver.By.name('password'));
-            console.log(emailField);
+
             emailField.sendKeys(email);
             passwordField.sendKeys(password);
-            console.log('Waiting for button....');
+
             driver.findElement(webdriver.By.className('btn')).click(); 
             
             driver.wait(until.titleIs(expectedTitle)).then(() => {
-              console.log('Correct page');
               driver.getTitle().then((title) => {
                 TestUtils.removeReplies().then(() => {
                     resolve(title);
