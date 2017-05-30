@@ -59,7 +59,7 @@
     static takeScreenshot(driver) {
       return new Promise((resolve, reject) => {
         driver.takeScreenshot().then((data) => {
-          const filepath = '/tmp/metaform/build/' + new Date().getTime();
+          const filepath = util.format('/tmp/metaform/build/%s%s', new Date().getTime(), '.png');
           TestUtils.ensureDirectoryExistence(filepath);
           fs.writeFile(filepath, data.replace(/^data:image\/png;base64,/,''), 'base64', (scErr) => {
             if(scErr) {
