@@ -4,8 +4,6 @@
 (function() {
   'use strict';
   
-  const clearRequire = require('clear-require');
-  const mongoose = require('mongoose');
   const chai = require('chai');
   const expect = chai.expect;
   const webdriver = require('selenium-webdriver');
@@ -24,17 +22,8 @@
     
     this.timeout(60000);
       
-    afterEach((done) => {
-      if (driver) {
-        driver.close();
-        driver = null;
-      }
-
-      app.close(() => {
-        mongoose.disconnect();
-        clearRequire.all();
-        done();
-      });
+    afterEach(function(done) {
+      TestUtils.afterTest(this.currentTest, driver, app, done);
     });
     
     it('Login test with correct credentials', () => {
@@ -52,14 +41,13 @@
           driver.wait(until.elementLocated(webdriver.By.name('email'))).then(() => {
             const emailField = driver.findElement(webdriver.By.name('email'));
             const passwordField = driver.findElement(webdriver.By.name('password'));
-            
+
             emailField.sendKeys(email);
             passwordField.sendKeys(password);
 
             driver.findElement(webdriver.By.className('btn')).click(); 
-
+            
             driver.wait(until.titleIs(expectedTitle)).then(() => {
-               
               driver.getTitle().then((title) => {
                 TestUtils.removeReplies().then(() => {
                     resolve(title);

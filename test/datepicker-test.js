@@ -4,9 +4,7 @@
 (function() {
   'use strict';
   
-  const clearRequire = require('clear-require');
   const config = require('nconf');
-  const mongoose = require('mongoose');
   const chai = require('chai');
   const expect = chai.expect;
   const webdriver = require('selenium-webdriver');
@@ -36,17 +34,8 @@
       }
     });
     
-    afterEach((done) => {
-      if (driver) {
-        driver.close();
-        driver = null;
-      }
-
-      app.close(() => {
-        mongoose.disconnect();
-        clearRequire.all();
-        done();
-      });
+    afterEach(function(done) {
+      TestUtils.afterTest(this.currentTest, driver, app, done);
     });
     
     if (skipThis) {
