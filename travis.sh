@@ -1,7 +1,5 @@
 #!/bin/bash
 
-phantomjs --version
-
 npm run test-coverage
 TEST_STATUS=$?
 

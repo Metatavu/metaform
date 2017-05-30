@@ -3,10 +3,8 @@
 
 (function() {
   'use strict';
-  
-  const clearRequire = require('clear-require');
+
   const config = require('nconf');
-  const mongoose = require('mongoose');
   const chai = require('chai');
   const expect = chai.expect;
   const webdriver = require('selenium-webdriver');
@@ -29,17 +27,8 @@
     
     this.timeout(60000);
     
-    afterEach((done) => {
-      if (driver) {
-        driver.close();
-        driver = null;
-      }
-
-      app.close(() => {
-        mongoose.disconnect();
-        clearRequire.all();
-        done();
-      });
+    afterEach(function(done) {
+      TestUtils.afterTest(this.currentTest, driver, app, done);
     });
     
     it('Testing if radio buttons appends more elements and testing textarea', () => { 

@@ -8,12 +8,69 @@
   const Promise = require('bluebird');
   const http = require('http');
   const webdriver = require('selenium-webdriver');
+  const fs = require('fs');
+  const path = require('path');
+  const util = require('util');
+  const mongoose = require('mongoose');
   
   process.on('unhandledRejection', function(error, promise) {
     console.error("UNHANDLED REJECTION", error.stack);
   });
   
   class TestUtils {
+    
+    static afterTest(test, driver, server, done) {
+      if (test.state === 'failed') {
+        TestUtils.takeScreenshot(driver)
+          .then((screenshot) => {
+            TestUtils.cleanUp(driver, server, done);
+          })
+          .catch((err) => {
+            console.error("Error taking screenshot", err);
+            TestUtils.cleanUp(driver, server, done);
+          });
+      } else {
+        TestUtils.cleanUp(driver, server, done);
+      }
+    }
+    
+    static cleanUp(driver, server, callback) {
+      if (driver) {
+        driver.close();
+        driver = null;
+      }
+      
+      server.close(() => {
+        mongoose.disconnect();
+        clearRequire.all();
+        callback();
+      });
+    }
+    
+    static ensureDirectoryExistence(filePath) {
+      var dirname = path.dirname(filePath);
+      if (fs.existsSync(dirname)) {
+        return true;
+      }
+      TestUtils.ensureDirectoryExistence(dirname);
+      fs.mkdirSync(dirname);
+    }
+    
+    static takeScreenshot(driver) {
+      return new Promise((resolve, reject) => {
+        driver.takeScreenshot().then((data) => {
+          const filepath = '/tmp/metaform/build/' + new Date().getTime();
+          TestUtils.ensureDirectoryExistence(filepath);
+          fs.writeFile(filepath, data.replace(/^data:image\/png;base64,/,''), 'base64', (scErr) => {
+            if(scErr) {
+              reject(scErr);
+            } else {
+              resolve(filepath);
+            }
+          });
+        });
+      });
+    }
     
     static startServerFork(command,options) {   
       let app;
@@ -37,8 +94,6 @@
       
       return new Promise((resolve, reject) => {
         app.startServer(() => {
-          console.log('Server started');
-          console.log(app);
           resolve(app);
         });
       });

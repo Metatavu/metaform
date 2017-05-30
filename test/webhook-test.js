@@ -4,10 +4,8 @@
 (function() {
   'use strict';
   
-  const clearRequire = require('clear-require');
   const nock = require('nock');
   const config = require('nconf');
-  const mongoose = require('mongoose');
   const chai = require('chai');
   const expect = chai.expect;
   const webdriver = require('selenium-webdriver');
@@ -23,21 +21,11 @@
   describe('Testing Webhooks', function() {
     let app;
     let driver;
-    let webhookResponse;
     
     this.timeout(60000);
     
-    afterEach((done) => {
-      if (driver) {
-        driver.close();
-        driver = null;
-      }
-
-      app.close(() => {
-        mongoose.disconnect();
-        clearRequire.all();
-        done();
-      });
+    afterEach(function(done) {
+      TestUtils.afterTest(this.currentTest, driver, app, done);
     });
     
     it('Webhook test', () => {

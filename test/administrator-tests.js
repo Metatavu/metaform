@@ -4,8 +4,6 @@
 (function() {
   'use strict';
   
-  const clearRequire = require('clear-require');
-  const mongoose = require('mongoose');
   const chai = require('chai');
   const expect = chai.expect;
   const webdriver = require('selenium-webdriver');
@@ -14,22 +12,9 @@
   const Condition = webdriver.Condition;
   const Promise = require('bluebird');
   const TestUtils = require(__dirname + '/test-utils');
-  const fs = require('fs');
-  const path = require('path');
   const browser = process.env.METAFORM_BROWSER || 'chrome';
   
-  function ensureDirectoryExistence(filePath) {
-    var dirname = path.dirname(filePath);
-    if (fs.existsSync(dirname)) {
-      return true;
-    }
-    ensureDirectoryExistence(dirname);
-    fs.mkdirSync(dirname);
-  }
-  
   chai.use(require('chai-as-promised'));
-  
-  
   
   describe('Administrator view tests', function() {
     let app;
@@ -37,25 +22,8 @@
     
     this.timeout(60000);
       
-    afterEach((done) => {
-      driver.takeScreenshot().then(function(data) {
-        var filepath = '/tmp/metaform/build/' + new Date().getTime();
-        ensureDirectoryExistence(filepath);
-        fs.writeFile(filepath, data.replace(/^data:image\/png;base64,/,''), 'base64', function(scErr) {
-          if(scErr) {
-            console.error(scErr);
-          }
-          if (driver) {
-            driver.close();
-            driver = null;
-          }
-        });
-      });
-      app.close(() => {
-        mongoose.disconnect();
-        clearRequire.all();
-        done();
-      });
+    afterEach(function(done) {
+      TestUtils.afterTest(this.currentTest, driver, app, done);
     });
     
     it('Login test with correct credentials', () => {

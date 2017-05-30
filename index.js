@@ -26,7 +26,7 @@
   require('./auth/passport')(passport);
   
   const app = express();
-  const http = require('http').Server(app);
+  const http = require('http-shutdown')(require('http').Server(app));
   
   app.set('views', path.join(__dirname, 'views'));
   app.set('view engine', 'pug');
@@ -89,7 +89,7 @@
   };
   
   exports.close = (callback) => {
-    http.close(callback);
+    http.shutdown(callback);
   };
   
 }).call(this);
