@@ -48,18 +48,18 @@
           
           driver = TestUtils.createDriver(browser);
           driver.get('http://localhost:3000/login');
-
+          console.log('Waiting for email field....');
           driver.wait(until.elementLocated(webdriver.By.name('email'))).then(() => {
             const emailField = driver.findElement(webdriver.By.name('email'));
             const passwordField = driver.findElement(webdriver.By.name('password'));
-            
+            console.log(emailField);
             emailField.sendKeys(email);
             passwordField.sendKeys(password);
-
+            console.log('Waiting for button....');
             driver.findElement(webdriver.By.className('btn')).click(); 
-
+            
             driver.wait(until.titleIs(expectedTitle)).then(() => {
-               
+              console.log('Correct page');
               driver.getTitle().then((title) => {
                 TestUtils.removeReplies().then(() => {
                     resolve(title);

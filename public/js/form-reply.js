@@ -1,11 +1,14 @@
 (function(){
-	'use strict';
-	
+  'use strict';
+
   $.widget("custom.metaform", {
     
     _create : function() {
       this.element.on("submit", $.proxy(this._onFormSubmit, this));
-      
+      this.socket = io();
+      $(window).on('unload', $.proxy(this._onWindowUnload, this));
+      this._sendReplyOpened();
+      this.replyOpenTimer = setInterval($.proxy(this._sendReplyOpened, this), 20000);
       this.element.find('.table-field').each(function (tableIndex, table) {
         $(table).find('thead th[data-calculate-sum="true"]').each(function (rowIndex, row) {
           var sum = 0;
@@ -28,6 +31,19 @@
       });
     },
     
+    _sendReplyOpened: function() {
+      this.socket.emit('reply:opened', {
+        'replyId': this.element.attr('data-id')
+      });
+    },
+    
+    _onWindowUnload: function() {
+      clearInterval(this.replyOpenTimer);
+      this.socket.emit('reply:closed', {
+        'replyId': this.element.attr('data-id')
+      });
+    },
+    
     _onFormSubmit: function (event) {
       event.preventDefault();
       var data = this.element.serialize();
@@ -39,7 +55,7 @@
         success: function() {
           $('<div>')
             .addClass('alert alert-success fixed-top')
-            .text('Lomake lähetettiin onnistuneesti')
+            .text('Lomake tallennettiin onnistuneesti')
             .appendTo(document.body);        
           
           window.location.href = "/admin";
