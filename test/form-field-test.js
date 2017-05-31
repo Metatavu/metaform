@@ -43,7 +43,7 @@
 
             driver.findElement(webdriver.By.className('btn')).click(); 
 
-            driver.wait(until.elementLocated(webdriver.By.className('alert-success'))).then(() => {
+            driver.wait(until.elementLocated(webdriver.By.className('bootbox-body'))).then(() => {
 
               TestUtils.getReplies().then((value) => {
                 if (value) {
@@ -84,7 +84,7 @@
 
             driver.findElement(webdriver.By.className('btn')).click(); 
 
-            driver.wait(until.elementLocated(webdriver.By.className('alert-success'))).then(() => {
+            driver.wait(until.elementLocated(webdriver.By.className('bootbox-body'))).then(() => {
 
               TestUtils.getReplies().then((value) => {
                 if(value) {
@@ -125,7 +125,7 @@
 
             driver.findElement(webdriver.By.className('btn')).click(); 
 
-            driver.wait(until.elementLocated(webdriver.By.className('alert-success'))).then(() => {
+            driver.wait(until.elementLocated(webdriver.By.className('bootbox-body'))).then(() => {
 
               TestUtils.getReplies().then((value) => {
                 if (value) {
@@ -166,7 +166,7 @@
 
             driver.findElement(webdriver.By.className('btn')).click(); 
 
-            driver.wait(until.elementLocated(webdriver.By.className('alert-success'))).then(() => {
+            driver.wait(until.elementLocated(webdriver.By.className('bootbox-body'))).then(() => {
 
               TestUtils.getReplies().then((value) => {
                 if (value) {
