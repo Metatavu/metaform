@@ -52,7 +52,7 @@
                         }
                         
                         let fieldValue = reply[targetingField.name];
-                        users = _.filter(users, (user) => { return ManagerEmail._hasRole(fieldValue, user) });
+                        users = _.filter(users, (user) => { return ManagerEmail._hasRole(fieldValue, user); });
                       }
                       
                       resolve(users.map((user) => {
