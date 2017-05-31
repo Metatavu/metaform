@@ -26,16 +26,8 @@
     }]
   }],
   "notifications": [{
-    "type": "webhook",
-    "url": "http://77.86.187.9:803",
-    "params": [{
-      "in": "query",
-      "name": "id",
-      "value": "0001"
+      "type": "manager-email"
     }, {
-      "in": "query",
-      "name": "message",
-      "value": "[freetext]"
+      "type": "client-email"
     }]
-  }]
 }
