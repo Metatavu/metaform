@@ -30,6 +30,7 @@
     "selenium-webdriver": "3.4.0"
   },
   "dependencies": {
+    "keycloak-admin-client": "Metatavu/keycloak-admin-client",
     "async": "2.1.4",
     "bcrypt-nodejs": "0.0.3",
     "bluebird": "^3.5.0",
