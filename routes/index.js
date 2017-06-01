@@ -63,7 +63,7 @@
      */
 
     app.get("/", navigation.renderIndex);
-    
+
     /*
      * File uploads
      */
