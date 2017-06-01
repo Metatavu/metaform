@@ -159,7 +159,7 @@
 
             driver.findElement(webdriver.By.className('btn')).click(); 
 
-            driver.wait(until.elementLocated(webdriver.By.className('alert-success'))).then(() => {
+            driver.wait(until.elementLocated(webdriver.By.className('bootbox-body'))).then(() => {
               driver.get('http://localhost:3000/login');
                           
               driver.wait(until.elementLocated(webdriver.By.name('email'))).then(() => {
@@ -213,7 +213,7 @@
 
             driver.findElement(webdriver.By.className('btn')).click(); 
 
-            driver.wait(until.elementLocated(webdriver.By.className('alert-success'))).then(() => {
+            driver.wait(until.elementLocated(webdriver.By.className('bootbox-body'))).then(() => {
               driver.get('http://localhost:3000/login');
                           
               driver.wait(until.elementLocated(webdriver.By.name('email'))).then(() => {
@@ -274,7 +274,7 @@
 
             driver.findElement(webdriver.By.className('btn')).click();
           
-            driver.wait(until.elementLocated(webdriver.By.className('alert-success'))).then(() => {
+            driver.wait(until.elementLocated(webdriver.By.className('bootbox-body'))).then(() => {
               driver.findElements(By.id('field-not-in-form')).then((element) => {
                 if(element.length === 0) {
                   driver.get('http://localhost:3000/login');

@@ -60,7 +60,7 @@
                                 
                                 driver.wait(until.elementLocated(webdriver.By.css('input[type="submit"]'))).then((element) => {
                                   element.click();
-                                  driver.wait(until.elementLocated(webdriver.By.className('alert-success'))).then(() => {
+                                  driver.wait(until.elementLocated(webdriver.By.className('bootbox-body'))).then(() => {
                                     TestUtils.getReplies().then((value) => {
                                       if (value) {
                                         TestUtils.removeReplies().then(() => {

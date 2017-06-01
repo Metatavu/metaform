@@ -70,7 +70,7 @@
 
                       driver.wait(until.elementLocated(webdriver.By.css('input[type="submit"]'))).then((element) => {
                         element.click().then(() => 
-                          driver.wait(until.elementLocated(webdriver.By.className('alert-success'))).then(() => {
+                          driver.wait(until.elementLocated(webdriver.By.className('bootbox-body'))).then(() => {
 
                             TestUtils.getReplies().then((value) => {
                               if (value) {
@@ -121,7 +121,7 @@
                   TestUtils.waitAnimation(2000).then(() => {
                     driver.wait(until.elementLocated(webdriver.By.css('input[type="submit"]'))).then((element) => {
                         element.click().then(() => {
-                          driver.wait(until.elementLocated(webdriver.By.className('alert-success'))).then(() => {
+                          driver.wait(until.elementLocated(webdriver.By.className('bootbox-body'))).then(() => {
 
                             TestUtils.getReplies().then((value) => {
                               if (value) {
@@ -173,7 +173,7 @@
                       elements[3].sendKeys("test");
                         driver.wait(until.elementLocated(webdriver.By.css('input[type="submit"]'))).then((element) => {
                         element.click().then(() => {
-                          driver.wait(until.elementLocated(webdriver.By.className('alert-success'))).then(() => {
+                          driver.wait(until.elementLocated(webdriver.By.className('bootbox-body'))).then(() => {
 
                             TestUtils.getReplies().then((value) => {
                               if (value) {

@@ -1,4 +1,4 @@
-/* global Modernizr, pdfMake, MetaformUtils, hyperform */
+/* global Modernizr, pdfMake, MetaformUtils, hyperform, bootbox */
 
 (function(){
   
@@ -161,14 +161,13 @@
         data: data,
         method: 'POST',
         success: function() {
-          $('<div>')
-            .addClass('alert alert-success fixed-top')
-            .text('Lomake lähetettiin onnistuneesti')
-            .appendTo(document.body);        
-          
-          setTimeout(function () {
-            window.location.reload(true);
-          }, 2000);
+          bootbox.alert({
+            message: '<i class="fa fa-check" /><h3>Lomake lähetettiin onnistuneesti.</h3>',
+            backdrop: true,
+            callback: function(){
+              window.location.reload(true);
+            }
+          });
         },
         error: function (jqXHR, textStatus) {
           var errorMessage = textStatus ? jqXHR.responseText || jqXHR.statusText || textStatus : null;
