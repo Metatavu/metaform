@@ -1,4 +1,4 @@
-/* global Modernizr, pdfMake, MetaformUtils */
+/* global Modernizr, pdfMake, MetaformUtils, hyperform, bootbox */
 
 (function(){
   
@@ -7,6 +7,8 @@
   $.widget("custom.metaform", {
     
     _create : function() {
+      this.attachedVisibleIfListeners = [];
+      
       this.element.on("submit", $.proxy(this._onFormSubmit, this));
       if (!Modernizr.formvalidation) {
         hyperform(this.element[0]);
@@ -21,6 +23,7 @@
         var formGroupId = $(element).attr('id');
         var rule = JSON.parse($(element).attr('data-visible-if'));
         this._registerVisibleIfRule(formGroupId, rule, rule);
+        this.attachedVisibleIfListeners = [];
       }.bind(this));
       
       this.element.find('input:checked').change();
@@ -41,8 +44,12 @@
     },
     
     _registerVisibleIfRule: function (formGroupId, currentRule, rule) {
-      if (typeof(currentRule.field) !== 'undefined') {
-        $('input[name="'+currentRule.field+'"]').change($.proxy(this._createFormChangeFunction(formGroupId, rule), this));
+      if (typeof(currentRule.field) !== 'undefined' && this.attachedVisibleIfListeners.indexOf(currentRule.field) === -1) {
+        this.attachedVisibleIfListeners.push(currentRule.field);
+        
+        $('input[name="'+currentRule.field+'"],select[name="'+currentRule.field+'"]')
+          .change($.proxy(this._createFormChangeFunction(formGroupId, rule), this))
+          .keyup($.proxy(this._createFormChangeFunction(formGroupId, rule), this));
       }
       
       if (typeof(currentRule.and) !== 'undefined') {
@@ -67,8 +74,18 @@
       var analyzed = false;
 
       if (typeof(rule.field) !== 'undefined') {
-        var checked = $('input[name="'+rule.field+'"]:checked').length > 0;
-        var currentValue = $('input[name="'+rule.field+'"]:checked').val();
+        var inputElement = $('input[name="'+rule.field+'"],select[name="'+rule.field+'"]').first();
+        var currentValue = '';
+        var checked = false;
+        
+        if( inputElement.is(':checkbox') || inputElement.is(':radio')) {
+          checked = $('input[name="'+rule.field+'"]:checked').length > 0;
+          currentValue = $('input[name="'+rule.field+'"]:checked').val();
+        } else {
+          checked = inputElement.val() ? true : false;
+          currentValue = inputElement.val();
+        }
+
         analyzed = true;
         
         if (rule.equals === true) {
@@ -105,14 +122,14 @@
         }
         equals = analyzed ? equals || orResult : orResult;
       }
-
+      
       return equals;
     },
     _createFormChangeFunction: function(formGroupId, rule) {
       return function(e) {
         var formGroup = $('#' + formGroupId);
         var equals = this._evaluateFormRule(rule);
-
+        
         if(equals && !formGroup.is(':visible')) {
           formGroup.slideToggle(400, function() {
             this._onRequiredFieldsVisibilityChange(formGroup, 'SHOW');
@@ -144,14 +161,13 @@
         data: data,
         method: 'POST',
         success: function() {
-          $('<div>')
-            .addClass('alert alert-success fixed-top')
-            .text('Lomake lähetettiin onnistuneesti')
-            .appendTo(document.body);        
-          
-          setTimeout(function () {
-            window.location.reload(true);
-          }, 2000);
+          bootbox.alert({
+            message: '<i class="fa fa-check" /><h3>Lomake lähetettiin onnistuneesti.</h3>',
+            backdrop: true,
+            callback: function(){
+              window.location.reload(true);
+            }
+          });
         },
         error: function (jqXHR, textStatus) {
           var errorMessage = textStatus ? jqXHR.responseText || jqXHR.statusText || textStatus : null;

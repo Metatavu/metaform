@@ -10,12 +10,13 @@
   const util = require('util');
   
   exports.renderAdminView = function (req, res) {
-    var includeFiltered = req.query.includeFiltered == "true";
-    Form.listReplies(includeFiltered, (err, replies) => {
+    const includeFiltered = req.query.includeFiltered == "true";
+    Form.listReplies(req.metaform.token, includeFiltered, (err, replies) => {
       if (err) {
         res.status(500).send();
       } else {
         res.render('admin', { 
+          title: 'Hallintapaneeli',
           user: req.user,
           viewModel: Form.viewModel(),
           fields: Form.contextFields('MANAGEMENT_LIST'),
@@ -34,13 +35,14 @@
   };
   
   exports.getFormReply = (req, res) => {
-    var id = req.params.id;
+    const id = req.params.id;
     
     Form.loadReply(id, (err, formReply) => {
       if (err) {
         res.status(500).send(err);
       } else {
         res.render('form-reply', {
+          title: 'Vastaus',
           user: req.user,
           viewModel: Form.viewModel(),
           formReply: formReply
@@ -54,15 +56,15 @@
   };
   
   exports.createXlsx = (req, res) => {
-    var includeFiltered = req.query.includeFiltered == "true";
-    Form.listReplies(includeFiltered, (err, replies) => {
+    const includeFiltered = req.query.includeFiltered == "true";
+    Form.listReplies(req.metaform.token, includeFiltered, (err, replies) => {
       if (err) {
         res.status(500).send();
       } else {
-        var fields = Form.dataFields();
-        var rows = [];
-        var header = [];
-        var fieldNames = req.query.fields.split(',');
+        const fields = Form.dataFields();
+        const rows = [];
+        const header = [];
+        const fieldNames = req.query.fields.split(',');
         for (let i = 0; i < fieldNames.length; i++) {
           for (let j = 0; j < fields.length;j++) {
             if (fieldNames[i] === fields[j].name) {
@@ -74,10 +76,10 @@
         rows.push(header);
 
         for (let i = 0; i < replies.length; i++) {
-          var row = [];
-          var reply = replies[i].toObject();
+          const row = [];
+          const reply = replies[i].toObject();
           for (let j = 0; j < fieldNames.length; j++) {
-            var replyField = reply[fieldNames[j]];
+            const replyField = reply[fieldNames[j]];
             if (typeof(replyField) === 'undefined') {
               row.push('');
             } else if (fieldNames[j] === 'attachments') {
@@ -102,7 +104,7 @@
           }
           rows.push(row);
         }
-        var buffer = xlsx.build([{name: 'Hakemukset', data: rows}]);
+        const buffer = xlsx.build([{name: 'Hakemukset', data: rows}]);
         res.setHeader('content-type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         res.send(buffer);
       }
@@ -110,7 +112,7 @@
   };
 
   function stringifyObjects(objects) {
-    var result = objects.map((o) => {
+    const result = objects.map((o) => {
       return stringifyObject(o);
     });
     
@@ -118,8 +120,8 @@
   }
 
   function stringifyObject(object) {
-    var result = [];
-    var keys = Object.keys(object);
+    const result = [];
+    const keys = Object.keys(object);
     for (let i = 0; i < keys.length; i++) {
       if (keys[i].startsWith('_')) {
         continue;

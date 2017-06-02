@@ -1,0 +1,19 @@
+{
+  "port": 3000,
+  "server_root": "",
+  "session_secret": "Extremely secret",
+  "admin": {
+    "email": "admin@example.com",
+    "initialPassword": "admin"
+  },
+  "mail": {
+    "api_key": "api-key",
+    "domain": "",
+    "sender": ""
+  },
+  "database": {
+    "host": "localhost",
+    "table": "metaform"
+  },
+  "form": "test/data/text-field-form"
+}

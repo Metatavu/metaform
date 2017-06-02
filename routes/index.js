@@ -13,21 +13,39 @@
   const gridFsStorage = require(__dirname + '/../multer/gridfs-storage');
   const fileParser = multer({ storage: gridFsStorage() });
   
-  function authenticate(allowedRoles) {
-    return function (req, res, next) {
-      if (req.isAuthenticated()) {
-        var role = req.user.role;
-        if (allowedRoles.indexOf(role) != -1) {
-          next();
-        } else {
-          res.status(403).send('Go away!');
+  function authenticate(allowedRoles, keycloak) {
+    if (keycloak) {
+      return keycloak.protect((token, req) => {
+        for (let i = 0; i < allowedRoles.length; i++) {
+          if (token.hasRole(allowedRoles[i])) {
+            req.metaform = {
+              token: token
+            };
+            return true;
+          }
         }
-      } else {
-        res.redirect('/login');
-      }
-    };
+
+        return false;
+      });
+    } else {
+      return (req, res, next) => {
+        if (req.isAuthenticated()) {
+          const role = req.user.role;
+          if (allowedRoles.indexOf(role) !== -1) {
+            req.metaform = {
+              token: null
+            };
+            next();
+          } else {
+            res.status(403).send('Go away!');
+          }
+        } else {
+          res.redirect('/login');
+        }
+      };
+    }
   }
-  
+
   function extendTimeout(timeout) {
     return (req, res, next) => {
       res.setTimeout(timeout, () => {
@@ -38,16 +56,14 @@
     };
   }
 
-  module.exports = function (app) {
+  module.exports = function (app, keycloak) {
 
     /*
      * Navigation
      */
 
     app.get("/", navigation.renderIndex);
-    app.get('/login', navigation.renderLogin);
-    app.get('/forgotpassword', navigation.renderForgotPass);
-    
+
     /*
      * File uploads
      */
@@ -62,7 +78,7 @@
      */
 
     app.post('/formReply', form.postReply);
-    app.put('/formReply/:id', authenticate(['manager', 'admin']), form.putReply);
+    app.put('/formReply/:id', authenticate(['manager', 'admin'], keycloak), form.putReply);
     
     app.post('/reply', form.postReply);
 
@@ -70,29 +86,31 @@
      *  Admin
      */
 
-    app.get('/admin', authenticate(['manager', 'admin']), admin.renderAdminView);
-    app.get('/admin/users', authenticate(['admin']), admin.renderUserManagementView);
-    app.get('/admin/replies/:id', authenticate(['manager', 'admin']), admin.getFormReply);
-    app.get('/admin/fields', authenticate(['manager', 'admin']), admin.getFields);
-    app.get('/admin/export/xlsx', authenticate(['manager', 'admin']), admin.createXlsx);
+    app.get('/admin', authenticate(['manager', 'admin'], keycloak), admin.renderAdminView);
+    app.get('/admin/users', authenticate(['admin'], keycloak), admin.renderUserManagementView);
+    app.get('/admin/replies/:id', authenticate(['manager', 'admin'], keycloak), admin.getFormReply);
+    app.get('/admin/fields', authenticate(['manager', 'admin'], keycloak), admin.getFields);
+    app.get('/admin/export/xlsx', authenticate(['manager', 'admin'], keycloak), admin.createXlsx);
     
     /*
      * User
      */
 
-    app.post('/login', user.login);
-    app.post('/signup', authenticate(['admin']), user.create);
-    app.get('/user/list', authenticate(['admin']), user.list);
-    app.delete ('/user/:id', authenticate(['admin']), user.archieve);
-    app.get('/logout', user.logout);
-    app.post('/forgotpassword', user.forgotpassword);
-    app.get('/resetpassword/:token', user.getResetpassword);
-    app.post('/resetpassword/:token', user.postResetpassword);
-    
-    app.get('/changepass', authenticate(['manager', 'admin']), user.getChangePass);
-    app.post('/changepass', authenticate(['manager', 'admin']), user.postChangePass);
-    
-    app.get('/user/get/:id', authenticate(['admin', 'manager']), user.get);
+    if (!keycloak) {
+      app.get('/login', navigation.renderLogin);
+      app.post('/login', user.login);
+      app.get('/forgotpassword', navigation.renderForgotPass);
+      app.post('/signup', authenticate(['admin']), user.create);
+      app.get('/user/list', authenticate(['admin']), user.list);
+      app.delete ('/user/:id', authenticate(['admin']), user.archieve);
+      app.get('/logout', user.logout);
+      app.post('/forgotpassword', user.forgotpassword);
+      app.get('/resetpassword/:token', user.getResetpassword);
+      app.post('/resetpassword/:token', user.postResetpassword);
+      app.get('/changepass', authenticate(['manager', 'admin']), user.getChangePass);
+      app.post('/changepass', authenticate(['manager', 'admin']), user.postChangePass);
+      app.get('/user/get/:id', authenticate(['admin', 'manager']), user.get);
+    }
   };
 
 }).call(this);

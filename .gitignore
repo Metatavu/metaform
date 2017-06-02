@@ -1,6 +1,7 @@
 node_modules
 .settings
 config.json
+keycloak.json
 /.project
 /.tern-project
 /.externalToolBuilders/
@@ -8,3 +9,9 @@ config.json
 /essote-debt.json
 /mikkeli-asuntomessut.json
 /dna-sovend-form-prototype.json
+/essote-quick-service.json
+/nbproject
+coverage
+/.nyc_output
+.phantomjs
+.idea
