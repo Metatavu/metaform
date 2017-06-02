@@ -40,8 +40,18 @@
     store: sessionStore
   }));
   
-  const keycloak = config.get('authProvider') === 'keycloak' ? new Keycloak({ store: sessionStore}) : null;
-  if (keycloak) {
+  let keycloak = null;
+  if (config.get('authProvider') === 'keycloak') {
+    
+    keycloak = new Keycloak({ store: sessionStore}, {
+      "realm": config.get('keycloak:realm'),
+      "auth-server-url": config.get('keycloak:admin:baseUrl'),
+      "ssl-required": "external",
+      "resource": config.get('keycloak:client'),
+      "public-client": true,
+      "use-resource-role-mappings": true
+    });
+    
     app.use(keycloak.middleware({
       logout: '/logout',
       admin: '/admin'
