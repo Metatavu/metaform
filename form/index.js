@@ -365,15 +365,22 @@
       if (token) {
         const targetingFields = Form.listTargetingFields();
         const targetingFieldsQuery = [];
+        const booleanTargetValues = [];
         for (let i = 0; i < targetingFields.length; i++) {
           const targetingField = targetingFields[i];
           const targetOptionValues = [];
-          targetOptionValues.push({ [targetingField.name]: null });
-
-          for (let j = 0; j < targetingField.options.length; j++) {
-            const option = targetingField.options[j];
-            if (token.hasRole(option.name)) {
-              targetOptionValues.push({ [targetingField.name]: option.name});
+          if (targetingField.type === 'boolean') {
+            if (token.hasRole(targetingField.name)) {
+              booleanTargetValues.push({ [targetingField.name]: true});
+            }
+          } else {
+            targetOptionValues.push({ [targetingField.name]: null });
+            
+            for (let j = 0; j < targetingField.options.length; j++) {
+              const option = targetingField.options[j];
+              if (token.hasRole(option.name)) {
+                targetOptionValues.push({ [targetingField.name]: option.name});
+              }
             }
           }
 
@@ -382,6 +389,12 @@
               '$or': targetOptionValues
             });
           }
+        }
+
+        if (booleanTargetValues.length > 0) {
+          targetingFieldsQuery.push({
+            '$or': booleanTargetValues
+          });
         }
 
         query['$and'] = targetingFieldsQuery;
