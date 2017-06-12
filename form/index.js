@@ -27,6 +27,29 @@
       }
     }
     
+    static adminViewModel(reply) {
+      const formConfig = Form.config();
+      formConfig.sections = _.filter(formConfig.sections, (section) => {
+        if (!section['visible-if']) {
+          return true;
+        }
+
+        return Form.validateFieldVisibilityRule(reply, section['visible-if']);
+      });
+      
+      for (let i = 0; i < formConfig.sections.length; i++) {
+        const section = formConfig.sections[i];
+        const sectionFields = section.fields;
+        section.fields = _.filter(section.fields, (field) => { return Form.validateFieldVisibilityRules(reply, field); });
+      }
+      
+      return {
+        "title": formConfig.title,
+        "theme": formConfig.theme,
+        "sections": formConfig.sections
+      };
+    }
+    
     static get notifications() {
       return Form.config().notifications||[];
     }
@@ -107,13 +130,13 @@
       return result;
     }
     
-    static validateFieldVisibilityRule(req, rule) {
+    static validateFieldVisibilityRule(reply, rule) {
       let isVisible = false;
       let analyzed = false;
 
       if (rule.field) {
-        const valueSet = Form.isValueSet(req, rule.field);
-        const fieldValue = valueSet ? req.body[rule.field] : null;
+        const valueSet = reply[rule.field] !== undefined && reply[rule.field] !== null && reply[rule.field] !== '';
+        const fieldValue = valueSet ? reply[rule.field] : null;
 
         analyzed = true;
         
@@ -132,7 +155,7 @@
         let andResult = true;
         for (let i = 0; i < rule.and.length; i++) {
           const andSubRule = rule.and[i];
-          andResult = andResult && Form.validateFieldVisibilityRule(req, andSubRule);
+          andResult = andResult && Form.validateFieldVisibilityRule(reply, andSubRule);
           if (!andResult) {
             break;
           }
@@ -144,7 +167,7 @@
         let orResult = false;
         for (let j = 0; j < rule.or.length; j++) {
           const orSubRule = rule.or[j];
-          orResult = orResult || Form.validateFieldVisibilityRule(req, orSubRule);
+          orResult = orResult || Form.validateFieldVisibilityRule(reply, orSubRule);
           if (orResult) {
             break;
           }
@@ -155,10 +178,10 @@
       return isVisible;
     }
     
-    static validateFieldVisibilityRules(req, field) {
+    static validateFieldVisibilityRules(reply, field) {
       for (let i = 0; i < field.visibilityRules.length; i++) {
         const rule = field.visibilityRules[i];
-        if (!Form.validateFieldVisibilityRule(req, rule)) {
+        if (!Form.validateFieldVisibilityRule(reply, rule)) {
           return false;
         }
       }
@@ -172,7 +195,7 @@
       for (let i = 0; i < fields.length; i++) {
         const field = fields[i];
 
-        if (field.required && Form.validateFieldVisibilityRules(req, field)) {
+        if (field.required && Form.validateFieldVisibilityRules(req.body, field)) {
           req.checkBody(field.name, util.format("Syötä %s", field.title)).notEmpty();
         }
         
