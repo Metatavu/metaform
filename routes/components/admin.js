@@ -44,7 +44,7 @@
         res.render('form-reply', {
           title: 'Vastaus',
           user: req.user,
-          viewModel: Form.viewModel(),
+          viewModel: Form.adminViewModel(formReply),
           formReply: formReply
         });
       }

@@ -51,7 +51,7 @@
                           continue;
                         }
                         
-                        let fieldValue = reply[targetingField.name];
+                        let fieldValue = targetingField.type === 'boolean' ? targetingField.name : reply[targetingField.name];
                         users = _.filter(users, (user) => { return ManagerEmail._hasRole(fieldValue, user); });
                       }
                       
