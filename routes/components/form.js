@@ -21,6 +21,8 @@
       }
     }
     
+    data.lastEditor = req.kauth ? req.kauth.grant.access_token.content.name : req.user.email;
+    
     Form.updateReply(id, data, (err) => {
       if (err) {
         res.status(500).send(util.format("Lomakkeen tallennuksessa tapahtui virhe: %s", err));

@@ -20,6 +20,7 @@
           user: req.user,
           viewModel: Form.viewModel(),
           fields: Form.contextFields('MANAGEMENT_LIST'),
+          metafields: Form.metaFields('MANAGEMENT_LIST'),
           replies: replies,
           includeFiltered: includeFiltered
         });
@@ -45,6 +46,7 @@
           title: 'Vastaus',
           user: req.user,
           viewModel: Form.adminViewModel(formReply),
+          metafields: Form.metaFields('MANAGEMENT'),
           formReply: formReply
         });
       }
