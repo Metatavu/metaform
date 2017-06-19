@@ -18,6 +18,14 @@
       return require(util.format(__dirname + '/../%s.json', config.get('form')));
     }
     
+    static metaFields(context) {
+      const formConfig = Form.config();
+      const metaFields = formConfig.metafields || [];
+      return _.filter(metaFields, (field) => {
+        return (field.contexts||[]).indexOf(context) > -1;
+      });
+    }
+    
     static viewModel() {
       const formConfig = Form.config();
       return {
@@ -288,6 +296,7 @@
 
       schemaOptions['created'] = Date;
       schemaOptions['modified'] = Date;
+      schemaOptions['lastEditor'] = String;
       
       const schema = new mongoose.Schema(schemaOptions);
       Form._replyModel = mongoose.model('Reply', schema);

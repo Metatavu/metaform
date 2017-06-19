@@ -33,3 +33,12 @@ block body
                     each field in section.fields
                       if field.contexts.indexOf('MANAGEMENT') > -1
                         +field(field, formReply[field.name], !field.editable)
+          .row
+            section.col-12
+              .row
+                .col-12
+                  h2 Lisätiedot
+          .row
+            fieldset.col-12
+              each metafield in metafields
+                +field(metafield, formReply[metafield.name], true)
