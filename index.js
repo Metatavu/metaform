@@ -72,6 +72,7 @@
   app.use(expressValidator());
   
   app.locals.metaformMode = config.get('mode') || 'production';
+  app.locals.moment = require('moment');
   
   require(__dirname + '/websocket')(http);
   require('./routes')(app, keycloak);

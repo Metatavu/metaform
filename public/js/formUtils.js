@@ -9,13 +9,13 @@
         "altFormat": "d.m.Y",
         "altInput": true,
         "utc": true,
-        "allowInput": false
+        "allowInput": true
       });
     }, 
     createTimePicker: function(input) {
       $(input).flatpickr({
         "locale": "fi",
-        "allowInput": false,
+        "allowInput": true,
         "noCalendar": true,
         "enableTime" : true,
         "time_24hr": true

@@ -26,19 +26,17 @@ block body
               each field in fields
                 th
                   =field.title
+              each metafield in metafields
+                th
+                  =metafield.title
               th(style="width:0")
           tbody
             each reply in replies
               tr(data-reply-id=reply._id)
                 each field in fields 
-                  td
-                    case field.type 
-                      when 'radio'
-                        each option in field.options
-                          if reply[field.name] == option.name
-                            =option.text
-                      default
-                        =reply[field.name]
+                  +table-title(field, reply)
+                each metafield in metafields
+                  +table-title(metafield, reply)
                 td
                   a(href="/admin/replies/" + reply._id)
                     |Avaa

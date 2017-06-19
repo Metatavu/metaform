@@ -17,3 +17,18 @@ mixin admin-menu(active)
               a.nav-link(class=active == 'user-management' ? 'active' : '', href='/admin/users') Käyttäjähallinta
           li.nav-item
             a.nav-link(href='/logout') Kirjaudu ulos
+mixin table-title(field, reply)
+  td
+    case field.type 
+      when 'radio'
+      when 'select'
+        each option in field.options
+          if reply[field.name] == option.name
+            =option.text
+      when 'date'
+        if (field-time)
+          =moment(reply[field.name]).format('DD.MM.YYYY HH:mm')
+        else
+          =moment(reply[field.name]).format('DD.MM.YYYY')
+      default
+        =reply[field.name]
