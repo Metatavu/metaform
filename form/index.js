@@ -294,9 +294,9 @@
         }
       }
 
-      schemaOptions['created'] = Date;
-      schemaOptions['modified'] = Date;
-      schemaOptions['lastEditor'] = String;
+      schemaOptions.created = Date;
+      schemaOptions.modified = Date;
+      schemaOptions.lastEditor = String;
       
       const schema = new mongoose.Schema(schemaOptions);
       Form._replyModel = mongoose.model('Reply', schema);
