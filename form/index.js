@@ -429,7 +429,9 @@
           });
         }
 
-        query['$and'] = targetingFieldsQuery;
+        if (targetingFieldsQuery && targetingFieldsQuery.length) {
+          query['$and'] = targetingFieldsQuery;
+        }
       }
 
       if (!includeFiltered) {

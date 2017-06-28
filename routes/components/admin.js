@@ -13,7 +13,8 @@
     const includeFiltered = req.query.includeFiltered == "true";
     Form.listReplies(req.metaform.token, includeFiltered, (err, replies) => {
       if (err) {
-        res.status(500).send();
+        console.error(err);
+        res.status(500).send(err);
       } else {
         res.render('admin', { 
           title: 'Hallintapaneeli',
