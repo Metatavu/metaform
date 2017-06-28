@@ -48,7 +48,13 @@
       for (let i = 0; i < formConfig.sections.length; i++) {
         const section = formConfig.sections[i];
         const sectionFields = section.fields;
-        section.fields = _.filter(section.fields, (field) => { return Form.validateFieldVisibilityRules(reply, field); });
+        section.fields = _.filter(section.fields, (field) => { 
+          if (!field['visible-if']) {
+            return true;
+          }
+
+          return Form.validateFieldVisibilityRule(reply, field['visible-if']); 
+        });
       }
       
       return {
@@ -187,6 +193,10 @@
     }
     
     static validateFieldVisibilityRules(reply, field) {
+      if (!field.visibilityRules) {
+        return true;
+      }
+      
       for (let i = 0; i < field.visibilityRules.length; i++) {
         const rule = field.visibilityRules[i];
         if (!Form.validateFieldVisibilityRule(reply, rule)) {
