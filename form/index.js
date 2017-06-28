@@ -15,7 +15,7 @@
   class Form {
     
     static config() {
-      return require(util.format(__dirname + '/../%s.json', config.get('form')));
+      return JSON.parse(JSON.stringify(require(util.format(__dirname + '/../%s.json', config.get('form')))));
     }
     
     static metaFields(context) {
