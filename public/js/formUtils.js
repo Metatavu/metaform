@@ -8,7 +8,6 @@
         "locale": "fi",
         "altFormat": "d.m.Y",
         "altInput": true,
-        "utc": true,
         "allowInput": true
       });
     }, 
