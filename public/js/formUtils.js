@@ -6,7 +6,7 @@
   
   window.MetaformUtils = {
     createDatePicker: function(input) {
-      const datePickerOptions = {
+      var datePickerOptions = {
         "locale": "fi",
         "altFormat": "d.m.Y",
         "altInput": true,
@@ -45,7 +45,7 @@
       $(input).flatpickr(datePickerOptions);
     },
     
-    _createDisabledIndicesFunction(disabledIndices) {
+    _createDisabledIndicesFunction: function(disabledIndices) {
       return function(date) {
         return disabledIndices.indexOf(date.getDay()) !== -1;
       };
