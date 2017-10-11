@@ -8,6 +8,7 @@
   const moment = require('moment');
   const xlsx = require('node-xlsx');
   const util = require('util');
+  const pdf = require('html-pdf');
   
   exports.renderAdminView = function (req, res) {
     const includeFiltered = req.query.includeFiltered == "true";
@@ -38,18 +39,34 @@
   
   exports.getFormReply = (req, res) => {
     const id = req.params.id;
+    const format = req.query.format;
     
     Form.loadReply(id, (err, formReply) => {
       if (err) {
         res.status(500).send(err);
       } else {
-        res.render('form-reply', {
-          title: 'Vastaus',
-          user: req.user,
-          viewModel: Form.adminViewModel(formReply),
-          metafields: Form.metaFields('MANAGEMENT'),
-          formReply: formReply
-        });
+        if (format === 'pdf') {
+          res.render('form-reply-print', {
+            title: 'Vastaus',
+            user: req.user,
+            viewModel: Form.adminViewModel(formReply),
+            metafields: Form.metaFields('MANAGEMENT'),
+            formReply: formReply
+          }, function(err, html) {
+            res.header("Content-Type", "application/pdf");
+            pdf.create(html, {'border': '1cm'}).toStream(function(err, pdfStream){
+              pdfStream.pipe(res);
+            });
+          });
+        } else {
+          res.render('form-reply', {
+            title: 'Vastaus',
+            user: req.user,
+            viewModel: Form.adminViewModel(formReply),
+            metafields: Form.metaFields('MANAGEMENT'),
+            formReply: formReply
+          });
+        }
       }
     });
   };

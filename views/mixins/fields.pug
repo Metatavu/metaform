@@ -1,335 +1,446 @@
-mixin text-field(field, value, readonly)
-  .form-group.row(data-visible-if=field['visible-if'],id="fg-" + field.name)
+mixin text-field(field, value, readonly, toPdf)
+  if toPdf
     if field.title
-      .col-12
-        label(for='field-' + field.name)
-          =field.title
-          if field.required
-            |&nbsp;*
-    .col-12
-      input.form-control(aria-labelledby=id='field-' + field.name,id='field-' + field.name,type="text",name=field.name,title=field.title,required=field.required,readonly=readonly,value=value)
-      if field.help
-        small.form-text.text-muted
-          =field.help
-          
-mixin email-field(field, value, readonly)
-  .form-group.row(data-visible-if=field['visible-if'],id="fg-" + field.name)
-    if field.title
-      .col-12
-        label(for='field-' + field.name)
-          =field.title
-          if field.required
-            |&nbsp;*
-    .col-12
-      input.form-control(aria-labelledby=id='field-' + field.name,id='field-' + field.name,type="email",name=field.name,title=field.title,required=field.required,readonly=readonly,value=value)
-      if field.help
-        small.form-text.text-muted
-          =field.help
-          
-mixin date-field(field, value, readonly)
-  .form-group.row(data-visible-if=field['visible-if'],id="fg-" + field.name)
-    if field.title
-      .col-12
-        label(for='field-' + field.name)
-          =field.title
-          if field.required
-            |&nbsp;*
-    .col-12
-      input.form-control(data-constraints=field.constraints ? JSON.stringify(field.constraints) : null, aria-labelledby=id='field-' + field.name,id='field-' + field.name,type="text",name=field.name,title=field.title,required=field.required,readonly=readonly,data-iso-date=value,data-type="date")
-      if field.help
-        small.form-text.text-muted
-          =field.help
-
-mixin time-field(field, value, readonly)
-  .form-group.row(data-visible-if=field['visible-if'],id="fg-" + field.name)
-    if field.title
-      .col-12
-        label(for='field-' + field.name)
-          =field.title
-          if field.required
-            |&nbsp;*
-    .col-12
-      input.form-control(aria-labelledby=id='field-' + field.name,id='field-' + field.name,type="text",name=field.name,title=field.title,required=field.required,readonly=readonly,data-iso-date=value,data-type="time")
-      if field.help
-        small.form-text.text-muted
-          =field.help
-          
-mixin number-field(field, value, readonly)
-  .form-group.row(data-visible-if=field['visible-if'],id="fg-" + field.name)
-    if field.title
-      .col-12
-        label(for='field-' + field.name)
-          =field.title
-          if field.required
-            |&nbsp;*
-    .col-12
-      input.form-control(aria-labelledby=id='field-' + field.name,id='field-' + field.name,type="number",name=field.name,title=field.title,required=field.required,min=field.min,max=field.max,step=field.step,readonly=readonly,value=value||field.default,lang='fi')
-      if field.help
-        small.form-text.text-muted
-          =field.help
-          
-mixin boolean-field(field, value, readonly)
-  .form-group.row(data-visible-if=field['visible-if'],id="fg-" + field.name)
-    .col-12
-      .form-check
-        label.form-check-label
-          if readonly
-            if value
-              i.fa.fa-check-square-o(aria-hidden="true")
-            else
-              i.fa.fa-square-o(aria-hidden="true")
-          if !readonly
-            input.form-check-input(type="checkbox",name=field.name,title=field.title,checked=value||field.checked,value="true")
-            |&nbsp;
-          =field.title
-          if field.required
-            |&nbsp;*
-      if field.help
-        small.form-text.text-muted
-          =field.help
-
-mixin radio-field(field, value, readonly)
-  .form-group.row(data-visible-if=field['visible-if'],id="fg-" + field.name)
-    if field.title
-      .col-12
-        label(for='field-' + field.name)
-          =field.title
-          if field.required
-            |&nbsp;*
-    .col-12
-      each option in field.options
-        .form-check
-          label.form-check-label
-            if readonly
-              if value == option.name
-                i.fa.fa-dot-circle-o(aria-hidden="true")
-              else
-                i.fa.fa-circle-o(aria-hidden="true")
-            else
-              input.form-check-input(type="radio",name=field.name, value=option.name,checked=(value && value == option.name) || (!value && option.checked))
-            |&nbsp;
-          =option.text
-      if field.help
-        small.form-text.text-muted
-          =field.help
-
-mixin select-field(field, value, readonly)
-  .form-group.row(data-visible-if=field['visible-if'],id="fg-" + field.name)
-    if field.title
-      .col-12
-        label(for='field-' + field.name)
-          =field.title
-          if field.required
-            |&nbsp;*
-    .col-12
-      select.form-control(aria-labelledby=id='field-' + field.name,id='field-' + field.name, name=field.name,title=field.title,required=field.required,readonly=readonly)
-        option(value='') Valitse
-        each option in field.options
-          option(value=option.name,selected=(value && value == option.name) || (!value && option.selected))
-            =option.text
-      if field.help
-        small.form-text.text-muted
-          =field.help
-
-mixin checklist-field(field, value, readonly)
-  .form-group.row(data-visible-if=field['visible-if'],id="fg-" + field.name)
-    if field.title
-      .col-12
-        label(for='field-' + field.name)
-          =field.title
-          if field.required
-            |&nbsp;*
-    .col-12
-      each option in field.options
-        .form-check(class=field['display-inline'] ? 'form-check-inline' : '')
-          label.form-check-label
-            if readonly
-              if value && value.length && value.indexOf(option.name) != -1
-                i.fa.fa-check-square-o(aria-hidden="true")
-              else
-                i.fa.fa-square-o(aria-hidden="true")
-            else
-              input.form-check-input(type="checkbox",name=field.name, value=option.name,checked=(value && value.length && value.indexOf(option.name) != -1) || (!value && option.checked))
-            |&nbsp;
-          =option.text
-      if field.help
-        small.form-text.text-muted
-          =field.help
-          
-mixin memo-field(field, value, readonly)
-  .form-group.row(data-visible-if=field['visible-if'],id="fg-" + field.name)
-    if field.title
-      .col-12
-        label(for='field-' + field.name)
-          =field.title
-          if field.required
-            |&nbsp;*
-    .col-12
-      textarea.form-control(aria-labelledby=id='field-' + field.name,id='field-' + field.name,name=field.name,title=field.title,required=field.required,readonly=readonly)
-        =value
-      if field.help
-        small.form-text.text-muted
-          =field.help          
-          
-mixin files-field(field, fileMetas, readonly)
-  .form-group.row(data-visible-if=field['visible-if'],id="fg-" + field.name)
-    if field.title
-      .col-12
-        label(for='field-' + field.name)
-          =field.title
-          if field.required
-            |&nbsp;*
-    .col-12
-      if readonly
-        if fileMetas
-          each fileMeta in fileMetas
-            .row
-              .col-12
-                a(href='/upload/' + fileMeta.fileData,target='_blank')
-                  =fileMeta.originalname
-      else
-        .file-component(data-field-name=field.name)
-          button.add-file-button.btn.btn-success
-            |+ Lisää tiedosto
-          input.form-control-file(aria-labelledby=id='field-' + field.name,id='field-' + field.name,type="file",multiple="multiple",name='file',title=field.title,required=field.required,readonly=readonly)
-          .progress
-            .progress-bar(role='progressbar',aria-valuemin='0',aria-valuemax='100',aria-valuenow='0')
-          .files
-      if field.help
-        small.form-text.text-muted
-          =field.help
-          
-mixin table-field(field, value, readonly)
-  .form-group.table-field.row(data-field-name=field.name,data-field-title=field.title, data-visible-if=field['visible-if'],id="fg-" + field.name)
-    .col-12
-      .row
+      h4
+        =field.title
+    if value
+      p
+       =value
+  else
+    .form-group.row(data-visible-if=field['visible-if'],id="fg-" + field.name)
+      if field.title
         .col-12
           label(for='field-' + field.name)
             =field.title
             if field.required
               |&nbsp;*
-      .row
+      .col-12
+        input.form-control(aria-labelledby=id='field-' + field.name,id='field-' + field.name,type="text",name=field.name,title=field.title,required=field.required,readonly=readonly,value=value)
+        if field.help
+          small.form-text.text-muted
+            =field.help
+          
+mixin email-field(field, value, readonly, toPdf)
+  if toPdf
+    if field.title
+      h4
+        =field.title
+    if value
+      p
+       =value
+  else
+    .form-group.row(data-visible-if=field['visible-if'],id="fg-" + field.name)
+      if field.title
         .col-12
-          .table-container
-            if !readonly && field.printable
-              a(href='#').print-table.float-right
-                i.fa.fa-print(aria-hidden="true")
-                |&nbsp;Tulosta
-            table.table(data-field-name=field.name)
-              thead
-                each column in field.columns
-                  th(data-calculate-sum=column['calculate-sum'] ? 'true' : 'false',width=column['column-width'])
-                    =column.title
-              tbody
-                if readonly
-                  if value && value.length
-                    each row in value
-                      tr
-                        each column, columnIndex in field.columns
-                          td
-                            =row[column.name]
+          label(for='field-' + field.name)
+            =field.title
+            if field.required
+              |&nbsp;*
+      .col-12
+        input.form-control(aria-labelledby=id='field-' + field.name,id='field-' + field.name,type="email",name=field.name,title=field.title,required=field.required,readonly=readonly,value=value)
+        if field.help
+          small.form-text.text-muted
+            =field.help
+          
+mixin date-field(field, value, readonly, toPdf)
+  if toPdf
+    if field.title
+      h4
+        =field.title
+    if value
+      p
+       =moment(value).format('D.M.YYYY')
+  else
+    .form-group.row(data-visible-if=field['visible-if'],id="fg-" + field.name)
+      if field.title
+        .col-12
+          label(for='field-' + field.name)
+            =field.title
+            if field.required
+              |&nbsp;*
+      .col-12
+        input.form-control(data-constraints=field.constraints ? JSON.stringify(field.constraints) : null, aria-labelledby=id='field-' + field.name,id='field-' + field.name,type="text",name=field.name,title=field.title,required=field.required,readonly=readonly,data-iso-date=value,data-type="date")
+        if field.help
+          small.form-text.text-muted
+            =field.help
+
+mixin time-field(field, value, readonly, toPdf)
+  if toPdf
+    if field.title
+      h4
+        =field.title
+    if value
+      p
+       =moment(value).format('D.M.YYYY HH:mm')
+  else
+    .form-group.row(data-visible-if=field['visible-if'],id="fg-" + field.name)
+      if field.title
+        .col-12
+          label(for='field-' + field.name)
+            =field.title
+            if field.required
+              |&nbsp;*
+      .col-12
+        input.form-control(aria-labelledby=id='field-' + field.name,id='field-' + field.name,type="text",name=field.name,title=field.title,required=field.required,readonly=readonly,data-iso-date=value,data-type="time")
+        if field.help
+          small.form-text.text-muted
+            =field.help
+          
+mixin number-field(field, value, readonly, toPdf)
+  if toPdf
+    if field.title
+      h4
+        =field.title
+    if value
+      p
+       =value
+  else
+    .form-group.row(data-visible-if=field['visible-if'],id="fg-" + field.name)
+      if field.title
+        .col-12
+          label(for='field-' + field.name)
+            =field.title
+            if field.required
+              |&nbsp;*
+      .col-12
+        input.form-control(aria-labelledby=id='field-' + field.name,id='field-' + field.name,type="number",name=field.name,title=field.title,required=field.required,min=field.min,max=field.max,step=field.step,readonly=readonly,value=value||field.default,lang='fi')
+        if field.help
+          small.form-text.text-muted
+            =field.help
+          
+mixin boolean-field(field, value, readonly, toPdf)
+  if toPdf
+    if field.title && value
+      h4
+        =field.title
+  else
+    .form-group.row(data-visible-if=field['visible-if'],id="fg-" + field.name)
+      .col-12
+        .form-check
+          label.form-check-label
+            if readonly
+              if value
+                i.fa.fa-check-square-o(aria-hidden="true")
+              else
+                i.fa.fa-square-o(aria-hidden="true")
+            if !readonly
+              input.form-check-input(type="checkbox",name=field.name,title=field.title,checked=value||field.checked,value="true")
+              |&nbsp;
+            =field.title
+            if field.required
+              |&nbsp;*
+        if field.help
+          small.form-text.text-muted
+            =field.help
+
+mixin radio-field(field, value, readonly, toPdf)
+  if toPdf
+    if field.title
+     h4
+       =field.title
+    if value
+      each option in field.options
+        if value == option.name
+          p
+            =option.text
+  else
+    .form-group.row(data-visible-if=field['visible-if'],id="fg-" + field.name)
+      if field.title
+        .col-12
+          label(for='field-' + field.name)
+            =field.title
+            if field.required
+              |&nbsp;*
+      .col-12
+        each option in field.options
+          .form-check
+            label.form-check-label
+              if readonly
+                if value == option.name
+                  i.fa.fa-dot-circle-o(aria-hidden="true")
                 else
-                  each column, columnIndex in field.columns
-                    td(data-column-type=column.type,data-column-name=column.name)
-                      case column.type 
-                        when 'text'
-                          input.form-control(type="text")
-                        when 'number'
-                          input.form-control(type="number",lang='fi',min=column.min,max=column.max,step=column.step)
-                        when 'enum'
-                          select.form-control
-                            each value in column.values
-                              option(data-other=value.other)
-                                =value.text
-                        when 'date'
-                          input.form-control(type="text",name=column.name,title=column.title,required=column.required,data-type="table-date")
-                        when 'time'
-                           input.form-control(type="text",name=column.name,title=column.title,required=column.required,data-type="table-time")
-                          
-              tfoot
-                tr
-                  each column, columnIndex in field.columns
-                    td
-                      if column['calculate-sum']
-                        div.sum-container
-                          span.sum
-                            =column['calculated-sum']|0
-                          span.sum-postfix
-                            |&nbsp;
-                            =column['sum-postfix']
-              if !readonly
-                input(type="hidden",name=field.name)                             
-      if !readonly && field.addRows
+                  i.fa.fa-circle-o(aria-hidden="true")
+              else
+                input.form-check-input(type="radio",name=field.name, value=option.name,checked=(value && value == option.name) || (!value && option.checked))
+              |&nbsp;
+            =option.text
+        if field.help
+          small.form-text.text-muted
+            =field.help
+
+mixin select-field(field, value, readonly, toPdf)
+  if toPdf
+    if field.title
+     h4
+       =field.title
+    if value
+      each option in field.options
+        if value == option.name
+          p
+            =option.text
+  else
+    .form-group.row(data-visible-if=field['visible-if'],id="fg-" + field.name)
+      if field.title
+        .col-12
+          label(for='field-' + field.name)
+            =field.title
+            if field.required
+              |&nbsp;*
+      .col-12
+        select.form-control(aria-labelledby=id='field-' + field.name,id='field-' + field.name, name=field.name,title=field.title,required=field.required,readonly=readonly, toPdf)
+          option(value='') Valitse
+          each option in field.options
+            option(value=option.name,selected=(value && value == option.name) || (!value && option.selected))
+              =option.text
+        if field.help
+          small.form-text.text-muted
+            =field.help
+
+mixin checklist-field(field, value, readonly, toPdf)
+  if toPdf
+    if field.title
+     h4
+       =field.title
+    if value
+      ul
+        each option in field.options
+          if value && value.length && value.indexOf(option.name) != -1
+            li
+              =option.text
+  else
+    .form-group.row(data-visible-if=field['visible-if'],id="fg-" + field.name)
+      if field.title
+        .col-12
+          label(for='field-' + field.name)
+            =field.title
+            if field.required
+              |&nbsp;*
+      .col-12
+        each option in field.options
+          .form-check(class=field['display-inline'] ? 'form-check-inline' : '')
+            label.form-check-label
+              if readonly
+                if value && value.length && value.indexOf(option.name) != -1
+                  i.fa.fa-check-square-o(aria-hidden="true")
+                else
+                  i.fa.fa-square-o(aria-hidden="true")
+              else
+                input.form-check-input(type="checkbox",name=field.name, value=option.name,checked=(value && value.length && value.indexOf(option.name) != -1) || (!value && option.checked))
+              |&nbsp;
+            =option.text
+        if field.help
+          small.form-text.text-muted
+            =field.help
+
+mixin memo-field(field, value, readonly, toPdf)
+  if toPdf
+    if field.title
+      h4
+        =field.title
+    if value
+      p
+       =value
+  else
+    .form-group.row(data-visible-if=field['visible-if'],id="fg-" + field.name)
+      if field.title
+        .col-12
+          label(for='field-' + field.name)
+            =field.title
+            if field.required
+              |&nbsp;*
+      .col-12
+        textarea.form-control(aria-labelledby=id='field-' + field.name,id='field-' + field.name,name=field.name,title=field.title,required=field.required,readonly=readonly, toPdf)
+          =value
+        if field.help
+          small.form-text.text-muted
+            =field.help          
+          
+mixin files-field(field, fileMetas, readonly, toPdf)
+  if !toPdf
+    .form-group.row(data-visible-if=field['visible-if'],id="fg-" + field.name)
+      if field.title
+        .col-12
+          label(for='field-' + field.name)
+            =field.title
+            if field.required
+              |&nbsp;*
+      .col-12
+        if readonly
+          if fileMetas
+            each fileMeta in fileMetas
+              .row
+                .col-12
+                  a(href='/upload/' + fileMeta.fileData,target='_blank')
+                    =fileMeta.originalname
+        else
+          .file-component(data-field-name=field.name)
+            button.add-file-button.btn.btn-success
+              |+ Lisää tiedosto
+            input.form-control-file(aria-labelledby=id='field-' + field.name,id='field-' + field.name,type="file",multiple="multiple",name='file',title=field.title,required=field.required,readonly=readonly, toPdf)
+            .progress
+              .progress-bar(role='progressbar',aria-valuemin='0',aria-valuemax='100',aria-valuenow='0')
+            .files
+        if field.help
+          small.form-text.text-muted
+            =field.help
+          
+mixin table-field(field, value, readonly, toPdf)
+  if toPdf
+    table
+      thead
+        each column in field.columns
+          th
+            =column.title
+      tbody
+        if value && value.length
+          each row in value
+            tr
+              each column, columnIndex in field.columns
+                td
+                  =row[column.name]
+      tfoot
+        tr
+          each column, columnIndex in field.columns
+            td
+              if column['calculate-sum']
+                div.sum-container
+                  span.sum
+                    =column['calculated-sum']|0
+                  span.sum-postfix
+                    |&nbsp;
+                    =column['sum-postfix']
+  else
+    .form-group.table-field.row(data-field-name=field.name,data-field-title=field.title, data-visible-if=field['visible-if'],id="fg-" + field.name)
+      .col-12
         .row
           .col-12
-            a.btn.btn-sm.btn-success.add-table-row
-              |Lisää rivi
-      .row
-        .col-12
-          if field.help
-            small.form-text.text-muted
-              =field.help
+            label(for='field-' + field.name)
+              =field.title
+              if field.required
+                |&nbsp;*
+        .row
+          .col-12
+            .table-container
+              if !readonly && field.printable
+                a(href='#').print-table.float-right
+                  i.fa.fa-print(aria-hidden="true")
+                  |&nbsp;Tulosta
+              table.table(data-field-name=field.name)
+                thead
+                  each column in field.columns
+                    th(data-calculate-sum=column['calculate-sum'] ? 'true' : 'false',width=column['column-width'])
+                      =column.title
+                tbody
+                  if readonly
+                    if value && value.length
+                      each row in value
+                        tr
+                          each column, columnIndex in field.columns
+                            td
+                              =row[column.name]
+                  else
+                    each column, columnIndex in field.columns
+                      td(data-column-type=column.type,data-column-name=column.name)
+                        case column.type 
+                          when 'text'
+                            input.form-control(type="text")
+                          when 'number'
+                            input.form-control(type="number",lang='fi',min=column.min,max=column.max,step=column.step)
+                          when 'enum'
+                            select.form-control
+                              each value in column.values
+                                option(data-other=value.other)
+                                  =value.text
+                          when 'date'
+                            input.form-control(type="text",name=column.name,title=column.title,required=column.required,data-type="table-date")
+                          when 'time'
+                             input.form-control(type="text",name=column.name,title=column.title,required=column.required,data-type="table-time")
+
+                tfoot
+                  tr
+                    each column, columnIndex in field.columns
+                      td
+                        if column['calculate-sum']
+                          div.sum-container
+                            span.sum
+                              =column['calculated-sum']|0
+                            span.sum-postfix
+                              |&nbsp;
+                              =column['sum-postfix']
+                if !readonly
+                  input(type="hidden",name=field.name)                             
+        if !readonly && field.addRows
+          .row
+            .col-12
+              a.btn.btn-sm.btn-success.add-table-row
+                |Lisää rivi
+        .row
+          .col-12
+            if field.help
+              small.form-text.text-muted
+                =field.help
               
-mixin logo-field(field, value, readonly)
+mixin logo-field(field, value, readonly, toPdf)
   .form-group.row(data-visible-if=field['visible-if'],id="fg-" + field.name)
     .col-12.logo-container
       img.logo(src=field.src)
 
-mixin small-text-field(field, value, readonly)
+mixin small-text-field(field, value, readonly, toPdf)
   .form-group.row(data-visible-if=field['visible-if'],id="fg-" + field.name)
     .col-12.small-text-container
       small
         =field.text
 
-mixin html-field(field, value, readonly)
+mixin html-field(field, value, readonly, toPdf)
   .form-group.row(data-visible-if=field['visible-if'],id="fg-" + field.name)
     .col-12.html-container
       !=field.html
 
-mixin submit-field(field, value, readonly)
-  .form-group.row(data-visible-if=field['visible-if'],id="fg-" + field.name)
-    .col-12
-      input.btn.btn-lg.btn-primary(type="submit",value=field.text,disabled=readonly)
+mixin submit-field(field, value, readonly, toPdf)
+  if !toPdf
+    .form-group.row(data-visible-if=field['visible-if'],id="fg-" + field.name)
+      .col-12
+        input.btn.btn-lg.btn-primary(type="submit",value=field.text,disabled=readonly)
 
 mixin unknown-field(field)
   .col-12.error.row
     =field.type
     |&nbsp;is unknown
 
-mixin field(field, value, readonly)
+mixin field(field, value, readonly, toPdf)
   case field.type 
     when 'text'
-      +text-field(field, value, readonly)
+      +text-field(field, value, readonly, toPdf)
     when 'email'
-      +email-field(field, value, readonly)
+      +email-field(field, value, readonly, toPdf)
     when 'number'
-      +number-field(field, value, readonly)
+      +number-field(field, value, readonly, toPdf)
     when 'memo'
-      +memo-field(field, value, readonly)
+      +memo-field(field, value, readonly, toPdf)
     when 'boolean'
-      +boolean-field(field, value, readonly)
+      +boolean-field(field, value, readonly, toPdf)
     when 'radio'
-      +radio-field(field, value, readonly)
+      +radio-field(field, value, readonly, toPdf)
     when 'checklist'
-      +checklist-field(field, value, readonly)
+      +checklist-field(field, value, readonly, toPdf)
     when 'date'
-      +date-field(field, value, readonly)
+      +date-field(field, value, readonly, toPdf)
     when 'time'
-      +time-field(field, value, readonly)
+      +time-field(field, value, readonly, toPdf)
     when 'files'
-      +files-field(field, value, readonly)
+      +files-field(field, value, readonly, toPdf)
     when 'table'
-      +table-field(field, value, readonly)
+      +table-field(field, value, readonly, toPdf)
     when 'logo'
-      +logo-field(field, value, readonly)
+      +logo-field(field, value, readonly, toPdf)
     when 'small-text'
-      +small-text-field(field, value, readonly)
+      +small-text-field(field, value, readonly, toPdf)
     when 'html'
-      +html-field(field, value, readonly)
+      +html-field(field, value, readonly, toPdf)
     when 'submit'
-      +submit-field(field, value, readonly)
+      +submit-field(field, value, readonly, toPdf)
     when 'select'
-      +select-field(field, value, readonly)
+      +select-field(field, value, readonly, toPdf)
     default
       +unknown-field(field)
       
