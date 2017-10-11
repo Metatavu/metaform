@@ -36,7 +36,7 @@
     
     static cleanUp(driver, server, callback) {
       if (driver) {
-        driver.close();
+        driver.quit();
         driver = null;
       }
       

@@ -9,12 +9,13 @@
   },
   "scripts": {
     "start": "node app.js",
-    "test": "nyc --reporter=lcov -- mocha",
-    "test-email": "nyc --reporter=lcov -- mocha --grep 'Email'",
-    "test-date": "nyc --reporter=lcov -- mocha --grep 'Date'",
-    "test-form-input": "nyc --reporter=lcov -- mocha --grep 'Form field'",
-    "test-webhook": "nyc --reporter=lcov -- mocha --grep 'Webhooks'",
-    "test-coverage": "nyc --reporter=lcov -- mocha -b && cat ./coverage/lcov.info | coveralls"
+    "test": "nyc --reporter=lcov -- mocha --exit",
+    "test-email": "nyc --reporter=lcov -- mocha --grep 'Email' --exit",
+    "test-date": "nyc --reporter=lcov -- mocha --grep 'Date' --exit",
+    "test-form-input": "nyc --reporter=lcov -- mocha --grep 'Form field' --exit",
+    "test-webhook": "nyc --reporter=lcov -- mocha --grep 'Webhooks' --exit",
+    "test-append": "nyc --reporter=lcov -- mocha --grep 'Append' --exit",
+    "test-coverage": "nyc --reporter=lcov -- mocha -b --exit && cat ./coverage/lcov.info | coveralls"
   },
   "devDependencies": {
     "grunt": "^1.0.1",
@@ -30,7 +31,6 @@
     "selenium-webdriver": "3.6.0"
   },
   "dependencies": {
-    "keycloak-admin-client": "Metatavu/keycloak-admin-client",
     "async": "2.5.0",
     "bcrypt-nodejs": "0.0.3",
     "bluebird": "^3.5.1",
@@ -42,6 +42,7 @@
     "express-session": "1.15.6",
     "express-validator": "4.2.1",
     "http-shutdown": "1.2.0",
+    "keycloak-admin-client": "Metatavu/keycloak-admin-client",
     "keycloak-connect": "3.3.0-cr.2",
     "mailgun-js": "0.13.1",
     "minimist": "^1.2.0",
