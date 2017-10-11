@@ -41,6 +41,7 @@
     "express": "4.16.2",
     "express-session": "1.15.6",
     "express-validator": "4.2.1",
+    "html-pdf": "^2.2.0",
     "http-shutdown": "1.2.0",
     "keycloak-admin-client": "Metatavu/keycloak-admin-client",
     "keycloak-connect": "3.3.0-cr.2",
