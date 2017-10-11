@@ -59,7 +59,7 @@ mixin date-field(field, value, readonly, toPdf)
             if field.required
               |&nbsp;*
       .col-12
-        input.form-control(aria-labelledby=id='field-' + field.name,id='field-' + field.name,type="text",name=field.name,title=field.title,required=field.required,readonly=readonly,data-iso-date=value,data-type="date")
+        input.form-control(data-constraints=field.constraints ? JSON.stringify(field.constraints) : null, aria-labelledby=id='field-' + field.name,id='field-' + field.name,type="text",name=field.name,title=field.title,required=field.required,readonly=readonly,data-iso-date=value,data-type="date")
         if field.help
           small.form-text.text-muted
             =field.help
