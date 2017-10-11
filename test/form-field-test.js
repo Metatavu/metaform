@@ -48,7 +48,7 @@
               TestUtils.getReplies().then((value) => {
                 if (value) {
                   TestUtils.removeReplies().then(() => {
-                    resolve(value);
+                    resolve(value[0]);
                   });
                 } else {
                   reject('Replies not found');
@@ -63,8 +63,7 @@
         .to
         .eventually
         .have
-        .deep
-        .property('[0].required-text', testText);
+        .property('required-text', testText);
     }); 
     
     it('Test text field by Chinese', () => { 
@@ -89,7 +88,7 @@
               TestUtils.getReplies().then((value) => {
                 if(value) {
                   TestUtils.removeReplies().then(() => {
-                    resolve(value);
+                    resolve(value[0]);
                   });
                 } else {
                   reject('Replies not found');
@@ -104,8 +103,7 @@
         .to
         .eventually
         .have
-        .deep
-        .property('[0].required-text', testText);
+        .property('required-text', testText);
     });
     
     it('Test text field by Finnish', () => { 
@@ -130,7 +128,7 @@
               TestUtils.getReplies().then((value) => {
                 if (value) {
                   TestUtils.removeReplies().then(() => {
-                    resolve(value);
+                    resolve(value[0]);
                   });
                 } else {
                   reject('Replies not found');
@@ -145,8 +143,7 @@
         .to
         .eventually
         .have
-        .deep
-        .property('[0].required-text', testText);
+        .property('required-text', testText);
     });
     
     it('Test text field by Russian', () => { 
@@ -171,7 +168,7 @@
               TestUtils.getReplies().then((value) => {
                 if (value) {
                   TestUtils.removeReplies().then(() => {
-                    resolve(value);
+                    resolve(value[0]);
                   });
                 } else {
                   reject('Replies not found');
@@ -186,8 +183,7 @@
         .to
         .eventually
         .have
-        .deep
-        .property('[0].required-text', testText);
+        .property('required-text', testText);
     });
     
     it('Test for required fields', () => { 
