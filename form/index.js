@@ -11,6 +11,7 @@
   const FileMeta = require(__dirname + '/../model/filemeta');
   const config = require('nconf');
   const NOT_SAVED_FIELDS = ['logo', 'submit', 'small-text', 'html'];
+  const moment = require('moment');
   
   class Form {
     
@@ -233,10 +234,38 @@
               let options = Form.resolveFieldOptions(field);
               req.checkBody(field.name, util.format("%s ei ole joukossa %s", field.title, options.join(','))).isIn(options);
             break;
+            case 'date':
+              if (field.constraints) {
+                const constraints = field.constraints;
+                if (constraints['min-date']) {
+                  const minDate = Form.resolveMinDate(constraints['min-date']);
+                  req.checkBody(field.name, util.format("%s on ennen %s", field.title, minDate.toDate())).isAfter(minDate.toString());
+                }
+                if (constraints['disabled-weekday-indices']) {
+                  const disabledIndices = constraints['disabled-weekday-indices'];
+                  req.checkBody(field.name, util.format("%s on joukossa %s", field.title, disabledIndices.join(','))).custom((value) => { 
+                    return disabledIndices.indexOf(new Date(value).getDay()) === -1; 
+                  });
+                }
+              }
+            break;
             default:
             break;
           }
         } 
+      }
+    }
+
+    static resolveMinDate(minDateString) {
+      if (minDateString.startsWith('+') || minDateString.startsWith('-')) {
+        const dateStringParts = minDateString.split('_');
+        const operator = dateStringParts[0];
+        const amount = parseInt(dateStringParts[1]);
+        const unit = dateStringParts[2];
+        
+        return operator === '+' ? moment().add(amount, unit) : moment().subtract(amount, unit);
+      } else {
+        return moment(minDateString);
       }
     }
 

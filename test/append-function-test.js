@@ -64,7 +64,7 @@
                                     TestUtils.getReplies().then((value) => {
                                       if (value) {
                                         TestUtils.removeReplies().then(() => {
-                                          resolve(value);
+                                          resolve(value[0]);
                                         });
                                       } else {
                                         reject('Replies not found');
@@ -84,13 +84,12 @@
             }); 
           });
       }));
-           
+      
       return result
         .to
         .eventually
         .have
-        .deep
-        .property('[0].examination-results-text', testText);
+        .property('examination-results-text', testText);
     }); 
   });
 })();
