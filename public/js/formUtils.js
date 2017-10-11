@@ -13,7 +13,7 @@
         "allowInput": true
       };
 
-      if ($(input).attr("data-constraints")) {
+      /*if ($(input).attr("data-constraints")) {
         var constraints = JSON.parse($(input).attr("data-constraints"));
 
         if (constraints['min-date']) {
@@ -40,7 +40,7 @@
           disable.push(MetaformUtils._createDisabledIndicesFunction(constraints['disabled-weekday-indices']));
           datePickerOptions.disable = disable;
         }
-      }
+      }*/
       
       $(input).flatpickr(datePickerOptions);
     },
