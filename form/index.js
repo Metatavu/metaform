@@ -263,7 +263,7 @@
         const amount = parseInt(dateStringParts[1]);
         const unit = dateStringParts[2];
         
-        return operator === '+' ? moment().add(amount, unit) : moment().subtract(amount, unit);
+        return operator === '+' ? moment().add(amount, unit).startOf('day') : moment().subtract(amount, unit).startOf('day');
       } else {
         return moment(minDateString);
       }
