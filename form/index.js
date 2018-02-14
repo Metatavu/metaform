@@ -214,8 +214,12 @@
       for (let i = 0; i < fields.length; i++) {
         const field = fields[i];
 
-        if (field.required && Form.validateFieldVisibilityRules(req.body, field)) {
+        const fieldVisible = Form.validateFieldVisibilityRules(req.body, field);
+
+        if (field.required && fieldVisible) {
           req.checkBody(field.name, util.format("Syötä %s", field.title)).notEmpty();
+        } else if (!fieldVisible) {
+          delete req.body[field.name];
         }
         
         if (Form.isValueSet(req, field.name)) {
