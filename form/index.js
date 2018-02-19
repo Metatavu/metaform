@@ -159,10 +159,10 @@
           isVisible = valueSet;
         } else if (rule.equals) {
           isVisible = rule.equals === fieldValue;
-        } else if (rule['not-isVisible'] === true) {
+        } else if (rule['not-equals'] === true) {
           isVisible = !valueSet;
-        } else if (rule['not-isVisible']) {
-          isVisible = rule['not-isVisible'] !== fieldValue;
+        } else if (rule['not-equals']) {
+          isVisible = rule['not-equals'] !== fieldValue;
         }
       }
 
