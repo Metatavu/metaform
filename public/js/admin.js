@@ -32,7 +32,7 @@
           });
         }
       }
-    })
+    });
   });
   
   $('.xlsx-export').click(function(e) {
