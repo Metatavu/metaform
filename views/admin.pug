@@ -38,5 +38,6 @@ block body
                 each metafield in metafields
                   +table-title(metafield, reply)
                 td
-                  a(href="/admin/replies/" + reply._id)
+                  a.btn.btn-primary(href="/admin/replies/" + reply._id)
                     |Avaa
+                  button.btn.btn-danger.delete-reply-btn(data-id=reply._id) Poista
