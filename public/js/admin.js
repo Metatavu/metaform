@@ -17,6 +17,24 @@
     $('tr[data-reply-id="' + replyId +'"]').removeClass('locked');
   });
   
+  $(document).on('click', '.delete-reply-btn', function(e) {
+    var id = $(e.target).closest('.delete-reply-btn').attr('data-id');
+    vex.dialog.confirm({
+      message: 'Haluatko varmasti poistaa vastauksen pysyvästi?',
+      callback: function (value) {
+        if (value) {
+          $.ajax({
+            url: '/admin/replies/' + id,
+            type: 'DELETE',
+            success: function(response) {
+              $(e.target).parents('tr').remove();
+            }
+          });
+        }
+      }
+    })
+  });
+  
   $('.xlsx-export').click(function(e) {
     e.preventDefault();
     
