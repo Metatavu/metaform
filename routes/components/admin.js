@@ -9,9 +9,11 @@
   const xlsx = require('node-xlsx');
   const util = require('util');
   const pdf = require('html-pdf');
+  const config = require('nconf');
   
-  exports.renderAdminView = function (req, res) {
+  exports.renderAdminView = (req, res) => {
     const includeFiltered = req.query.includeFiltered == "true";
+    const allowDeletion = config.get('allow-deletion') || false;
     Form.listReplies(req.metaform.token, includeFiltered, (err, replies) => {
       if (err) {
         console.error(err);
@@ -24,13 +26,14 @@
           fields: Form.contextFields('MANAGEMENT_LIST'),
           metafields: Form.metaFields('MANAGEMENT_LIST'),
           replies: replies,
-          includeFiltered: includeFiltered
+          includeFiltered: includeFiltered,
+          allowDeletion: allowDeletion
         });
       }
     });
   };
 
-  exports.renderUserManagementView = function(req, res){
+  exports.renderUserManagementView = (req, res) => {
     res.render('usermanagement', { 
       user: req.user,
       viewModel: Form.viewModel()
@@ -73,6 +76,22 @@
   
   exports.getFields = (req, res) => {
     res.send(Form.dataFields());
+  };
+
+  exports.deleteReply = (req, res) => {
+    if (!config.get('allow-deletion')) {
+      res.status(405).send();
+      return;
+    }
+    
+    const id = req.params.id;
+    Form.deleteReply(id, (err) => {
+      if (err) {
+        res.status(500).send(err);
+      } else {
+        res.status(204).send();
+      }
+    });
   };
   
   exports.createXlsx = (req, res) => {

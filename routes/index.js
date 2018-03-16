@@ -89,6 +89,7 @@
     app.get('/admin', authenticate(['manager', 'admin'], keycloak), admin.renderAdminView);
     app.get('/admin/users', authenticate(['admin'], keycloak), admin.renderUserManagementView);
     app.get('/admin/replies/:id', authenticate(['manager', 'admin'], keycloak), admin.getFormReply);
+    app.delete('/admin/replies/:id', authenticate(['manager', 'admin'], keycloak), admin.deleteReply);
     app.get('/admin/fields', authenticate(['manager', 'admin'], keycloak), admin.getFields);
     app.get('/admin/export/xlsx', authenticate(['manager', 'admin'], keycloak), admin.createXlsx);
     

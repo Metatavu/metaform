@@ -372,6 +372,16 @@
       reply.save(callback); 
     }
     
+    static deleteReply(id, callback) {
+      Form.replyModel().findByIdAndRemove(id, (err) => {
+        if (err) {
+          callback(err);
+        } else {
+          callback(null);
+        }
+      });
+    }
+    
     static updateReply(id, data, callback) {
       Form.replyModel().findById(id, (loadErr, formReply) => {
         if (loadErr) {
