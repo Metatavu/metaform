@@ -33,7 +33,7 @@
         return new Promise((resolve, reject) => {
           KeycloakAdminClient(config.get('keycloak:admin'))
             .then((keycloakAdminClient) => {
-              keycloakAdminClient.users.find(config.get('keycloak:realm'))
+              keycloakAdminClient.users.find(config.get('keycloak:realm'), {max: 200})
                 .then((users) => {
                   const userRoleLoads = [];
                   for (let i = 0; i < users.length; i++) {
