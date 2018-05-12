@@ -21,16 +21,22 @@
       }
       
       socket.on('reply:opened', (data) => {
-        let replyIndex = socketData[socket.id].openReplies.indexOf(data.replyId);
+        let replyIndex = socketData[socket.id] && socketData[socket.id].openReplies ? socketData[socket.id].openReplies.indexOf(data.replyId) : -1;
         if (replyIndex < 0) {
-          socketData[socket.id].openReplies.push(data.replyId);
+          if (!socketData[socket.id]) {
+            socketData[socket.id] = {
+              openReplies: [data.replyId]
+            };
+          } else {
+            socketData[socket.id].openReplies.push(data.replyId);  
+          }
         }
         
         io.emit('reply:locked', data.replyId);
       });
       
       socket.on('reply:closed', (data) => {
-        let replyIndex = socketData[socket.id].openReplies.indexOf(data.replyId);
+        let replyIndex = socketData[socket.id] && socketData[socket.id].openReplies ? socketData[socket.id].openReplies.indexOf(data.replyId) : -1;
         if (replyIndex > -1) {
           socketData[socket.id].openReplies.splice(replyIndex, 1);
         }
@@ -39,7 +45,8 @@
       });
       
       socket.on('disconnect', () => {
-        for (let i = 0; i < socketData[socket.id].openReplies.length; i++) {
+        let n = socketData[socket.id] && socketData[socket.id].openReplies ? socketData[socket.id].openReplies.length : 0;
+        for (let i = 0; i < n; i++) {
           io.emit('reply:unlocked', socketData[socket.id].openReplies[i]);
         }
         
