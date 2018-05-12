@@ -40,4 +40,5 @@ block body
                 td
                   a.btn.btn-primary(href="/admin/replies/" + reply._id)
                     |Avaa
-                  button.btn.btn-danger.delete-reply-btn(data-id=reply._id) Poista
+                  if allowDeletion
+                    button.btn.btn-danger.delete-reply-btn(data-id=reply._id) Poista
