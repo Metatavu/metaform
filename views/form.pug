@@ -22,10 +22,16 @@ block custom-head
 block body
   .container
     .row
+      .col-12.title-page-column
+        if viewModel.titlePage
+          div
+            !=viewModel.titlePage
+    
+    - var display = viewModel.titlePage ? 'none' : 'block'
+    .row.form-column(style='display:'+display)
       .col-12
         h1
           =viewModel.title
-    .row
       .col-12
         form
           each section, index in viewModel.sections 

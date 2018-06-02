@@ -29,6 +29,14 @@
       this.element.find('input:checked').change();
       this._createDatepickers();
       this._createTimepickers();
+      
+      $('.close-title-page').on('click', $.proxy(this._onCloseTitlePageButtonClicked, this));
+    },
+    
+    _onCloseTitlePageButtonClicked: function () {
+      $('.title-page-column').fadeOut(400, function () {
+         $('.form-column').fadeIn(400);
+      });
     },
     
     _createDatepickers: function () {

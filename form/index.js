@@ -32,8 +32,9 @@
       return {
         "title": formConfig.title,
         "theme": formConfig.theme,
-        "sections": formConfig.sections
-      }
+        "sections": formConfig.sections,
+        "titlePage": formConfig.titlePage
+      };
     }
     
     static adminViewModel(reply) {
