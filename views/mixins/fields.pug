@@ -59,7 +59,7 @@ mixin date-field(field, value, readonly, toPdf)
             if field.required
               |&nbsp;*
       .col-12
-        if field.format == 'birthday'
+        if field.format == 'birthday' && !readonly
           input.form-control(aria-labelledby=id='field-' + field.name,id='field-' + field.name,type="text",name=field.name,title=field.title,required=field.required,readonly=readonly,data-type="birthday")
           if field.help
             small.form-text.text-muted
