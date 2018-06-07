@@ -59,6 +59,10 @@
         "enableTime" : true,
         "time_24hr": true
       });
+    },
+    
+    createBirthdayPicker: function(input) {
+      $(input).metaformBirthdayPicker();
     }
   };
   

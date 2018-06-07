@@ -86,14 +86,16 @@
       
       try {
         var viewModel = Form.viewModel();
-        var emailContent = pug.renderFile(util.format('%s/../views/mails/received-manager.pug', __dirname), { 
+        
+        const emailTitle = settings.title || util.format('Uusi vastaus lomakkeessa %s', viewModel.title);
+        const emailContent = settings.content || pug.renderFile(util.format('%s/../views/mails/received-manager.pug', __dirname), { 
           viewModel: viewModel
         });
 
         ManagerEmail._getRelevantEmails(reply)
           .then((emails) => {
             for (let i = 0; i < emails.length; i++) {
-              mailer.sendMail(emails[i], util.format('Uusi vastaus lomakkeessa %s', viewModel.title), emailContent);
+              mailer.sendMail(emails[i], emailTitle, emailContent);
             }
           })
           .catch((emailFetchErr) => {
