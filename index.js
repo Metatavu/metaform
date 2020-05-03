@@ -21,8 +21,9 @@
   
   const User = require(__dirname + '/model/user');
   const port = argv.port||3000;
+  const connectionUrl = `mongodb://${config.get('database:user')}:${config.get('database:pass')}@${config.get('database:host')}/${config.get('database:table')}?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true&w=majority`;
 
-  mongoose.connect('mongodb://' + config.get('database:host') + '/' + config.get('database:table'));
+  mongoose.connect(connectionUrl);
   require('./auth/passport')(passport);
   
   const app = express();
