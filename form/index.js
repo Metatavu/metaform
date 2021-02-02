@@ -243,7 +243,9 @@
                 const constraints = field.constraints;
                 if (constraints['min-date']) {
                   const minDate = Form.resolveMinDate(constraints['min-date']);
-                  req.checkBody(field.name, util.format("%s on ennen %s", field.title, minDate.toDate())).isAfter(minDate.toString());
+                  req.checkBody(field.name, util.format("%s on ennen %s", field.title, minDate.toDate())).custom((value) => {
+                    return moment(value).utc(true).isSameOrAfter(minDate);
+                  });
                 }
                 if (constraints['disabled-weekday-indices']) {
                   const disabledIndices = constraints['disabled-weekday-indices'];
@@ -267,9 +269,9 @@
         const amount = parseInt(dateStringParts[1]);
         const unit = dateStringParts[2];
         
-        return operator === '+' ? moment().add(amount, unit).startOf('day') : moment().subtract(amount, unit).startOf('day');
+        return operator === '+' ? moment().utc().add(amount, unit).startOf('day') : moment().utc().subtract(amount, unit).startOf('day');
       } else {
-        return moment(minDateString);
+        return moment(minDateString).utc();
       }
     }
 
