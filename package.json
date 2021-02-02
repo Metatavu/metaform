@@ -1,6 +1,6 @@
 {
   "name": "metaform",
-  "version": "0.5.7",
+  "version": "0.6.0",
   "description": "",
   "main": "app.js",
   "author": {
@@ -18,13 +18,13 @@
     "test-coverage": "nyc --reporter=lcov -- mocha -b --exit && cat ./coverage/lcov.info | coveralls"
   },
   "devDependencies": {
-    "grunt": "^1.0.2",
-    "grunt-contrib-sass": "^1.0.0",
-    "load-grunt-tasks": "^3.5.2",
     "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",
     "clear-require": "^2.0.0",
     "coveralls": "3.0.0",
+    "grunt": "^1.0.2",
+    "grunt-contrib-sass": "^1.0.0",
+    "load-grunt-tasks": "^3.5.2",
     "mocha": "^5.0.4",
     "nock": "^9.2.3",
     "nyc": "11.6.0",
@@ -48,6 +48,7 @@
     "mailgun-js": "0.16.0",
     "minimist": "^1.2.0",
     "moment": "2.21.0",
+    "moment-timezone": "^0.5.32",
     "mongoose": "^4.12.1",
     "mongoose-gridfs": "^0.2.0",
     "multer": "1.3.0",
