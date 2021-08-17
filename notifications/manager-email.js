@@ -14,6 +14,7 @@
   const _ = require('underscore');
   
   class ManagerEmail {
+
     static _hasRole(role, user) {
       const metaformClientMappings = user.roleMappings.clientMappings[config.get('keycloak:client')];
       if (!metaformClientMappings) {
@@ -33,7 +34,7 @@
         return new Promise((resolve, reject) => {
           KeycloakAdminClient(config.get('keycloak:admin'))
             .then((keycloakAdminClient) => {
-              keycloakAdminClient.users.find(config.get('keycloak:realm'), {max: 200})
+              keycloakAdminClient.users.find(config.get('keycloak:realm'), {max: 400})
                 .then((users) => {
                   const userRoleLoads = [];
                   for (let i = 0; i < users.length; i++) {
