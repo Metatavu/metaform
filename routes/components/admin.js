@@ -8,7 +8,7 @@
   const moment = require('moment');
   const xlsx = require('node-xlsx');
   const util = require('util');
-  const pdf = require('html-pdf');
+  const html_to_pdf = require('html-pdf-node');
   const config = require('nconf');
   
   exports.renderAdminView = (req, res) => {
@@ -57,9 +57,10 @@
             formReply: formReply
           }, function(err, html) {
             res.header("Content-Type", "application/pdf");
-            pdf.create(html, {'border': '1cm'}).toStream(function(err, pdfStream){
-              pdfStream.pipe(res);
-            });
+            html_to_pdf.generatePdf({ content: html}, { format: "A4" })
+              .then((output) => {
+                res.send(output);
+              });
           });
         } else {
           res.render('form-reply', {
