@@ -41,7 +41,7 @@
     "express": "4.16.3",
     "express-session": "1.15.6",
     "express-validator": "5.0.3",
-    "html-pdf": "^2.2.0",
+    "html-pdf": "^3.0.1",
     "html-pdf-node": "^1.0.7",
     "http-shutdown": "1.2.0",
     "keycloak-admin-client": "^0.12.0",
