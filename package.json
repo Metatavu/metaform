@@ -58,7 +58,7 @@
     "passport": "0.4.0",
     "passport-local": "1.0.0",
     "password-generator": "2.2.0",
-    "pug": "2.0.1",
+    "pug": "3.0.1",
     "request": "^2.85.0",
     "socket.io": "2.0.4",
     "underscore": "1.8.3"
