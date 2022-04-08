@@ -48,7 +48,7 @@
     "keycloak-connect": "4.5.0",
     "mailgun-js": "0.16.0",
     "minimist": "^1.2.0",
-    "moment": "2.21.0",
+    "moment": "2.29.2",
     "moment-timezone": "^0.5.32",
     "mongoose": "^4.12.1",
     "mongoose-gridfs": "^0.2.0",
