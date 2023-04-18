@@ -10,8 +10,8 @@
   config.file({ file: argv.config || 'config.json' });
   const app = require(__dirname + '/index');
   
-  app.startServer(() => {
-    console.log('Express server started');
+  app.startServer((port) => {
+    console.log('Express server started at port ' + port);
   });
   
 }).call(this);

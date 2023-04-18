@@ -29,6 +29,8 @@
       this.element.find('input:checked').change();
       this._createDatepickers();
       this._createTimepickers();
+      this._createBirthdaypickers();
+      this.element.trigger('metaformReady');
     },
     
     _createDatepickers: function () {
@@ -40,6 +42,12 @@
     _createTimepickers: function () {
       this.element.find('input[data-type="time"]').each(function (index, input) {
         MetaformUtils.createTimePicker(input);
+      });
+    },
+    
+    _createBirthdaypickers: function () {
+      this.element.find('input[data-type="birthday"]').each(function (index, input) {
+        MetaformUtils.createBirthdayPicker(input);
       });
     },
     
@@ -510,6 +518,10 @@
   });
   
   $(document).ready(function () {
+    $(document).on('metaformReady', function() {
+      $('.init-loader').remove();
+    });
+
     $('form').metaform();
     $('.file-component').fileField();
     $('.table-field').tableField();

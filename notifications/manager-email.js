@@ -14,6 +14,7 @@
   const _ = require('underscore');
   
   class ManagerEmail {
+
     static _hasRole(role, user) {
       const metaformClientMappings = user.roleMappings.clientMappings[config.get('keycloak:client')];
       if (!metaformClientMappings) {
@@ -33,7 +34,7 @@
         return new Promise((resolve, reject) => {
           KeycloakAdminClient(config.get('keycloak:admin'))
             .then((keycloakAdminClient) => {
-              keycloakAdminClient.users.find(config.get('keycloak:realm'), {max: 200})
+              keycloakAdminClient.users.find(config.get('keycloak:realm'), {max: 400})
                 .then((users) => {
                   const userRoleLoads = [];
                   for (let i = 0; i < users.length; i++) {
@@ -86,14 +87,16 @@
       
       try {
         var viewModel = Form.viewModel();
-        var emailContent = pug.renderFile(util.format('%s/../views/mails/received-manager.pug', __dirname), { 
+        
+        const emailTitle = settings.title || util.format('Uusi vastaus lomakkeessa %s', viewModel.title);
+        const emailContent = settings.content || pug.renderFile(util.format('%s/../views/mails/received-manager.pug', __dirname), { 
           viewModel: viewModel
         });
 
         ManagerEmail._getRelevantEmails(reply)
           .then((emails) => {
             for (let i = 0; i < emails.length; i++) {
-              mailer.sendMail(emails[i], util.format('Uusi vastaus lomakkeessa %s', viewModel.title), emailContent);
+              mailer.sendMail(emails[i], emailTitle, emailContent);
             }
           })
           .catch((emailFetchErr) => {
